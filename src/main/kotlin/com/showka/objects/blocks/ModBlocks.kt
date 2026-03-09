@@ -2,6 +2,7 @@ package com.showka.objects.blocks
 
 import com.showka.TatamiCraftModInitializer
 import com.showka.objects.TatamiColor
+import com.showka.objects.items.ModItems
 import net.minecraft.block.AbstractBlock
 import net.minecraft.block.Block
 import net.minecraft.block.Blocks
@@ -40,7 +41,7 @@ object ModBlocks {
     val COLORED_TATAMI_PARTS: Map<TatamiColor, Block> = TatamiColor.COLORED.associateWith { color ->
         registerBlockOnly(
             path = "${color.prefix()}tatami_part",
-            factory = { settings -> TatamiPartBlock(settings) },
+            factory = { settings -> TatamiPartBlock(settings, dropItemOverride = { ModItems.getTatamiItem(color) }) },
             settings = tatamiSettings()
         )
     }
@@ -49,7 +50,7 @@ object ModBlocks {
     val COLORED_TATAMI_HALF_PARTS: Map<TatamiColor, Block> = TatamiColor.COLORED.associateWith { color ->
         registerBlockOnly(
             path = "${color.prefix()}tatami_half_part",
-            factory = { settings -> TatamiHalfPartBlock(settings) },
+            factory = { settings -> TatamiHalfPartBlock(settings, dropItemOverride = { ModItems.getTatamiHalfItem(color) }) },
             settings = tatamiSettings()
         )
     }

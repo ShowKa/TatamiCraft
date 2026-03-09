@@ -10,12 +10,17 @@ import net.minecraft.util.math.Direction
 
 /**
  * 畳パーツブロック（2×4 = 8枚）。
+ *
+ * @param dropItemOverride カラーバリエーション用のドロップアイテム上書き。null ならデフォルト。
  */
-class TatamiPartBlock(settings: Settings) : AbstractTatamiPartBlock(
+class TatamiPartBlock(
+    settings: Settings,
+    dropItemOverride: (() -> net.minecraft.item.Item)? = null
+) : AbstractTatamiPartBlock(
     settings = settings,
     layout = TatamiLayout.TATAMI,
     partProperty = PART,
-    dropItemProvider = { ModItems.TATAMI_ITEM },
+    dropItemProvider = dropItemOverride ?: { ModItems.TATAMI_ITEM },
     blockEntityTypeProvider = { ModBlockEntities.TATAMI_PART_BLOCK_ENTITY }
 ) {
     companion object {
