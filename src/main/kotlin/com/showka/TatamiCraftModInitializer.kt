@@ -1,5 +1,6 @@
 package com.showka
 
+import com.showka.objects.TatamiColor
 import com.showka.objects.blocks.ModBlockEntities
 import com.showka.objects.blocks.ModBlocks
 import com.showka.objects.items.ModItems
@@ -31,15 +32,13 @@ object TatamiCraftModInitializer : ModInitializer {
 		// mod item 登録
 		ModItems.init()
 
-		// クリエイティブタブに畳アイテムを追加（デフォルト＋全カラー）
+		// クリエイティブタブに畳アイテムを追加（デフォルト＋全カラー、同じ色の畳・半畳を隣り合わせに）
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.BUILDING_BLOCKS).register { entries ->
 			entries.add(ModItems.TATAMI_ITEM)
 			entries.add(ModItems.TATAMI_HALF_ITEM)
-			for (item in ModItems.COLORED_TATAMI_ITEMS.values) {
-				entries.add(item)
-			}
-			for (item in ModItems.COLORED_TATAMI_HALF_ITEMS.values) {
-				entries.add(item)
+			for (color in TatamiColor.COLORED) {
+				entries.add(ModItems.getTatamiItem(color))
+				entries.add(ModItems.getTatamiHalfItem(color))
 			}
 		}
 	}
