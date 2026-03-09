@@ -78,6 +78,9 @@ jar {
 	}
 }
 
+// 畳カラーバリエーション JSON 自動生成
+apply from: 'gradle/tatami-assets.gradle'
+
 // configure the maven publication
 publishing {
 	publications {

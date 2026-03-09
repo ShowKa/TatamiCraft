@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "tatamicraft:item/tatami_half_item_brown"
-  }
-}
