@@ -15,13 +15,13 @@ object ModItems {
     val TATAMI_ITEM: Item = register(
         path = "tatami",
         factory = { settings -> TatamiItem(settings) },
-        settings = Item.Settings()
+        settings = Item.Settings().useItemPrefixedTranslationKey()
     )
 
     val TATAMI_HALF_ITEM: Item = register(
         path = "tatami_half",
         factory = { settings -> TatamiHalfItem(settings) },
-        settings = Item.Settings()
+        settings = Item.Settings().useItemPrefixedTranslationKey()
     )
 
     private fun register(
