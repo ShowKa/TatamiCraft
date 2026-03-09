@@ -21,6 +21,11 @@ def tatamiColors = [
     [id: 'white',    en: 'White',    ja: '白色'],
     [id: 'gray',     en: 'Gray',     ja: '灰色'],
     [id: 'black',    en: 'Black',    ja: '黒色'],
+    [id: 'walnut',       en: 'Walnut',       ja: '胡桃色'],
+    [id: 'light_brown',  en: 'Light Brown',  ja: '白茶色'],
+    [id: 'grayish_pink', en: 'Grayish Pink', ja: '灰桜色'],
+    [id: 'milk_white',   en: 'Milk White',   ja: '乳白色'],
+    [id: 'silver_white', en: 'Silver White', ja: '銀白色'],
 ]
 
 def MOD_ID = 'tatamicraft'
