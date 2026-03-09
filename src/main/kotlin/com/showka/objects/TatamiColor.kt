@@ -16,20 +16,16 @@ enum class TatamiColor(
     RED("red", "Crimson Red", "紅色"),
     ORANGE("orange", "Apricot Orange", "杏色"),
     YELLOW("yellow", "Mustard Yellow", "芥子色"),
-    SKY_BLUE("sky_blue", "Sky Blue", "水色"),
+    SKY_BLUE("sky_blue", "Sky Blue", "空色"),
     GREEN("green", "Light Green", "若竹色"),
-    BLUE("blue", "Blue", "青色"),
     PEACH("peach", "Peach", "桃色"),
     PURPLE("purple", "Mauve Purple", "藤色"),
-    BROWN("brown", "Brown", "茶色"),
     WHITE("white", "White", "白色"),
-    GRAY("gray", "Gray", "灰色"),
     BLACK("black", "Black", "黒色"),
     WALNUT("walnut", "Walnut", "胡桃色"),
     LIGHT_BROWN("light_brown", "Light Brown", "白茶色"),
     GRAYISH_PINK("grayish_pink", "Grayish Pink", "灰桜色"),
-    MILK_WHITE("milk_white", "Milk White", "乳白色"),
-    SILVER_WHITE("silver_white", "Silver White", "銀白色");
+    MILK_WHITE("milk_white", "Milk White", "乳白色");
 
     /** ブロック/アイテムパスの接頭辞。デフォルトは空文字。 */
     fun prefix(): String = if (id.isEmpty()) "" else "${id}_"
