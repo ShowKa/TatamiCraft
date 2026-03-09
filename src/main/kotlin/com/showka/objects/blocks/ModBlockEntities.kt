@@ -2,6 +2,7 @@ package com.showka.objects.blocks
 
 import com.showka.TatamiCraftModInitializer
 import net.fabricmc.fabric.api.`object`.builder.v1.block.entity.FabricBlockEntityTypeBuilder
+import net.minecraft.block.Block
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
@@ -17,7 +18,7 @@ object ModBlockEntities {
         Identifier.of(TatamiCraftModInitializer.MOD_ID, "tatami_part"),
         FabricBlockEntityTypeBuilder.create(
             { pos, state -> TatamiBlockEntity(TATAMI_PART_BLOCK_ENTITY, pos, state) },
-            ModBlocks.TATAMI_PART
+            *ModBlocks.allTatamiParts().toTypedArray<Block>()
         ).build()
     )
 
@@ -26,7 +27,7 @@ object ModBlockEntities {
         Identifier.of(TatamiCraftModInitializer.MOD_ID, "tatami_half_part"),
         FabricBlockEntityTypeBuilder.create(
             { pos, state -> TatamiBlockEntity(TATAMI_HALF_PART_BLOCK_ENTITY, pos, state) },
-            ModBlocks.TATAMI_HALF_PART
+            *ModBlocks.allTatamiHalfParts().toTypedArray<Block>()
         ).build()
     )
 

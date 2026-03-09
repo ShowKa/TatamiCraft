@@ -10,12 +10,17 @@ import net.minecraft.util.math.Direction
 
 /**
  * 半畳パーツブロック（2×2 = 4枚）。
+ *
+ * @param dropItemOverride カラーバリエーション用のドロップアイテム上書き。null ならデフォルト。
  */
-class TatamiHalfPartBlock(settings: Settings) : AbstractTatamiPartBlock(
+class TatamiHalfPartBlock(
+    settings: Settings,
+    dropItemOverride: (() -> net.minecraft.item.Item)? = null
+) : AbstractTatamiPartBlock(
     settings = settings,
     layout = TatamiLayout.TATAMI_HALF,
     partProperty = PART,
-    dropItemProvider = { ModItems.TATAMI_HALF_ITEM },
+    dropItemProvider = dropItemOverride ?: { ModItems.TATAMI_HALF_ITEM },
     blockEntityTypeProvider = { ModBlockEntities.TATAMI_HALF_PART_BLOCK_ENTITY }
 ) {
     companion object {

@@ -2,5 +2,65 @@
   "block.tatamicraft.tatami_part": "畳 Tatami",
   "item.tatamicraft.tatami": "畳 Tatami",
   "block.tatamicraft.tatami_half_part": "半畳 Half Tatami",
-  "item.tatamicraft.tatami_half": "半畳 Half Tatami"
+  "item.tatamicraft.tatami_half": "半畳 Half Tatami",
+
+  "block.tatamicraft.red_tatami_part": "赤色畳 Red Tatami",
+  "item.tatamicraft.red_tatami": "赤色畳 Red Tatami",
+  "block.tatamicraft.red_tatami_half_part": "赤色半畳 Red Half Tatami",
+  "item.tatamicraft.red_tatami_half": "赤色半畳 Red Half Tatami",
+
+  "block.tatamicraft.orange_tatami_part": "橙色畳 Orange Tatami",
+  "item.tatamicraft.orange_tatami": "橙色畳 Orange Tatami",
+  "block.tatamicraft.orange_tatami_half_part": "橙色半畳 Orange Half Tatami",
+  "item.tatamicraft.orange_tatami_half": "橙色半畳 Orange Half Tatami",
+
+  "block.tatamicraft.yellow_tatami_part": "黄色畳 Yellow Tatami",
+  "item.tatamicraft.yellow_tatami": "黄色畳 Yellow Tatami",
+  "block.tatamicraft.yellow_tatami_half_part": "黄色半畳 Yellow Half Tatami",
+  "item.tatamicraft.yellow_tatami_half": "黄色半畳 Yellow Half Tatami",
+
+  "block.tatamicraft.sky_blue_tatami_part": "水色畳 Sky Blue Tatami",
+  "item.tatamicraft.sky_blue_tatami": "水色畳 Sky Blue Tatami",
+  "block.tatamicraft.sky_blue_tatami_half_part": "水色半畳 Sky Blue Half Tatami",
+  "item.tatamicraft.sky_blue_tatami_half": "水色半畳 Sky Blue Half Tatami",
+
+  "block.tatamicraft.green_tatami_part": "緑色畳 Green Tatami",
+  "item.tatamicraft.green_tatami": "緑色畳 Green Tatami",
+  "block.tatamicraft.green_tatami_half_part": "緑色半畳 Green Half Tatami",
+  "item.tatamicraft.green_tatami_half": "緑色半畳 Green Half Tatami",
+
+  "block.tatamicraft.blue_tatami_part": "青色畳 Blue Tatami",
+  "item.tatamicraft.blue_tatami": "青色畳 Blue Tatami",
+  "block.tatamicraft.blue_tatami_half_part": "青色半畳 Blue Half Tatami",
+  "item.tatamicraft.blue_tatami_half": "青色半畳 Blue Half Tatami",
+
+  "block.tatamicraft.peach_tatami_part": "桃色畳 Peach Tatami",
+  "item.tatamicraft.peach_tatami": "桃色畳 Peach Tatami",
+  "block.tatamicraft.peach_tatami_half_part": "桃色半畳 Peach Half Tatami",
+  "item.tatamicraft.peach_tatami_half": "桃色半畳 Peach Half Tatami",
+
+  "block.tatamicraft.purple_tatami_part": "紫色畳 Purple Tatami",
+  "item.tatamicraft.purple_tatami": "紫色畳 Purple Tatami",
+  "block.tatamicraft.purple_tatami_half_part": "紫色半畳 Purple Half Tatami",
+  "item.tatamicraft.purple_tatami_half": "紫色半畳 Purple Half Tatami",
+
+  "block.tatamicraft.brown_tatami_part": "茶色畳 Brown Tatami",
+  "item.tatamicraft.brown_tatami": "茶色畳 Brown Tatami",
+  "block.tatamicraft.brown_tatami_half_part": "茶色半畳 Brown Half Tatami",
+  "item.tatamicraft.brown_tatami_half": "茶色半畳 Brown Half Tatami",
+
+  "block.tatamicraft.white_tatami_part": "白色畳 White Tatami",
+  "item.tatamicraft.white_tatami": "白色畳 White Tatami",
+  "block.tatamicraft.white_tatami_half_part": "白色半畳 White Half Tatami",
+  "item.tatamicraft.white_tatami_half": "白色半畳 White Half Tatami",
+
+  "block.tatamicraft.gray_tatami_part": "灰色畳 Gray Tatami",
+  "item.tatamicraft.gray_tatami": "灰色畳 Gray Tatami",
+  "block.tatamicraft.gray_tatami_half_part": "灰色半畳 Gray Half Tatami",
+  "item.tatamicraft.gray_tatami_half": "灰色半畳 Gray Half Tatami",
+
+  "block.tatamicraft.black_tatami_part": "黒色畳 Black Tatami",
+  "item.tatamicraft.black_tatami": "黒色畳 Black Tatami",
+  "block.tatamicraft.black_tatami_half_part": "黒色半畳 Black Half Tatami",
+  "item.tatamicraft.black_tatami_half": "黒色半畳 Black Half Tatami"
 }
