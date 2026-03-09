@@ -1,0 +1,48 @@
+{
+  "textures": {
+    "particle": "tatamicraft:block/tatami_block_gray",
+    "top": "tatamicraft:block/tatami_block_gray",
+    "bottom": "tatamicraft:block/tatami_block_gray",
+    "side": "tatamicraft:block/tatami_block_gray"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        1,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#bottom",
+          "cullface": "down"
+        },
+        "up": {
+          "texture": "#top",
+          "rotation": 270
+        },
+        "north": {
+          "texture": "#side",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#side",
+          "cullface": "south"
+        },
+        "west": {
+          "texture": "#side",
+          "cullface": "west"
+        },
+        "east": {
+          "texture": "#side",
+          "cullface": "east"
+        }
+      }
+    }
+  ]
+}

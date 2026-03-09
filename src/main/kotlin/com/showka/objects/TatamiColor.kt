@@ -1,0 +1,39 @@
+package com.showka.objects
+
+/**
+ * 畳のカラーバリエーション。
+ *
+ * @param id           レジストリパス接頭辞（例: "red"）。デフォルトは空文字。
+ * @param englishName  英語表示名（例: "Red"）
+ * @param japaneseName 日本語表示名（例: "赤色"）
+ */
+enum class TatamiColor(
+    val id: String,
+    val englishName: String,
+    val japaneseName: String
+) {
+    DEFAULT("", "", ""),
+    RED("red", "Red", "赤色"),
+    ORANGE("orange", "Orange", "橙色"),
+    YELLOW("yellow", "Yellow", "黄色"),
+    SKY_BLUE("sky_blue", "Sky Blue", "水色"),
+    GREEN("green", "Green", "緑色"),
+    BLUE("blue", "Blue", "青色"),
+    PEACH("peach", "Peach", "桃色"),
+    PURPLE("purple", "Purple", "紫色"),
+    BROWN("brown", "Brown", "茶色"),
+    WHITE("white", "White", "白色"),
+    GRAY("gray", "Gray", "灰色"),
+    BLACK("black", "Black", "黒色");
+
+    /** ブロック/アイテムパスの接頭辞。デフォルトは空文字。 */
+    fun prefix(): String = if (id.isEmpty()) "" else "${id}_"
+
+    /** テクスチャファイル名のサフィックス。デフォルトは空文字。 */
+    fun suffix(): String = if (id.isEmpty()) "" else "_${id}"
+
+    companion object {
+        /** デフォルト以外のすべてのカラー */
+        val COLORED = entries.filter { it != DEFAULT }
+    }
+}

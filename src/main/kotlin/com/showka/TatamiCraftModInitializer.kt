@@ -31,10 +31,16 @@ object TatamiCraftModInitializer : ModInitializer {
 		// mod item 登録
 		ModItems.init()
 
-		// クリエイティブタブに畳アイテムを追加
+		// クリエイティブタブに畳アイテムを追加（デフォルト＋全カラー）
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.BUILDING_BLOCKS).register { entries ->
 			entries.add(ModItems.TATAMI_ITEM)
 			entries.add(ModItems.TATAMI_HALF_ITEM)
+			for (item in ModItems.COLORED_TATAMI_ITEMS.values) {
+				entries.add(item)
+			}
+			for (item in ModItems.COLORED_TATAMI_HALF_ITEMS.values) {
+				entries.add(item)
+			}
 		}
 	}
 
