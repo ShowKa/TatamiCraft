@@ -20,8 +20,6 @@ enum class TatamiColor(
     GREEN("green", "Light Green", "若竹色"),
     PEACH("peach", "Peach", "桃色"),
     PURPLE("purple", "Mauve Purple", "藤色"),
-    WHITE("white", "White", "白色"),
-    BLACK("black", "Black", "黒色"),
     WALNUT("walnut", "Walnut", "胡桃色"),
     LIGHT_BROWN("light_brown", "Light Brown", "白茶色"),
     GRAYISH_PINK("grayish_pink", "Grayish Pink", "灰桜色"),

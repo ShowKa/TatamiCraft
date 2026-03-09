@@ -16,8 +16,6 @@ def tatamiColors = [
     [id: 'green',    en: 'Light Green',    ja: '若竹色'],
     [id: 'peach',    en: 'Peach',    ja: '桃色'],
     [id: 'purple',   en: 'Mauve Purple',   ja: '藤色'],
-    [id: 'white',    en: 'White',    ja: '白色'],
-    [id: 'black',    en: 'Black',    ja: '黒色'],
     [id: 'walnut',       en: 'Walnut',       ja: '胡桃色'],
     [id: 'light_brown',  en: 'Light Brown',  ja: '白茶色'],
     [id: 'grayish_pink', en: 'Grayish Pink', ja: '灰桜色'],
