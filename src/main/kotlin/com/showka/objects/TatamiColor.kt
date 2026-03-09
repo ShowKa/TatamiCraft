@@ -24,7 +24,12 @@ enum class TatamiColor(
     BROWN("brown", "Brown", "茶色"),
     WHITE("white", "White", "白色"),
     GRAY("gray", "Gray", "灰色"),
-    BLACK("black", "Black", "黒色");
+    BLACK("black", "Black", "黒色"),
+    WALNUT("walnut", "Walnut", "胡桃色"),
+    LIGHT_BROWN("light_brown", "Light Brown", "白茶色"),
+    GRAYISH_PINK("grayish_pink", "Grayish Pink", "灰桜色"),
+    MILK_WHITE("milk_white", "Milk White", "乳白色"),
+    SILVER_WHITE("silver_white", "Silver White", "銀白色");
 
     /** ブロック/アイテムパスの接頭辞。デフォルトは空文字。 */
     fun prefix(): String = if (id.isEmpty()) "" else "${id}_"
