@@ -1,0 +1,39 @@
+name: Release to Modrinth
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Get mod version from Gradle
+        id: mod_version
+        run: |
+          echo "VERSION=$(./gradlew properties -q | grep '^mod_version:' | awk '{print $2}')" >> $GITHUB_OUTPUT
+
+      - name: Build
+        run: ./gradlew build
+
+      - name: Publish to Modrinth
+        uses: cloudnode-pro/modrinth-publish@v2
+        with:
+          token: ${{ secrets.MODRINTH_TOKEN }}
+          project: 8L1DTZf2
+          version: ${{ steps.mod_version.outputs.VERSION }}
+          loaders: fabric
+          game-versions: 1.21.11
+          files: "build/libs/tatamicraft-${{ steps.mod_version.outputs.VERSION }}.jar"
+          changelog: "Release ${{ steps.mod_version.outputs.VERSION }}"
