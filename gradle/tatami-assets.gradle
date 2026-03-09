@@ -9,14 +9,14 @@ import groovy.json.JsonOutput
 
 // ── カラー定義 ─────────────────────────────────────────
 def tatamiColors = [
-    [id: 'red',      en: 'Red',      ja: '赤色'],
-    [id: 'orange',   en: 'Orange',   ja: '橙色'],
-    [id: 'yellow',   en: 'Yellow',   ja: '黄色'],
+    [id: 'red',      en: 'Crimson Red',      ja: '紅色'],
+    [id: 'orange',   en: 'Apricot Orange',   ja: '杏色'],
+    [id: 'yellow',   en: 'Mustard Yellow',   ja: '芥子色'],
     [id: 'sky_blue', en: 'Sky Blue', ja: '水色'],
-    [id: 'green',    en: 'Green',    ja: '緑色'],
+    [id: 'green',    en: 'Light Green',    ja: '若竹色'],
     [id: 'blue',     en: 'Blue',     ja: '青色'],
     [id: 'peach',    en: 'Peach',    ja: '桃色'],
-    [id: 'purple',   en: 'Purple',   ja: '紫色'],
+    [id: 'purple',   en: 'Mauve Purple',   ja: '藤色'],
     [id: 'brown',    en: 'Brown',    ja: '茶色'],
     [id: 'white',    en: 'White',    ja: '白色'],
     [id: 'gray',     en: 'Gray',     ja: '灰色'],
