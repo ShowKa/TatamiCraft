@@ -9,17 +9,17 @@ import groovy.json.JsonOutput
 
 // ── カラー定義 ─────────────────────────────────────────
 def tatamiColors = [
-    [id: 'red',      en: 'Crimson Red',      ja: '紅色'],
-    [id: 'orange',   en: 'Apricot Orange',   ja: '杏色'],
-    [id: 'yellow',   en: 'Mustard Yellow',   ja: '芥子色'],
-    [id: 'sky_blue', en: 'Sky Blue', ja: '空色'],
-    [id: 'green',    en: 'Light Green',    ja: '若竹色'],
-    [id: 'peach',    en: 'Peach',    ja: '桃色'],
-    [id: 'purple',   en: 'Mauve Purple',   ja: '藤色'],
-    [id: 'walnut',       en: 'Walnut',       ja: '胡桃色'],
-    [id: 'light_brown',  en: 'Light Brown',  ja: '白茶色'],
-    [id: 'grayish_pink', en: 'Grayish Pink', ja: '灰桜色'],
-    [id: 'milk_white',   en: 'Milk White',   ja: '乳白色'],
+    [id: 'red',          en: 'Crimson Red',    ja: '紅色'],
+    [id: 'orange',       en: 'Apricot Orange', ja: '杏色'],
+    [id: 'peach',        en: 'Peach',          ja: '桃色'],
+    [id: 'yellow',       en: 'Mustard Yellow', ja: '芥子色'],
+    [id: 'green',        en: 'Light Green',    ja: '若竹色'],
+    [id: 'sky_blue',     en: 'Sky Blue',       ja: '空色'],
+    [id: 'purple',       en: 'Mauve Purple',   ja: '藤色'],
+    [id: 'grayish_pink', en: 'Grayish Pink',   ja: '灰桜色'],
+    [id: 'milk_white',   en: 'Milk White',     ja: '乳白色'],
+    [id: 'light_brown',  en: 'Light Brown',    ja: '白茶色'],
+    [id: 'walnut',       en: 'Walnut',         ja: '胡桃色'],
 ]
 
 def MOD_ID = 'tatamicraft'
@@ -164,10 +164,10 @@ def generateLangFiles(File baseDir, String modId, List colors) {
     enMap["block.${modId}.tatami_half_part"] = 'Half Tatami'
     enMap["item.${modId}.tatami_half"]       = 'Half Tatami'
 
-    jaMap["block.${modId}.tatami_part"]      = '畳 Tatami'
-    jaMap["item.${modId}.tatami"]            = '畳 Tatami'
-    jaMap["block.${modId}.tatami_half_part"] = '半畳 Half Tatami'
-    jaMap["item.${modId}.tatami_half"]       = '半畳 Half Tatami'
+    jaMap["block.${modId}.tatami_part"]      = '畳'
+    jaMap["item.${modId}.tatami"]            = '畳'
+    jaMap["block.${modId}.tatami_half_part"] = '半畳'
+    jaMap["item.${modId}.tatami_half"]       = '半畳'
 
     // カラーバリエーション
     colors.each { color ->
@@ -178,10 +178,10 @@ def generateLangFiles(File baseDir, String modId, List colors) {
         enMap["block.${modId}.${prefix}tatami_half_part"] = "${color.en} Half Tatami"
         enMap["item.${modId}.${prefix}tatami_half"]       = "${color.en} Half Tatami"
 
-        jaMap["block.${modId}.${prefix}tatami_part"]      = "${color.ja}畳 ${color.en} Tatami"
-        jaMap["item.${modId}.${prefix}tatami"]            = "${color.ja}畳 ${color.en} Tatami"
-        jaMap["block.${modId}.${prefix}tatami_half_part"] = "${color.ja}半畳 ${color.en} Half Tatami"
-        jaMap["item.${modId}.${prefix}tatami_half"]       = "${color.ja}半畳 ${color.en} Half Tatami"
+        jaMap["block.${modId}.${prefix}tatami_part"]      = "${color.ja}畳"
+        jaMap["item.${modId}.${prefix}tatami"]            = "${color.ja}畳"
+        jaMap["block.${modId}.${prefix}tatami_half_part"] = "${color.ja}半畳"
+        jaMap["item.${modId}.${prefix}tatami_half"]       = "${color.ja}半畳"
     }
 
     writeJson(baseDir, "assets/${modId}/lang/en_us.json", enMap)
