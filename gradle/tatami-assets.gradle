@@ -1,0 +1,265 @@
+import groovy.json.JsonOutput
+
+/**
+ * 畳ブロックのカラーバリエーション用 JSON アセットをビルド時に自動生成する Gradle スクリプト。
+ *
+ * 色を追加する場合は、このファイルの tatamiColors リストと
+ * src/main/kotlin/com/showka/objects/TatamiColor.kt の両方を更新してください。
+ */
+
+// ── カラー定義 ─────────────────────────────────────────
+def tatamiColors = [
+    [id: 'red',          en: 'Crimson Red',    ja: '紅色'],
+    [id: 'orange',       en: 'Apricot Orange', ja: '杏色'],
+    [id: 'peach',        en: 'Peach',          ja: '桃色'],
+    [id: 'yellow',       en: 'Mustard Yellow', ja: '芥子色'],
+    [id: 'green',        en: 'Light Green',    ja: '若竹色'],
+    [id: 'sky_blue',     en: 'Sky Blue',       ja: '空色'],
+    [id: 'purple',       en: 'Mauve Purple',   ja: '藤色'],
+    [id: 'grayish_pink', en: 'Grayish Pink',   ja: '灰桜色'],
+    [id: 'milk_white',   en: 'Milk White',     ja: '乳白色'],
+    [id: 'light_brown',  en: 'Light Brown',    ja: '白茶色'],
+    [id: 'walnut',       en: 'Walnut',         ja: '胡桃色'],
+]
+
+def MOD_ID = 'tatamicraft'
+
+// ── 出力先 ────────────────────────────────────────────
+def generatedDir = layout.buildDirectory.dir('generated-tatami-resources')
+
+// ── ユーティリティ ────────────────────────────────────
+/** JSON をファイルに書き出す */
+def writeJson(File baseDir, String relPath, Object data) {
+    def file = new File(baseDir, relPath)
+    file.parentFile.mkdirs()
+    file.text = JsonOutput.prettyPrint(JsonOutput.toJson(data)) + '\n'
+}
+
+// ── Blockstate 生成 ───────────────────────────────────
+/**
+ * 畳パーツ (tatami_part / tatami_half_part) の blockstate JSON を生成する。
+ *
+ * @param partCount パーツ数 (tatami_part=8, tatami_half_part=4)
+ */
+def generateBlockstate(File baseDir, String modId, String prefix, String type, int partCount) {
+    def variants = new LinkedHashMap()
+    def facings = [
+        [name: 'north', y: null],
+        [name: 'east',  y: 90],
+        [name: 'south', y: 180],
+        [name: 'west',  y: 270],
+    ]
+
+    facings.each { facing ->
+        [false, true].each { mirrored ->
+            (0..<partCount).each { part ->
+                def side
+                if (part % 2 == 0) {
+                    side = mirrored ? 'right' : 'left'
+                } else {
+                    side = mirrored ? 'left' : 'right'
+                }
+
+                def key = "facing=${facing.name},mirrored=${mirrored},part=${part}"
+                def value = new LinkedHashMap()
+                value.model = "${modId}:block/${prefix}${type}_${side}"
+                if (facing.y != null) {
+                    value.y = facing.y
+                }
+                variants[key] = value
+            }
+        }
+    }
+
+    writeJson(baseDir, "assets/${modId}/blockstates/${prefix}${type}.json", [variants: variants])
+}
+
+// ── Block Model 生成 ──────────────────────────────────
+/**
+ * 畳パーツの block model JSON を生成する。
+ *
+ * @param side      "left" or "right"
+ * @param rotation  上面テクスチャの回転角 (left=270, right=90)
+ */
+def generateBlockModel(File baseDir, String modId, String prefix, String type, String side, int rotation, String textureSuffix) {
+    def texture = "${modId}:block/tatami_block${textureSuffix}"
+    def data = new LinkedHashMap()
+    data.textures = new LinkedHashMap([
+        particle: texture,
+        top:      texture,
+        bottom:   texture,
+        side:     texture,
+    ])
+    data.elements = [
+        [
+            from: [0, 0, 0],
+            to:   [16, 1, 16],
+            faces: new LinkedHashMap([
+                down:  [texture: '#bottom', cullface: 'down'],
+                up:    [texture: '#top', rotation: rotation],
+                north: [texture: '#side', cullface: 'north'],
+                south: [texture: '#side', cullface: 'south'],
+                west:  [texture: '#side', cullface: 'west'],
+                east:  [texture: '#side', cullface: 'east'],
+            ]),
+        ]
+    ]
+    writeJson(baseDir, "assets/${modId}/models/block/${prefix}${type}_${side}.json", data)
+}
+
+// ── Item Model 生成 ───────────────────────────────────
+/**
+ * アイテムモデル JSON (models/item/) を生成する。
+ *
+ * @param itemType "tatami" or "tatami_half"
+ */
+def generateItemModel(File baseDir, String modId, String prefix, String itemType, String textureSuffix) {
+    def textureName = (itemType == 'tatami') ? 'tatami_item' : 'tatami_half_item'
+    def data = new LinkedHashMap([
+        parent: 'minecraft:item/generated',
+        textures: [
+            layer0: "${modId}:item/${textureName}${textureSuffix}",
+        ]
+    ])
+    writeJson(baseDir, "assets/${modId}/models/item/${prefix}${itemType}.json", data)
+}
+
+// ── Item Definition 生成 ──────────────────────────────
+/**
+ * アイテム定義 JSON (items/) を生成する。
+ */
+def generateItemDefinition(File baseDir, String modId, String prefix, String itemType) {
+    def data = [
+        model: [
+            type:  'minecraft:model',
+            model: "${modId}:item/${prefix}${itemType}",
+        ]
+    ]
+    writeJson(baseDir, "assets/${modId}/items/${prefix}${itemType}.json", data)
+}
+
+// ── Loot Table 生成 ───────────────────────────────────
+/**
+ * ルートテーブル JSON を生成する（空プール — ドロップは Block コードで制御）。
+ */
+def generateLootTable(File baseDir, String modId, String prefix, String blockType) {
+    def data = new LinkedHashMap([
+        type:  'minecraft:block',
+        pools: [],
+    ])
+    writeJson(baseDir, "data/${modId}/loot_table/blocks/${prefix}${blockType}.json", data)
+}
+
+// ── Lang 生成 ─────────────────────────────────────────
+/**
+ * 全色（デフォルト含む）の言語ファイルを生成する。
+ */
+def generateLangFiles(File baseDir, String modId, List colors) {
+    def enMap = new LinkedHashMap()
+    def jaMap = new LinkedHashMap()
+
+    // デフォルト
+    enMap["block.${modId}.tatami_part"]      = 'Tatami'
+    enMap["item.${modId}.tatami"]            = 'Tatami'
+    enMap["block.${modId}.tatami_half_part"] = 'Half Tatami'
+    enMap["item.${modId}.tatami_half"]       = 'Half Tatami'
+
+    jaMap["block.${modId}.tatami_part"]      = '畳'
+    jaMap["item.${modId}.tatami"]            = '畳'
+    jaMap["block.${modId}.tatami_half_part"] = '半畳'
+    jaMap["item.${modId}.tatami_half"]       = '半畳'
+
+    // カラーバリエーション
+    colors.each { color ->
+        def prefix = "${color.id}_"
+
+        enMap["block.${modId}.${prefix}tatami_part"]      = "${color.en} Tatami"
+        enMap["item.${modId}.${prefix}tatami"]            = "${color.en} Tatami"
+        enMap["block.${modId}.${prefix}tatami_half_part"] = "${color.en} Half Tatami"
+        enMap["item.${modId}.${prefix}tatami_half"]       = "${color.en} Half Tatami"
+
+        jaMap["block.${modId}.${prefix}tatami_part"]      = "${color.ja}畳"
+        jaMap["item.${modId}.${prefix}tatami"]            = "${color.ja}畳"
+        jaMap["block.${modId}.${prefix}tatami_half_part"] = "${color.ja}半畳"
+        jaMap["item.${modId}.${prefix}tatami_half"]       = "${color.ja}半畳"
+    }
+
+    writeJson(baseDir, "assets/${modId}/lang/en_us.json", enMap)
+    writeJson(baseDir, "assets/${modId}/lang/ja_jp.json", jaMap)
+}
+
+// ── メインタスク ──────────────────────────────────────
+tasks.register('generateTatamiAssets') {
+    description = 'Generates blockstate / model / item / loot-table / lang JSON files for all tatami color variants.'
+    group = 'tatami'
+    outputs.dir generatedDir
+
+    doLast {
+        def outDir = generatedDir.get().asFile
+        // クリーンアップ（増分ビルドで古い色が残らないように）
+        if (outDir.exists()) {
+            outDir.deleteDir()
+        }
+        outDir.mkdirs()
+
+        // ── デフォルト（色なし）──
+        generateBlockstate(outDir, MOD_ID, '', 'tatami_part', 8)
+        generateBlockstate(outDir, MOD_ID, '', 'tatami_half_part', 4)
+
+        ['tatami_part', 'tatami_half_part'].each { type ->
+            generateBlockModel(outDir, MOD_ID, '', type, 'left', 270, '')
+            generateBlockModel(outDir, MOD_ID, '', type, 'right', 90, '')
+        }
+
+        ['tatami', 'tatami_half'].each { itemType ->
+            generateItemModel(outDir, MOD_ID, '', itemType, '')
+            generateItemDefinition(outDir, MOD_ID, '', itemType)
+        }
+
+        ['tatami_part', 'tatami_half_part'].each { blockType ->
+            generateLootTable(outDir, MOD_ID, '', blockType)
+        }
+
+        // ── カラーバリエーション ──
+        tatamiColors.each { color ->
+            def prefix = "${color.id}_"
+            def texSuffix = "_${color.id}"
+
+            generateBlockstate(outDir, MOD_ID, prefix, 'tatami_part', 8)
+            generateBlockstate(outDir, MOD_ID, prefix, 'tatami_half_part', 4)
+
+            ['tatami_part', 'tatami_half_part'].each { type ->
+                generateBlockModel(outDir, MOD_ID, prefix, type, 'left', 270, texSuffix)
+                generateBlockModel(outDir, MOD_ID, prefix, type, 'right', 90, texSuffix)
+            }
+
+            ['tatami', 'tatami_half'].each { itemType ->
+                generateItemModel(outDir, MOD_ID, prefix, itemType, texSuffix)
+                generateItemDefinition(outDir, MOD_ID, prefix, itemType)
+            }
+
+            ['tatami_part', 'tatami_half_part'].each { blockType ->
+                generateLootTable(outDir, MOD_ID, prefix, blockType)
+            }
+        }
+
+        // ── 言語ファイル ──
+        generateLangFiles(outDir, MOD_ID, tatamiColors)
+
+        // 生成数をログ出力
+        def fileCount = 0
+        outDir.eachFileRecurse { fileCount++ }
+        logger.lifecycle("generateTatamiAssets: Generated ${fileCount} JSON files in ${outDir}")
+    }
+}
+
+// 生成ディレクトリをリソースに追加
+sourceSets.main.resources.srcDirs += generatedDir
+
+// リソースを使うタスクの前に生成タスクを実行
+tasks.named('processResources') {
+    dependsOn 'generateTatamiAssets'
+}
+tasks.named('sourcesJar') {
+    dependsOn 'generateTatamiAssets'
+}

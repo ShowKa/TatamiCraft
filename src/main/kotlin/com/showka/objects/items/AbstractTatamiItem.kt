@@ -29,6 +29,17 @@ abstract class AbstractTatamiItem(
 
     companion object {
         private val logger = LoggerFactory.getLogger("tatamicraft")
+
+        /**
+         * カラーバリエーション用のファクトリメソッド。
+         * サブクラスを作らずにインスタンスを生成する。
+         */
+        fun create(
+            settings: Settings,
+            layout: TatamiLayout,
+            partBlockProvider: () -> AbstractTatamiPartBlock,
+            partProperty: IntProperty
+        ): AbstractTatamiItem = object : AbstractTatamiItem(settings, layout, partBlockProvider, partProperty) {}
     }
 
     override fun useOnBlock(context: ItemUsageContext): ActionResult {
