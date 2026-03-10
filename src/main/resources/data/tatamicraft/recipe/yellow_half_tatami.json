@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:yellow_dye",
+    "tatamicraft:tatami_half"
+  ],
+  "result": {
+    "id": "tatamicraft:yellow_tatami_half",
+    "count": 1
+  }
+}

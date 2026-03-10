@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:brown_dye",
+    "minecraft:white_dye",
+    "tatamicraft:tatami"
+  ],
+  "result": {
+    "id": "tatamicraft:light_brown_tatami",
+    "count": 1
+  }
+}

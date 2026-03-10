@@ -1,0 +1,61 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "tatamicraft:light_brown_full_tatami"
+      }
+    },
+    "has_tatami": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tatamicraft:tatami"
+          }
+        ]
+      }
+    },
+    "has_brown_dye": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:brown_dye"
+          }
+        ]
+      }
+    },
+    "has_white_dye": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:white_dye"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_tatami"
+    ],
+    [
+      "has_the_recipe",
+      "has_brown_dye"
+    ],
+    [
+      "has_the_recipe",
+      "has_white_dye"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "tatamicraft:light_brown_full_tatami"
+    ]
+  },
+  "sends_telemetry_event": false
+}

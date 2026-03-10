@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "tatamicraft:grayish_pink_tatami"
+  ],
+  "result": {
+    "id": "tatamicraft:grayish_pink_tatami_half",
+    "count": 2
+  }
+}

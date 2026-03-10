@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:light_blue_dye",
+    "tatamicraft:tatami"
+  ],
+  "result": {
+    "id": "tatamicraft:sky_blue_tatami",
+    "count": 1
+  }
+}
