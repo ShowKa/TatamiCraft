@@ -1,0 +1,40 @@
+name: Release to CurseForge
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Get mod version from Gradle
+        id: mod_version
+        run: |
+          echo "VERSION=$(./gradlew properties -q | grep '^mod_version:' | awk '{print $2}')" >> $GITHUB_OUTPUT
+
+      - name: Build
+        run: ./gradlew build
+
+      - name: Publish to CurseForge
+        uses: itsmeow/curseforge-upload@v3
+        with:
+          token: ${{ secrets.CF_API_TOKEN }}
+          project_id: 1483308
+          game_endpoint: minecraft
+          file_path: build/libs/tatamicraft-${{ steps.mod_version.outputs.VERSION }}.jar
+          display_name: TatamiCraft ${{ steps.mod_version.outputs.VERSION }}
+          game_versions: Minecraft 1.21:1.21.11,Java 21,Fabric
+          changelog: Release version ${{ steps.mod_version.outputs.VERSION }}
+          changelog_type: text
