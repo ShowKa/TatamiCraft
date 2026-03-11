@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "tatamicraft:orange_tatami"
+  ],
+  "result": {
+    "id": "tatamicraft:orange_tatami_half",
+    "count": 2
+  }
+}

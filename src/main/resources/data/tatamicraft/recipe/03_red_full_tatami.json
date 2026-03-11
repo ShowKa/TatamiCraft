@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "minecraft:red_dye",
+    "tatamicraft:tatami"
+  ],
+  "result": {
+    "id": "tatamicraft:red_tatami",
+    "count": 1
+  }
+}
