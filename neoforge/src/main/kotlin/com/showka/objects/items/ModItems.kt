@@ -20,44 +20,60 @@ object ModItems {
 
     // ── Default tatami items ──────────────────────────
 
-    val TATAMI_ITEM: DeferredItem<Item> = ITEMS.register("tatami") { _ ->
-        TatamiItem(
-            Item.Properties().useItemDescriptionPrefix(),
-            partBlockProvider = { ModBlocks.TATAMI_PART.get() as AbstractTatamiPartBlock }
-        )
-    }
+    val TATAMI_ITEM: DeferredItem<Item> = ITEMS.registerItem(
+        "tatami",
+        { props: Item.Properties ->
+            TatamiItem(
+                props,
+                partBlockProvider = { ModBlocks.TATAMI_PART.get() as AbstractTatamiPartBlock }
+            )
+        },
+        Item.Properties().useItemDescriptionPrefix()
+    )
 
-    val TATAMI_HALF_ITEM: DeferredItem<Item> = ITEMS.register("tatami_half") { _ ->
-        TatamiHalfItem(
-            Item.Properties().useItemDescriptionPrefix(),
-            partBlockProvider = { ModBlocks.TATAMI_HALF_PART.get() as AbstractTatamiPartBlock }
-        )
-    }
+    val TATAMI_HALF_ITEM: DeferredItem<Item> = ITEMS.registerItem(
+        "tatami_half",
+        { props: Item.Properties ->
+            TatamiHalfItem(
+                props,
+                partBlockProvider = { ModBlocks.TATAMI_HALF_PART.get() as AbstractTatamiPartBlock }
+            )
+        },
+        Item.Properties().useItemDescriptionPrefix()
+    )
 
     // ── Color variations ──────────────────────────
 
     val COLORED_TATAMI_ITEMS: Map<TatamiColor, DeferredItem<Item>> =
         TatamiColor.COLORED.associateWith { color ->
-            ITEMS.register("${color.prefix()}tatami") { _ ->
-                AbstractTatamiItem.create(
-                    properties = Item.Properties().useItemDescriptionPrefix(),
-                    layout = TatamiLayout.TATAMI,
-                    partBlockProvider = { ModBlocks.getTatamiPart(color) as AbstractTatamiPartBlock },
-                    partProperty = TatamiPartBlock.PART
-                )
-            }
+            ITEMS.registerItem(
+                "${color.prefix()}tatami",
+                { props: Item.Properties ->
+                    AbstractTatamiItem.create(
+                        properties = props,
+                        layout = TatamiLayout.TATAMI,
+                        partBlockProvider = { ModBlocks.getTatamiPart(color) as AbstractTatamiPartBlock },
+                        partProperty = TatamiPartBlock.PART
+                    )
+                },
+                Item.Properties().useItemDescriptionPrefix()
+            )
         }
 
     val COLORED_TATAMI_HALF_ITEMS: Map<TatamiColor, DeferredItem<Item>> =
         TatamiColor.COLORED.associateWith { color ->
-            ITEMS.register("${color.prefix()}tatami_half") { _ ->
-                AbstractTatamiItem.create(
-                    properties = Item.Properties().useItemDescriptionPrefix(),
-                    layout = TatamiLayout.TATAMI_HALF,
-                    partBlockProvider = { ModBlocks.getTatamiHalfPart(color) as AbstractTatamiPartBlock },
-                    partProperty = TatamiHalfPartBlock.PART
-                )
-            }
+            ITEMS.registerItem(
+                "${color.prefix()}tatami_half",
+                { props: Item.Properties ->
+                    AbstractTatamiItem.create(
+                        properties = props,
+                        layout = TatamiLayout.TATAMI_HALF,
+                        partBlockProvider = { ModBlocks.getTatamiHalfPart(color) as AbstractTatamiPartBlock },
+                        partProperty = TatamiHalfPartBlock.PART
+                    )
+                },
+                Item.Properties().useItemDescriptionPrefix()
+            )
         }
 
     // ── Helpers ─────────────────────────────────────
