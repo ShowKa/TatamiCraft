@@ -1,0 +1,33 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "tatamicraft:23_purple_split_tatami"
+      }
+    },
+    "has_purple_tatami": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tatamicraft:purple_tatami"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_purple_tatami"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "tatamicraft:23_purple_split_tatami"
+    ]
+  },
+  "sends_telemetry_event": false
+}
