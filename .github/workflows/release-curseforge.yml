@@ -3,7 +3,7 @@ name: Release to CurseForge
 on:
   push:
     tags:
-      - "v*"
+      - "release-test-curseforge"
 
 jobs:
   publish:
