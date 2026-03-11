@@ -5,6 +5,7 @@ import com.showka.objects.TatamiColor
 import com.showka.objects.items.ModItems
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.core.registries.Registries
 import net.minecraft.resources.Identifier
 import net.minecraft.resources.ResourceKey
 import net.minecraft.world.level.block.Block
@@ -18,58 +19,61 @@ object ModBlocks {
 
     // -- Default tatami --
 
-    val TATAMI_PART: Block = registerBlock(
-        path = "tatami_part",
-        block = TatamiPartBlock(
-            tatamiSettings(),
+    val TATAMI_PART: Block = registerBlock("tatami_part") { props ->
+        TatamiPartBlock(
+            props,
             dropItemProvider = { ModItems.TATAMI_ITEM },
             blockEntityTypeProvider = { ModBlockEntities.TATAMI_PART_BLOCK_ENTITY }
         )
-    )
+    }
 
-    val TATAMI_HALF_PART: Block = registerBlock(
-        path = "tatami_half_part",
-        block = TatamiHalfPartBlock(
-            tatamiSettings(),
+    val TATAMI_HALF_PART: Block = registerBlock("tatami_half_part") { props ->
+        TatamiHalfPartBlock(
+            props,
             dropItemProvider = { ModItems.TATAMI_HALF_ITEM },
             blockEntityTypeProvider = { ModBlockEntities.TATAMI_HALF_PART_BLOCK_ENTITY }
         )
-    )
+    }
 
     // -- Color variations --
 
     val COLORED_TATAMI_PARTS: Map<TatamiColor, Block> = TatamiColor.COLORED.associateWith { color ->
-        registerBlock(
-            path = "${color.prefix()}tatami_part",
-            block = TatamiPartBlock(
-                tatamiSettings(),
+        registerBlock("${color.prefix()}tatami_part") { props ->
+            TatamiPartBlock(
+                props,
                 dropItemProvider = { ModItems.getTatamiItem(color) },
                 blockEntityTypeProvider = { ModBlockEntities.TATAMI_PART_BLOCK_ENTITY }
             )
-        )
+        }
     }
 
     val COLORED_TATAMI_HALF_PARTS: Map<TatamiColor, Block> = TatamiColor.COLORED.associateWith { color ->
-        registerBlock(
-            path = "${color.prefix()}tatami_half_part",
-            block = TatamiHalfPartBlock(
-                tatamiSettings(),
+        registerBlock("${color.prefix()}tatami_half_part") { props ->
+            TatamiHalfPartBlock(
+                props,
                 dropItemProvider = { ModItems.getTatamiHalfItem(color) },
                 blockEntityTypeProvider = { ModBlockEntities.TATAMI_HALF_PART_BLOCK_ENTITY }
             )
-        )
+        }
     }
 
     // -- Helpers --
 
-    private fun tatamiSettings(): BlockBehaviour.Properties =
-        BlockBehaviour.Properties.of()
+    private fun tatamiSettings(path: String): BlockBehaviour.Properties {
+        val key = ResourceKey.create(
+            Registries.BLOCK,
+            Identifier.fromNamespaceAndPath(TatamiCraftConstants.MOD_ID, path)
+        )
+        return BlockBehaviour.Properties.of()
+            .setId(key)
             .strength(0.1f)
             .sound(SoundType.WOOL)
             .noCollision()
+    }
 
-    private fun registerBlock(path: String, block: Block): Block {
+    private fun registerBlock(path: String, factory: (BlockBehaviour.Properties) -> Block): Block {
         val id = Identifier.fromNamespaceAndPath(TatamiCraftConstants.MOD_ID, path)
+        val block = factory(tatamiSettings(path))
         return Registry.register(BuiltInRegistries.BLOCK, id, block)
     }
 
