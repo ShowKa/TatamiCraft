@@ -36,4 +36,4 @@ jobs:
           loaders: fabric
           game-versions: 1.21.11
           files: "build/libs/tatamicraft-${{ steps.mod_version.outputs.VERSION }}.jar"
-          changelog: "Release version 1.0.0"
+          changelog: "Remove the debug log that was output in the user message."
