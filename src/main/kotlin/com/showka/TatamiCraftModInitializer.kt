@@ -19,11 +19,11 @@ object TatamiCraftModInitializer : ModInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 		ServerPlayConnectionEvents.JOIN.register{ handler, _, _->
-			val player = handler.player
-			player.sendMessage(
-				Text.literal("こんにちは！"),
-				false
-			)
+//			val player = handler.player
+//			player.sendMessage(
+//				Text.literal("こんにちは！"),
+//				false
+//			)
 		}
 		// mod block 登録
 		ModBlocks.init()
