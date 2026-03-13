@@ -3,6 +3,7 @@ package com.showka.objects.blocks
 import com.showka.TatamiCraftConstants
 import com.showka.objects.TatamiColor
 import com.showka.objects.items.ModItems
+import com.showka.util.TatamiLayout
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.state.BlockBehaviour
@@ -18,11 +19,11 @@ object ModBlocks {
 
     // ── Default tatami ──────────────────────────────
 
-    val TATAMI_PART: DeferredBlock<TatamiPartBlock> = BLOCKS.registerBlock(
+    val TATAMI_PART: DeferredBlock<AbstractTatamiPartBlock> = BLOCKS.registerBlock(
         "tatami_part",
         { props: BlockBehaviour.Properties ->
-            TatamiPartBlock(
-                props,
+            AbstractTatamiPartBlock(
+                props, TatamiLayout.TATAMI,
                 dropItemProvider = { ModItems.TATAMI_ITEM.get() },
                 blockEntityTypeProvider = { ModBlockEntities.TATAMI_PART_BLOCK_ENTITY.get() }
             )
@@ -30,11 +31,11 @@ object ModBlocks {
         java.util.function.Supplier { tatamiSettings() }
     )
 
-    val TATAMI_HALF_PART: DeferredBlock<TatamiHalfPartBlock> = BLOCKS.registerBlock(
+    val TATAMI_HALF_PART: DeferredBlock<AbstractTatamiPartBlock> = BLOCKS.registerBlock(
         "tatami_half_part",
         { props: BlockBehaviour.Properties ->
-            TatamiHalfPartBlock(
-                props,
+            AbstractTatamiPartBlock(
+                props, TatamiLayout.TATAMI_HALF,
                 dropItemProvider = { ModItems.TATAMI_HALF_ITEM.get() },
                 blockEntityTypeProvider = { ModBlockEntities.TATAMI_HALF_PART_BLOCK_ENTITY.get() }
             )
@@ -44,13 +45,13 @@ object ModBlocks {
 
     // ── Color variations ──────────────────────────
 
-    val COLORED_TATAMI_PARTS: Map<TatamiColor, DeferredBlock<TatamiPartBlock>> =
+    val COLORED_TATAMI_PARTS: Map<TatamiColor, DeferredBlock<AbstractTatamiPartBlock>> =
         TatamiColor.COLORED.associateWith { color ->
             BLOCKS.registerBlock(
-                "${color.prefix()}tatami_part",
+                color.tatamiPartId(),
                 { props: BlockBehaviour.Properties ->
-                    TatamiPartBlock(
-                        props,
+                    AbstractTatamiPartBlock(
+                        props, TatamiLayout.TATAMI,
                         dropItemProvider = { ModItems.getTatamiItem(color) },
                         blockEntityTypeProvider = { ModBlockEntities.TATAMI_PART_BLOCK_ENTITY.get() }
                     )
@@ -59,13 +60,13 @@ object ModBlocks {
             )
         }
 
-    val COLORED_TATAMI_HALF_PARTS: Map<TatamiColor, DeferredBlock<TatamiHalfPartBlock>> =
+    val COLORED_TATAMI_HALF_PARTS: Map<TatamiColor, DeferredBlock<AbstractTatamiPartBlock>> =
         TatamiColor.COLORED.associateWith { color ->
             BLOCKS.registerBlock(
-                "${color.prefix()}tatami_half_part",
+                color.tatamiHalfPartId(),
                 { props: BlockBehaviour.Properties ->
-                    TatamiHalfPartBlock(
-                        props,
+                    AbstractTatamiPartBlock(
+                        props, TatamiLayout.TATAMI_HALF,
                         dropItemProvider = { ModItems.getTatamiHalfItem(color) },
                         blockEntityTypeProvider = { ModBlockEntities.TATAMI_HALF_PART_BLOCK_ENTITY.get() }
                     )
@@ -89,9 +90,9 @@ object ModBlocks {
     fun getTatamiHalfPart(color: TatamiColor): Block =
         if (color == TatamiColor.DEFAULT) TATAMI_HALF_PART.get() else COLORED_TATAMI_HALF_PARTS.getValue(color).get()
 
-    fun allTatamiParts(): List<DeferredBlock<TatamiPartBlock>> =
+    fun allTatamiParts(): List<DeferredBlock<AbstractTatamiPartBlock>> =
         listOf(TATAMI_PART) + COLORED_TATAMI_PARTS.values
 
-    fun allTatamiHalfParts(): List<DeferredBlock<TatamiHalfPartBlock>> =
+    fun allTatamiHalfParts(): List<DeferredBlock<AbstractTatamiPartBlock>> =
         listOf(TATAMI_HALF_PART) + COLORED_TATAMI_HALF_PARTS.values
 }

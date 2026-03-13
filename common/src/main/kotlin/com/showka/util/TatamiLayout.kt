@@ -2,6 +2,7 @@ package com.showka.util
 
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.world.level.block.state.properties.IntegerProperty
 
 /**
  * Tatami multi-block layout definition.
@@ -20,6 +21,7 @@ import net.minecraft.core.Direction
 class TatamiLayout(val rows: Int, val cols: Int) {
 
     val totalParts: Int = rows * cols
+    val partProperty: IntegerProperty = IntegerProperty.create("part", 0, totalParts - 1)
 
     /**
      * Returns all positions in PART order from origin + facing.

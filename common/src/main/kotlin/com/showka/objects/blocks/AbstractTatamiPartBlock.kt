@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.EntityBlock
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.level.block.state.properties.EnumProperty
@@ -27,28 +28,56 @@ import net.minecraft.world.phys.shapes.VoxelShape
 import org.slf4j.LoggerFactory
 
 /**
- * Abstract base class for tatami part blocks (carpet-like thin blocks, height 1/16).
+ * Tatami part block (carpet-like thin block, height 1/16).
  *
  * BlockState:
  *   FACING   (NORTH / EAST / SOUTH / WEST)
- *   PART     (0..maxPart)
+ *   PART     (0..maxPart, range determined by layout)
  *   MIRRORED (true/false) - true = expand left
  *
- * @param layout     Tatami layout definition (rows x cols)
- * @param partProperty PART IntegerProperty (range varies by size)
+ * Uses a ThreadLocal to pass the layout through Block() constructor to createBlockStateDefinition,
+ * since instance fields are not yet available when Block() calls createBlockStateDefinition.
+ *
+ * @param layout     Tatami layout definition (rows x cols, also defines partProperty range)
  * @param dropItemProvider Lambda returning the item to drop
  * @param blockEntityTypeProvider Lambda returning BlockEntityType (lazy to avoid circular refs)
  */
-abstract class AbstractTatamiPartBlock(
+class AbstractTatamiPartBlock(
     properties: Properties,
     private val layout: TatamiLayout,
-    private val partProperty: IntegerProperty,
     private val dropItemProvider: () -> Item,
     private val blockEntityTypeProvider: () -> BlockEntityType<TatamiBlockEntity>
-) : Block(properties), EntityBlock {
+) : Block(stashLayout(layout, properties)), EntityBlock {
+
+    private val partProperty: IntegerProperty = layout.partProperty
+
+    init {
+        CONSTRUCTING_LAYOUT.remove()
+        registerDefaultState(
+            stateDefinition.any()
+                .setValue(FACING, Direction.NORTH)
+                .setValue(partProperty, 0)
+                .setValue(MIRRORED, false)
+        )
+    }
+
+    override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
+        builder.add(FACING, CONSTRUCTING_LAYOUT.get().partProperty, MIRRORED)
+    }
 
     companion object {
         private val logger = LoggerFactory.getLogger("tatamicraft")
+
+        /**
+         * ThreadLocal to pass layout through Block() constructor.
+         * Set before super() call, read in createBlockStateDefinition, cleared in init block.
+         */
+        private val CONSTRUCTING_LAYOUT: ThreadLocal<TatamiLayout> = ThreadLocal()
+
+        private fun stashLayout(layout: TatamiLayout, props: Properties): Properties {
+            CONSTRUCTING_LAYOUT.set(layout)
+            return props
+        }
 
         val FACING: EnumProperty<Direction> = BlockStateProperties.HORIZONTAL_FACING
         val MIRRORED: BooleanProperty = BooleanProperty.create("mirrored")

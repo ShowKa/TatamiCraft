@@ -3,6 +3,7 @@ package com.showka.objects.blocks
 import com.showka.TatamiCraftConstants
 import com.showka.objects.TatamiColor
 import com.showka.objects.items.ModItems
+import com.showka.util.TatamiLayout
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
@@ -20,16 +21,16 @@ object ModBlocks {
     // -- Default tatami --
 
     val TATAMI_PART: Block = registerBlock("tatami_part") { props ->
-        TatamiPartBlock(
-            props,
+        AbstractTatamiPartBlock(
+            props, TatamiLayout.TATAMI,
             dropItemProvider = { ModItems.TATAMI_ITEM },
             blockEntityTypeProvider = { ModBlockEntities.TATAMI_PART_BLOCK_ENTITY }
         )
     }
 
     val TATAMI_HALF_PART: Block = registerBlock("tatami_half_part") { props ->
-        TatamiHalfPartBlock(
-            props,
+        AbstractTatamiPartBlock(
+            props, TatamiLayout.TATAMI_HALF,
             dropItemProvider = { ModItems.TATAMI_HALF_ITEM },
             blockEntityTypeProvider = { ModBlockEntities.TATAMI_HALF_PART_BLOCK_ENTITY }
         )
@@ -38,9 +39,9 @@ object ModBlocks {
     // -- Color variations --
 
     val COLORED_TATAMI_PARTS: Map<TatamiColor, Block> = TatamiColor.COLORED.associateWith { color ->
-        registerBlock("${color.prefix()}tatami_part") { props ->
-            TatamiPartBlock(
-                props,
+        registerBlock(color.tatamiPartId()) { props ->
+            AbstractTatamiPartBlock(
+                props, TatamiLayout.TATAMI,
                 dropItemProvider = { ModItems.getTatamiItem(color) },
                 blockEntityTypeProvider = { ModBlockEntities.TATAMI_PART_BLOCK_ENTITY }
             )
@@ -48,9 +49,9 @@ object ModBlocks {
     }
 
     val COLORED_TATAMI_HALF_PARTS: Map<TatamiColor, Block> = TatamiColor.COLORED.associateWith { color ->
-        registerBlock("${color.prefix()}tatami_half_part") { props ->
-            TatamiHalfPartBlock(
-                props,
+        registerBlock(color.tatamiHalfPartId()) { props ->
+            AbstractTatamiPartBlock(
+                props, TatamiLayout.TATAMI_HALF,
                 dropItemProvider = { ModItems.getTatamiHalfItem(color) },
                 blockEntityTypeProvider = { ModBlockEntities.TATAMI_HALF_PART_BLOCK_ENTITY }
             )

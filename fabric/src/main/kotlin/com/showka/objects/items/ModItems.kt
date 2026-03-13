@@ -19,24 +19,24 @@ object ModItems {
     // -- Default tatami items --
 
     val TATAMI_ITEM: Item = registerItem("tatami") { props ->
-        TatamiItem(props, partBlockProvider = { ModBlocks.TATAMI_PART as AbstractTatamiPartBlock })
+        AbstractTatamiItem.tatami(props) { ModBlocks.TATAMI_PART as AbstractTatamiPartBlock }
     }
 
     val TATAMI_HALF_ITEM: Item = registerItem("tatami_half") { props ->
-        TatamiHalfItem(props, partBlockProvider = { ModBlocks.TATAMI_HALF_PART as AbstractTatamiPartBlock })
+        AbstractTatamiItem.tatamiHalf(props) { ModBlocks.TATAMI_HALF_PART as AbstractTatamiPartBlock }
     }
 
     // -- Color variations --
 
     val COLORED_TATAMI_ITEMS: Map<TatamiColor, Item> = TatamiColor.COLORED.associateWith { color ->
-        registerItem("${color.prefix()}tatami") { props ->
-            TatamiItem(props, partBlockProvider = { ModBlocks.getTatamiPart(color) as AbstractTatamiPartBlock })
+        registerItem(color.tatamiId()) { props ->
+            AbstractTatamiItem.tatami(props) { ModBlocks.getTatamiPart(color) as AbstractTatamiPartBlock }
         }
     }
 
     val COLORED_TATAMI_HALF_ITEMS: Map<TatamiColor, Item> = TatamiColor.COLORED.associateWith { color ->
-        registerItem("${color.prefix()}tatami_half") { props ->
-            TatamiHalfItem(props, partBlockProvider = { ModBlocks.getTatamiHalfPart(color) as AbstractTatamiPartBlock })
+        registerItem(color.tatamiHalfId()) { props ->
+            AbstractTatamiItem.tatamiHalf(props) { ModBlocks.getTatamiHalfPart(color) as AbstractTatamiPartBlock }
         }
     }
 

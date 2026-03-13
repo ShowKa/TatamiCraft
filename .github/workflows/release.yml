@@ -1,4 +1,4 @@
-name: Release to Modrinth
+name: Release to CurseForge & Modrinth
 
 on:
   push:
@@ -27,6 +27,34 @@ jobs:
 
       - name: Build
         run: chmod +x ./gradlew && ./gradlew build
+
+      # ── CurseForge ──────────────────────────────
+
+      - name: Publish Fabric to CurseForge
+        uses: itsmeow/curseforge-upload@v3
+        with:
+          token: ${{ secrets.CF_API_TOKEN }}
+          project_id: 1483308
+          game_endpoint: minecraft
+          file_path: fabric/build/libs/tatamicraft-fabric-${{ steps.mod_props.outputs.MC_VERSION }}-${{ steps.mod_props.outputs.VERSION }}.jar
+          display_name: TatamiCraft ${{ steps.mod_props.outputs.VERSION }} (Fabric)
+          game_versions: Minecraft 1.21:1.21.11,Java 21,Fabric
+          changelog: Release version ${{ steps.mod_props.outputs.VERSION }}
+          changelog_type: text
+
+      - name: Publish NeoForge to CurseForge
+        uses: itsmeow/curseforge-upload@v3
+        with:
+          token: ${{ secrets.CF_API_TOKEN }}
+          project_id: 1483308
+          game_endpoint: minecraft
+          file_path: neoforge/build/libs/tatamicraft-neoforge-${{ steps.mod_props.outputs.MC_VERSION }}-${{ steps.mod_props.outputs.VERSION }}.jar
+          display_name: TatamiCraft ${{ steps.mod_props.outputs.VERSION }} (NeoForge)
+          game_versions: Minecraft 1.21:1.21.11,Java 21,NeoForge
+          changelog: Release version ${{ steps.mod_props.outputs.VERSION }}
+          changelog_type: text
+
+      # ── Modrinth ─────────────────────────────────
 
       - name: Publish Fabric to Modrinth
         uses: cloudnode-pro/modrinth-publish@v2
