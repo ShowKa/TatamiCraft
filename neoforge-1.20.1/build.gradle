@@ -1,0 +1,74 @@
+plugins {
+    id 'multiloader-common'
+    id 'net.neoforged.moddev.legacyforge'
+    id 'org.jetbrains.kotlin.jvm'
+}
+
+// Include common resources (generated tatami assets, lang, etc.) but NOT common source
+// (common source uses MC 1.21.x APIs incompatible with 1.20.1)
+configurations {
+    commonResources {
+        canBeResolved = true
+    }
+}
+dependencies {
+    commonResources project(path: ':common', configuration: 'commonResources')
+}
+processResources {
+    dependsOn(configurations.commonResources)
+    from(configurations.commonResources)
+}
+tasks.named('sourcesJar', Jar) {
+    dependsOn(configurations.commonResources)
+    from(configurations.commonResources)
+}
+
+legacyForge {
+    version = forge_version
+    // Automatically enable AccessTransformers if the file exists
+    def at = project(':common').file('src/main/resources/META-INF/accesstransformer.cfg')
+    if (at.exists()) {
+        accessTransformers.from(at.absolutePath)
+    }
+    runs {
+        configureEach {
+            ideName = "Forge ${it.name.capitalize()} (${project.path})"
+        }
+        client {
+            client()
+        }
+        server {
+            server()
+        }
+    }
+    mods {
+        "${mod_id}" {
+            sourceSet sourceSets.main
+        }
+    }
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+kotlin {
+    jvmToolchain(java_version as int)
+}
+
+// Implement mcgradleconventions loader attribute
+def loaderAttribute = Attribute.of('io.github.mcgradleconventions.loader', String)
+['apiElements', 'runtimeElements', 'sourcesElements'].each { variant ->
+    configurations.named("$variant") {
+        attributes {
+            attribute(loaderAttribute, 'neoforge')
+        }
+    }
+}
+sourceSets.configureEach {
+    [it.compileClasspathConfigurationName, it.runtimeClasspathConfigurationName].each { variant ->
+        configurations.named("$variant") {
+            attributes {
+                attribute(loaderAttribute, 'neoforge')
+            }
+        }
+    }
+}

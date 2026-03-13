@@ -1,0 +1,86 @@
+plugins {
+    id 'multiloader-common'
+    id 'fabric-loom'
+    id 'org.jetbrains.kotlin.jvm'
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    mappings loom.officialMojangMappings()
+    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+    modImplementation "net.fabricmc:fabric-language-kotlin:${fabric_kotlin_version}"
+}
+
+// Include common resources (generated tatami assets, lang, etc.) but NOT common source
+// (common source uses MC 1.21.x APIs incompatible with 1.20.1)
+configurations {
+    commonResources {
+        canBeResolved = true
+    }
+}
+dependencies {
+    commonResources project(path: ':common', configuration: 'commonResources')
+}
+processResources {
+    dependsOn(configurations.commonResources)
+    from(configurations.commonResources)
+}
+tasks.named('sourcesJar', Jar) {
+    dependsOn(configurations.commonResources)
+    from(configurations.commonResources)
+}
+
+loom {
+    def aw = project(':common').file("src/main/resources/${mod_id}.accesswidener")
+    if (aw.exists()) {
+        accessWidenerPath.set(aw)
+    }
+    mixin {
+        defaultRefmapName.set("${mod_id}.refmap.json")
+    }
+    runs {
+        client {
+            client()
+            setConfigName('Fabric Client 1.20.1')
+            ideConfigGenerated(true)
+            runDir('runs/client')
+        }
+        server {
+            server()
+            setConfigName('Fabric Server 1.20.1')
+            ideConfigGenerated(true)
+            runDir('runs/server')
+        }
+    }
+}
+
+kotlin {
+    jvmToolchain(java_version as int)
+}
+
+// Implement mcgradleconventions loader attribute
+def loaderAttribute = Attribute.of('io.github.mcgradleconventions.loader', String)
+['apiElements', 'runtimeElements', 'sourcesElements'].each { variant ->
+    configurations.named("$variant") {
+        attributes {
+            attribute(loaderAttribute, 'fabric')
+        }
+    }
+}
+sourceSets.configureEach {
+    [it.compileClasspathConfigurationName, it.runtimeClasspathConfigurationName].each { variant ->
+        configurations.named("$variant") {
+            attributes {
+                attribute(loaderAttribute, 'fabric')
+            }
+        }
+    }
+}
+loom.remapConfigurations.configureEach {
+    configurations.named(it.name) {
+        attributes {
+            attribute(loaderAttribute, 'fabric')
+        }
+    }
+}

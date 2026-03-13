@@ -260,6 +260,6 @@ sourceSets.main.resources.srcDirs += generatedDir
 tasks.named('processResources') {
     dependsOn 'generateTatamiAssets'
 }
-tasks.named('sourcesJar') {
+tasks.matching { it.name == 'sourcesJar' }.configureEach {
     dependsOn 'generateTatamiAssets'
 }
