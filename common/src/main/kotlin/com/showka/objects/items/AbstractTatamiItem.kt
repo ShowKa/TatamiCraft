@@ -2,43 +2,40 @@ package com.showka.objects.items
 
 import com.showka.objects.blocks.AbstractTatamiPartBlock
 import com.showka.objects.blocks.TatamiBlockEntity
-import com.showka.objects.blocks.TatamiHalfPartBlock
-import com.showka.objects.blocks.TatamiPartBlock
 import com.showka.util.TatamiLayout
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.state.properties.IntegerProperty
 import net.minecraft.core.BlockPos
 import org.slf4j.LoggerFactory
 
 /**
- * Abstract base class for tatami items.
+ * Tatami item.
  * Right-click places a multi-block structure according to the layout.
  *
- * @param layout     Tatami layout definition (rows x cols)
+ * @param layout     Tatami layout definition (rows x cols, also defines partProperty)
  * @param partBlockProvider Lambda returning the part block to place (lazy)
- * @param partProperty PART IntegerProperty
  */
 class AbstractTatamiItem(
     properties: Properties,
     private val layout: TatamiLayout,
-    private val partBlockProvider: () -> AbstractTatamiPartBlock,
-    private val partProperty: IntegerProperty
+    private val partBlockProvider: () -> AbstractTatamiPartBlock
 ) : Item(properties) {
+
+    private val partProperty = layout.partProperty
 
     companion object {
         private val logger = LoggerFactory.getLogger("tatamicraft")
 
         /** Create a full-size tatami item (2x4 layout). */
         fun tatami(props: Properties, partBlockProvider: () -> AbstractTatamiPartBlock): AbstractTatamiItem =
-            AbstractTatamiItem(props, TatamiLayout.TATAMI, partBlockProvider, TatamiPartBlock.PART)
+            AbstractTatamiItem(props, TatamiLayout.TATAMI, partBlockProvider)
 
         /** Create a half-size tatami item (2x2 layout). */
         fun tatamiHalf(props: Properties, partBlockProvider: () -> AbstractTatamiPartBlock): AbstractTatamiItem =
-            AbstractTatamiItem(props, TatamiLayout.TATAMI_HALF, partBlockProvider, TatamiHalfPartBlock.PART)
+            AbstractTatamiItem(props, TatamiLayout.TATAMI_HALF, partBlockProvider)
     }
 
     override fun useOn(context: UseOnContext): InteractionResult {
