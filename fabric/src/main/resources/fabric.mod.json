@@ -20,21 +20,8 @@
 				"value": "com.showka.TatamiCraftModInitializer",
 				"adapter": "kotlin"
 			}
-		],
-		"client": [
-			{
-				"value": "com.showka.TatamiCraftClient",
-				"adapter": "kotlin"
-			}
 		]
 	},
-	"mixins": [
-		"tatamicraft.mixins.json",
-		{
-			"config": "tatamicraft.client.mixins.json",
-			"environment": "client"
-		}
-	],
 	"depends": {
 		"fabricloader": ">=${fabric_loader_version}",
 		"minecraft": "${minecraft_version_range}",
