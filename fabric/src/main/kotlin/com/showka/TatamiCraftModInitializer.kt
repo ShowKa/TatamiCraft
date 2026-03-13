@@ -1,9 +1,9 @@
 package com.showka
 
-import com.showka.objects.TatamiColor
 import com.showka.objects.blocks.ModBlockEntities
 import com.showka.objects.blocks.ModBlocks
 import com.showka.objects.items.ModItems
+import com.showka.util.orderedTatamiItems
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.minecraft.world.item.CreativeModeTabs
@@ -20,12 +20,12 @@ object TatamiCraftModInitializer : ModInitializer {
 
         // Add tatami items to creative tab (default + all colors, same color tatami & half tatami adjacent)
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.BUILDING_BLOCKS).register { entries ->
-            entries.accept(ModItems.TATAMI_ITEM)
-            entries.accept(ModItems.TATAMI_HALF_ITEM)
-            for (color in TatamiColor.COLORED) {
-                entries.accept(ModItems.getTatamiItem(color))
-                entries.accept(ModItems.getTatamiHalfItem(color))
-            }
+            orderedTatamiItems(
+                ModItems.TATAMI_ITEM,
+                ModItems.TATAMI_HALF_ITEM,
+                ModItems::getTatamiItem,
+                ModItems::getTatamiHalfItem
+            ).forEach { entries.accept(it) }
         }
     }
 }
