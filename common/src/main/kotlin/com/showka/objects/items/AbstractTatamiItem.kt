@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory
  * @param partBlockProvider Lambda returning the part block to place (lazy)
  * @param partProperty PART IntegerProperty
  */
-open class AbstractTatamiItem(
+class AbstractTatamiItem(
     properties: Properties,
     private val layout: TatamiLayout,
     private val partBlockProvider: () -> AbstractTatamiPartBlock,
