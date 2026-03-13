@@ -47,7 +47,7 @@ object ModBlocks {
     val COLORED_TATAMI_PARTS: Map<TatamiColor, DeferredBlock<TatamiPartBlock>> =
         TatamiColor.COLORED.associateWith { color ->
             BLOCKS.registerBlock(
-                "${color.prefix()}tatami_part",
+                color.tatamiPartId(),
                 { props: BlockBehaviour.Properties ->
                     TatamiPartBlock(
                         props,
@@ -62,7 +62,7 @@ object ModBlocks {
     val COLORED_TATAMI_HALF_PARTS: Map<TatamiColor, DeferredBlock<TatamiHalfPartBlock>> =
         TatamiColor.COLORED.associateWith { color ->
             BLOCKS.registerBlock(
-                "${color.prefix()}tatami_half_part",
+                color.tatamiHalfPartId(),
                 { props: BlockBehaviour.Properties ->
                     TatamiHalfPartBlock(
                         props,

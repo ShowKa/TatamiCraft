@@ -2,6 +2,8 @@ package com.showka.objects.items
 
 import com.showka.objects.blocks.AbstractTatamiPartBlock
 import com.showka.objects.blocks.TatamiBlockEntity
+import com.showka.objects.blocks.TatamiHalfPartBlock
+import com.showka.objects.blocks.TatamiPartBlock
 import com.showka.util.TatamiLayout
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.item.Item
@@ -29,6 +31,14 @@ class AbstractTatamiItem(
 
     companion object {
         private val logger = LoggerFactory.getLogger("tatamicraft")
+
+        /** Create a full-size tatami item (2x4 layout). */
+        fun tatami(props: Properties, partBlockProvider: () -> AbstractTatamiPartBlock): AbstractTatamiItem =
+            AbstractTatamiItem(props, TatamiLayout.TATAMI, partBlockProvider, TatamiPartBlock.PART)
+
+        /** Create a half-size tatami item (2x2 layout). */
+        fun tatamiHalf(props: Properties, partBlockProvider: () -> AbstractTatamiPartBlock): AbstractTatamiItem =
+            AbstractTatamiItem(props, TatamiLayout.TATAMI_HALF, partBlockProvider, TatamiHalfPartBlock.PART)
     }
 
     override fun useOn(context: UseOnContext): InteractionResult {

@@ -38,7 +38,7 @@ object ModBlocks {
     // -- Color variations --
 
     val COLORED_TATAMI_PARTS: Map<TatamiColor, Block> = TatamiColor.COLORED.associateWith { color ->
-        registerBlock("${color.prefix()}tatami_part") { props ->
+        registerBlock(color.tatamiPartId()) { props ->
             TatamiPartBlock(
                 props,
                 dropItemProvider = { ModItems.getTatamiItem(color) },
@@ -48,7 +48,7 @@ object ModBlocks {
     }
 
     val COLORED_TATAMI_HALF_PARTS: Map<TatamiColor, Block> = TatamiColor.COLORED.associateWith { color ->
-        registerBlock("${color.prefix()}tatami_half_part") { props ->
+        registerBlock(color.tatamiHalfPartId()) { props ->
             TatamiHalfPartBlock(
                 props,
                 dropItemProvider = { ModItems.getTatamiHalfItem(color) },

@@ -4,9 +4,6 @@ import com.showka.TatamiCraftConstants
 import com.showka.objects.TatamiColor
 import com.showka.objects.blocks.AbstractTatamiPartBlock
 import com.showka.objects.blocks.ModBlocks
-import com.showka.objects.blocks.TatamiHalfPartBlock
-import com.showka.objects.blocks.TatamiPartBlock
-import com.showka.util.TatamiLayout
 import net.minecraft.world.item.Item
 import net.neoforged.neoforge.registries.DeferredItem
 import net.neoforged.neoforge.registries.DeferredRegister
@@ -22,26 +19,26 @@ object ModItems {
 
     val TATAMI_ITEM: DeferredItem<Item> = ITEMS.registerItem(
         "tatami"
-    ) { props: Item.Properties -> AbstractTatamiItem(props, TatamiLayout.TATAMI, { ModBlocks.TATAMI_PART.get() as AbstractTatamiPartBlock }, TatamiPartBlock.PART) }
+    ) { props: Item.Properties -> AbstractTatamiItem.tatami(props) { ModBlocks.TATAMI_PART.get() as AbstractTatamiPartBlock } }
 
     val TATAMI_HALF_ITEM: DeferredItem<Item> = ITEMS.registerItem(
         "tatami_half"
-    ) { props: Item.Properties -> AbstractTatamiItem(props, TatamiLayout.TATAMI_HALF, { ModBlocks.TATAMI_HALF_PART.get() as AbstractTatamiPartBlock }, TatamiHalfPartBlock.PART) }
+    ) { props: Item.Properties -> AbstractTatamiItem.tatamiHalf(props) { ModBlocks.TATAMI_HALF_PART.get() as AbstractTatamiPartBlock } }
 
     // ── Color variations ──────────────────────────
 
     val COLORED_TATAMI_ITEMS: Map<TatamiColor, DeferredItem<Item>> =
         TatamiColor.COLORED.associateWith { color ->
             ITEMS.registerItem(
-                "${color.prefix()}tatami"
-            ) { props: Item.Properties -> AbstractTatamiItem(props, TatamiLayout.TATAMI, { ModBlocks.getTatamiPart(color) as AbstractTatamiPartBlock }, TatamiPartBlock.PART) }
+                color.tatamiId()
+            ) { props: Item.Properties -> AbstractTatamiItem.tatami(props) { ModBlocks.getTatamiPart(color) as AbstractTatamiPartBlock } }
         }
 
     val COLORED_TATAMI_HALF_ITEMS: Map<TatamiColor, DeferredItem<Item>> =
         TatamiColor.COLORED.associateWith { color ->
             ITEMS.registerItem(
-                "${color.prefix()}tatami_half"
-            ) { props: Item.Properties -> AbstractTatamiItem(props, TatamiLayout.TATAMI_HALF, { ModBlocks.getTatamiHalfPart(color) as AbstractTatamiPartBlock }, TatamiHalfPartBlock.PART) }
+                color.tatamiHalfId()
+            ) { props: Item.Properties -> AbstractTatamiItem.tatamiHalf(props) { ModBlocks.getTatamiHalfPart(color) as AbstractTatamiPartBlock } }
         }
 
     // ── Helpers ─────────────────────────────────────

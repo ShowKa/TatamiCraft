@@ -31,6 +31,13 @@ enum class TatamiColor(
     /** Texture file name suffix. Empty string for default. */
     fun suffix(): String = if (id.isEmpty()) "" else "_${id}"
 
+    // -- Registry ID helpers --
+
+    fun tatamiPartId(): String = "${prefix()}tatami_part"
+    fun tatamiHalfPartId(): String = "${prefix()}tatami_half_part"
+    fun tatamiId(): String = "${prefix()}tatami"
+    fun tatamiHalfId(): String = "${prefix()}tatami_half"
+
     companion object {
         /** All colors except DEFAULT */
         val COLORED = entries.filter { it != DEFAULT }
