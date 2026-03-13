@@ -19,21 +19,33 @@ jobs:
           distribution: temurin
           java-version: 21
 
-      - name: Get mod version from Gradle
-        id: mod_version
+      - name: Get mod properties
+        id: mod_props
         run: |
-          echo "VERSION=$(./gradlew properties -q | grep '^mod_version:' | awk '{print $2}')" >> $GITHUB_OUTPUT
+          echo "VERSION=$(grep '^version=' gradle.properties | cut -d'=' -f2)" >> $GITHUB_OUTPUT
+          echo "MC_VERSION=$(grep '^minecraft_version=' gradle.properties | cut -d'=' -f2)" >> $GITHUB_OUTPUT
 
       - name: Build
-        run: ./gradlew build
+        run: chmod +x ./gradlew && ./gradlew build
 
-      - name: Publish to Modrinth
+      - name: Publish Fabric to Modrinth
         uses: cloudnode-pro/modrinth-publish@v2
         with:
           token: ${{ secrets.MODRINTH_TOKEN }}
           project: 8L1DTZf2
-          version: ${{ steps.mod_version.outputs.VERSION }}
+          version: ${{ steps.mod_props.outputs.VERSION }}+fabric
           loaders: fabric
           game-versions: 1.21.11
-          files: "build/libs/tatamicraft-${{ steps.mod_version.outputs.VERSION }}.jar"
-          changelog: "Release version 1.0.0"
+          files: "fabric/build/libs/tatamicraft-fabric-${{ steps.mod_props.outputs.MC_VERSION }}-${{ steps.mod_props.outputs.VERSION }}.jar"
+          changelog: "Release version ${{ steps.mod_props.outputs.VERSION }}"
+
+      - name: Publish NeoForge to Modrinth
+        uses: cloudnode-pro/modrinth-publish@v2
+        with:
+          token: ${{ secrets.MODRINTH_TOKEN }}
+          project: 8L1DTZf2
+          version: ${{ steps.mod_props.outputs.VERSION }}+neoforge
+          loaders: neoforge
+          game-versions: 1.21.11
+          files: "neoforge/build/libs/tatamicraft-neoforge-${{ steps.mod_props.outputs.MC_VERSION }}-${{ steps.mod_props.outputs.VERSION }}.jar"
+          changelog: "Release version ${{ steps.mod_props.outputs.VERSION }}"
