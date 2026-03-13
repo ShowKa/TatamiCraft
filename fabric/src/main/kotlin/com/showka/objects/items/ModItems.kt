@@ -2,6 +2,8 @@ package com.showka.objects.items
 
 import com.showka.TatamiCraftConstants
 import com.showka.objects.TatamiColor
+import com.showka.objects.blocks.AbstractTatamiPartBlock
+import com.showka.objects.blocks.ModBlocks
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
@@ -16,18 +18,26 @@ object ModItems {
 
     // -- Default tatami items --
 
-    val TATAMI_ITEM: Item = registerItem("tatami") { props -> TatamiItem(props) }
+    val TATAMI_ITEM: Item = registerItem("tatami") { props ->
+        TatamiItem(props, partBlockProvider = { ModBlocks.TATAMI_PART as AbstractTatamiPartBlock })
+    }
 
-    val TATAMI_HALF_ITEM: Item = registerItem("tatami_half") { props -> TatamiHalfItem(props) }
+    val TATAMI_HALF_ITEM: Item = registerItem("tatami_half") { props ->
+        TatamiHalfItem(props, partBlockProvider = { ModBlocks.TATAMI_HALF_PART as AbstractTatamiPartBlock })
+    }
 
     // -- Color variations --
 
     val COLORED_TATAMI_ITEMS: Map<TatamiColor, Item> = TatamiColor.COLORED.associateWith { color ->
-        registerItem("${color.prefix()}tatami") { props -> TatamiItem(props) }
+        registerItem("${color.prefix()}tatami") { props ->
+            TatamiItem(props, partBlockProvider = { ModBlocks.getTatamiPart(color) as AbstractTatamiPartBlock })
+        }
     }
 
     val COLORED_TATAMI_HALF_ITEMS: Map<TatamiColor, Item> = TatamiColor.COLORED.associateWith { color ->
-        registerItem("${color.prefix()}tatami_half") { props -> TatamiHalfItem(props) }
+        registerItem("${color.prefix()}tatami_half") { props ->
+            TatamiHalfItem(props, partBlockProvider = { ModBlocks.getTatamiHalfPart(color) as AbstractTatamiPartBlock })
+        }
     }
 
     // -- Helpers --

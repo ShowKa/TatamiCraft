@@ -2,6 +2,8 @@ package com.showka.objects.items
 
 import com.showka.TatamiCraftConstants
 import com.showka.objects.TatamiColor
+import com.showka.objects.blocks.AbstractTatamiPartBlock
+import com.showka.objects.blocks.ModBlocks
 import net.minecraft.world.item.Item
 import net.neoforged.neoforge.registries.DeferredItem
 import net.neoforged.neoforge.registries.DeferredRegister
@@ -17,11 +19,11 @@ object ModItems {
 
     val TATAMI_ITEM: DeferredItem<Item> = ITEMS.registerItem(
         "tatami"
-    ) { props: Item.Properties -> TatamiItem(props) }
+    ) { props: Item.Properties -> TatamiItem(props, partBlockProvider = { ModBlocks.TATAMI_PART.get() as AbstractTatamiPartBlock }) }
 
     val TATAMI_HALF_ITEM: DeferredItem<Item> = ITEMS.registerItem(
         "tatami_half"
-    ) { props: Item.Properties -> TatamiHalfItem(props) }
+    ) { props: Item.Properties -> TatamiHalfItem(props, partBlockProvider = { ModBlocks.TATAMI_HALF_PART.get() as AbstractTatamiPartBlock }) }
 
     // ── Color variations ──────────────────────────
 
@@ -29,14 +31,14 @@ object ModItems {
         TatamiColor.COLORED.associateWith { color ->
             ITEMS.registerItem(
                 "${color.prefix()}tatami"
-            ) { props: Item.Properties -> TatamiItem(props) }
+            ) { props: Item.Properties -> TatamiItem(props, partBlockProvider = { ModBlocks.getTatamiPart(color) as AbstractTatamiPartBlock }) }
         }
 
     val COLORED_TATAMI_HALF_ITEMS: Map<TatamiColor, DeferredItem<Item>> =
         TatamiColor.COLORED.associateWith { color ->
             ITEMS.registerItem(
                 "${color.prefix()}tatami_half"
-            ) { props: Item.Properties -> TatamiHalfItem(props) }
+            ) { props: Item.Properties -> TatamiHalfItem(props, partBlockProvider = { ModBlocks.getTatamiHalfPart(color) as AbstractTatamiPartBlock }) }
         }
 
     // ── Helpers ─────────────────────────────────────
