@@ -6,21 +6,11 @@ import com.showka.objects.blocks.ModBlocks
 import com.showka.objects.items.ModItems
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
-import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents
-import net.minecraft.network.chat.Component
 import net.minecraft.world.item.CreativeModeTabs
-import org.slf4j.LoggerFactory
 
 object TatamiCraftModInitializer : ModInitializer {
-    private val logger = LoggerFactory.getLogger("tatamicraft")
 
     override fun onInitialize() {
-        ServerPlayConnectionEvents.JOIN.register { handler, _, _ ->
-            val player = handler.player
-            player.displayClientMessage(
-                Component.literal("こんにちは！"), false
-            )
-        }
         // Register blocks
         ModBlocks.init()
         // Register block entities
