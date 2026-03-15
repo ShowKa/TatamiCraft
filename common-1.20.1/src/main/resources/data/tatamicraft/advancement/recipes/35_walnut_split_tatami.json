@@ -1,0 +1,33 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "tatamicraft:35_walnut_split_tatami"
+      }
+    },
+    "has_walnut_tatami": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "tatamicraft:walnut_tatami"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_walnut_tatami"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "tatamicraft:35_walnut_split_tatami"
+    ]
+  },
+  "sends_telemetry_event": false
+}

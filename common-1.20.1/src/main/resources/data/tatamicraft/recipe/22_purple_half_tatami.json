@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "minecraft:purple_dye",
+    "tatamicraft:tatami_half"
+  ],
+  "result": {
+    "count": 1,
+    "item": "tatamicraft:purple_tatami_half"
+  }
+}

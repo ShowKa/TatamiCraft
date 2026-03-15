@@ -1,24 +1,24 @@
 plugins {
     id 'multiloader-common'
-    id 'net.neoforged.moddev'
+    id 'net.neoforged.moddev.legacyforge'
     id 'org.jetbrains.kotlin.jvm'
 }
 
-neoForge {
-    neoFormVersion = neo_form_version
-    // Automatically enable AccessTransformers if the file exists
-    def at = file('src/main/resources/META-INF/accesstransformer.cfg')
-    if (at.exists()) {
-        accessTransformers.from(at.absolutePath)
-    }
+// 1.20.1 uses Java 17
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(17)
+}
+
+kotlin {
+    jvmToolchain(17)
+}
+
+legacyForge {
+    mcpVersion = '1.20.1'
 }
 
 dependencies {
     compileOnly group: 'org.spongepowered', name: 'mixin', version: '0.8.5'
-}
-
-kotlin {
-    jvmToolchain(java_version as int)
 }
 
 // Shared resources (textures, icon) from common-resources
@@ -70,5 +70,3 @@ sourceSets.configureEach {
         }
     }
 }
-
-// tatami-assets.gradle is applied above (before artifacts block)

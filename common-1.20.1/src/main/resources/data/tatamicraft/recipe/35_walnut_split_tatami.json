@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "tatamicraft:walnut_tatami"
+  ],
+  "result": {
+    "count": 2,
+    "item": "tatamicraft:walnut_tatami_half"
+  }
+}

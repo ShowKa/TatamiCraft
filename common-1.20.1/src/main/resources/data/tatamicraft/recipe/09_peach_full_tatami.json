@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "minecraft:pink_dye",
+    "tatamicraft:tatami"
+  ],
+  "result": {
+    "count": 1,
+    "item": "tatamicraft:peach_tatami"
+  }
+}
