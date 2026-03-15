@@ -1,0 +1,49 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "tatamicraft:06_orange_full_tatami"
+      }
+    },
+    "has_tatami": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "tatamicraft:tatami",
+            "items": "tatamicraft:tatami"
+          }
+        ]
+      }
+    },
+    "has_orange_dye": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:orange_dye",
+            "items": "minecraft:orange_dye"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_tatami"
+    ],
+    [
+      "has_the_recipe",
+      "has_orange_dye"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "tatamicraft:06_orange_full_tatami"
+    ]
+  },
+  "sends_telemetry_event": false
+}
