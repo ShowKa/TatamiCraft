@@ -1,0 +1,49 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "tatamicraft:10_peach_half_tatami"
+      }
+    },
+    "has_pink_dye": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:pink_dye",
+            "items": "minecraft:pink_dye"
+          }
+        ]
+      }
+    },
+    "has_tatami_half": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "tatamicraft:tatami_half",
+            "items": "tatamicraft:tatami_half"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_pink_dye"
+    ],
+    [
+      "has_the_recipe",
+      "has_tatami_half"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "tatamicraft:10_peach_half_tatami"
+    ]
+  },
+  "sends_telemetry_event": false
+}

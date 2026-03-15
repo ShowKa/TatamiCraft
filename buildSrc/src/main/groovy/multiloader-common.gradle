@@ -3,8 +3,12 @@ plugins {
     id 'maven-publish'
 }
 
+// Extract loader name (e.g. 'fabric' from 'fabric-1.21.11') and MC version from project name
+def loaderName = project.name.replaceFirst(/-\d+\..*$/, '')
+def projectMcVersion = project.name.contains('-') ? project.name.replaceFirst(/^[^-]+-/, '') : minecraft_version
+
 base {
-    archivesName = "${mod_id}-${project.name}-${minecraft_version}"
+    archivesName = "${mod_id}-${loaderName}-${projectMcVersion}"
 }
 
 java {
@@ -43,7 +47,7 @@ repositories {
     configurations."$variant".outgoing {
         capability("$group:${project.name}:$version")
         capability("$group:${base.archivesName.get()}:$version")
-        capability("$group:$mod_id-${project.name}-${minecraft_version}:$version")
+        capability("$group:$mod_id-${loaderName}-${projectMcVersion}:$version")
         capability("$group:$mod_id:$version")
     }
     publishing.publications.configureEach {

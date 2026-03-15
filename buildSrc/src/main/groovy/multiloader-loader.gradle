@@ -15,7 +15,7 @@ configurations {
 }
 
 dependencies {
-    compileOnly(project(':common')) {
+    compileOnly(project(':common-1.21.11')) {
         capabilities {
             requireCapability "$group:$mod_id"
         }
@@ -24,9 +24,9 @@ dependencies {
             attribute(loaderAttribute, 'common')
         }
     }
-    commonJava project(path: ':common', configuration: 'commonJava')
-    commonKotlin project(path: ':common', configuration: 'commonKotlin')
-    commonResources project(path: ':common', configuration: 'commonResources')
+    commonJava project(path: ':common-1.21.11', configuration: 'commonJava')
+    commonKotlin project(path: ':common-1.21.11', configuration: 'commonKotlin')
+    commonResources project(path: ':common-1.21.11', configuration: 'commonResources')
 }
 
 tasks.named('compileJava', JavaCompile) {

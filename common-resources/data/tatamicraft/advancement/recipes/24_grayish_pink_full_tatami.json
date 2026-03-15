@@ -1,0 +1,64 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "tatamicraft:24_grayish_pink_full_tatami"
+      }
+    },
+    "has_light_gray_dye": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:light_gray_dye",
+            "items": "minecraft:light_gray_dye"
+          }
+        ]
+      }
+    },
+    "has_pink_dye": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:pink_dye",
+            "items": "minecraft:pink_dye"
+          }
+        ]
+      }
+    },
+    "has_tatami": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "tatamicraft:tatami",
+            "items": "tatamicraft:tatami"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_light_gray_dye"
+    ],
+    [
+      "has_the_recipe",
+      "has_pink_dye"
+    ],
+    [
+      "has_the_recipe",
+      "has_tatami"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "tatamicraft:24_grayish_pink_full_tatami"
+    ]
+  },
+  "sends_telemetry_event": false
+}

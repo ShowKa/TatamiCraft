@@ -1,0 +1,49 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "tatamicraft:16_green_half_tatami"
+      }
+    },
+    "has_green_dye": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:green_dye",
+            "items": "minecraft:green_dye"
+          }
+        ]
+      }
+    },
+    "has_tatami_half": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "tatamicraft:tatami_half",
+            "items": "tatamicraft:tatami_half"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_green_dye"
+    ],
+    [
+      "has_the_recipe",
+      "has_tatami_half"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "tatamicraft:16_green_half_tatami"
+    ]
+  },
+  "sends_telemetry_event": false
+}

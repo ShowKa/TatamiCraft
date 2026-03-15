@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "tatamicraft:29_milk_white_split_tatami"
+      }
+    },
+    "has_milk_white_tatami": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "tatamicraft:milk_white_tatami",
+            "items": "tatamicraft:milk_white_tatami"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_milk_white_tatami"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "tatamicraft:29_milk_white_split_tatami"
+    ]
+  },
+  "sends_telemetry_event": false
+}

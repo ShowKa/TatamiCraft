@@ -27,9 +27,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Fabric Artifacts
-          path: fabric/build/libs/
+          path: fabric-1.21.11/build/libs/
       - name: capture neoforge artifacts
         uses: actions/upload-artifact@v4
         with:
           name: NeoForge Artifacts
-          path: neoforge/build/libs/
+          path: neoforge-1.21.11/build/libs/

@@ -24,6 +24,11 @@ def tatamiColors = [
 
 def MOD_ID = 'tatamicraft'
 
+// Detect MC version from project name for version-aware asset generation
+def projectMcVersion = project.name.contains('-') ? project.name.replaceFirst(/^[^-]+-/, '') : ''
+def mcMajor = projectMcVersion ? (projectMcVersion.tokenize('.').take(2).join('.') as BigDecimal) : 99
+def isLegacyFormat = mcMajor < 1.21
+
 // ── 出力先 ────────────────────────────────────────────
 def generatedDir = layout.buildDirectory.dir('generated-tatami-resources')
 
@@ -142,12 +147,13 @@ def generateItemDefinition(File baseDir, String modId, String prefix, String ite
 /**
  * ルートテーブル JSON を生成する（空プール — ドロップは Block コードで制御）。
  */
-def generateLootTable(File baseDir, String modId, String prefix, String blockType) {
+def generateLootTable(File baseDir, String modId, String prefix, String blockType, boolean legacy) {
     def data = new LinkedHashMap([
         type:  'minecraft:block',
         pools: [],
     ])
-    writeJson(baseDir, "data/${modId}/loot_table/blocks/${prefix}${blockType}.json", data)
+    def lootDir = legacy ? 'loot_tables' : 'loot_table'
+    writeJson(baseDir, "data/${modId}/${lootDir}/blocks/${prefix}${blockType}.json", data)
 }
 
 // ── Lang 生成 ─────────────────────────────────────────
@@ -213,11 +219,13 @@ tasks.register('generateTatamiAssets') {
 
         ['tatami', 'tatami_half'].each { itemType ->
             generateItemModel(outDir, MOD_ID, '', itemType, '')
-            generateItemDefinition(outDir, MOD_ID, '', itemType)
+            if (!isLegacyFormat) {
+                generateItemDefinition(outDir, MOD_ID, '', itemType)
+            }
         }
 
         ['tatami_part', 'tatami_half_part'].each { blockType ->
-            generateLootTable(outDir, MOD_ID, '', blockType)
+            generateLootTable(outDir, MOD_ID, '', blockType, isLegacyFormat)
         }
 
         // ── カラーバリエーション ──
@@ -235,11 +243,13 @@ tasks.register('generateTatamiAssets') {
 
             ['tatami', 'tatami_half'].each { itemType ->
                 generateItemModel(outDir, MOD_ID, prefix, itemType, texSuffix)
-                generateItemDefinition(outDir, MOD_ID, prefix, itemType)
+                if (!isLegacyFormat) {
+                    generateItemDefinition(outDir, MOD_ID, prefix, itemType)
+                }
             }
 
             ['tatami_part', 'tatami_half_part'].each { blockType ->
-                generateLootTable(outDir, MOD_ID, prefix, blockType)
+                generateLootTable(outDir, MOD_ID, prefix, blockType, isLegacyFormat)
             }
         }
 
