@@ -36,7 +36,7 @@ jobs:
           token: ${{ secrets.CF_API_TOKEN }}
           project_id: 1483308
           game_endpoint: minecraft
-          file_path: fabric/build/libs/tatamicraft-fabric-${{ steps.mod_props.outputs.MC_VERSION }}-${{ steps.mod_props.outputs.VERSION }}.jar
+          file_path: fabric-1.21.11/build/libs/tatamicraft-fabric-${{ steps.mod_props.outputs.MC_VERSION }}-${{ steps.mod_props.outputs.VERSION }}.jar
           display_name: TatamiCraft ${{ steps.mod_props.outputs.VERSION }} (Fabric)
           game_versions: Minecraft 1.21:1.21.11,Java 21,Fabric
           changelog: Release version ${{ steps.mod_props.outputs.VERSION }}
@@ -48,7 +48,7 @@ jobs:
           token: ${{ secrets.CF_API_TOKEN }}
           project_id: 1483308
           game_endpoint: minecraft
-          file_path: neoforge/build/libs/tatamicraft-neoforge-${{ steps.mod_props.outputs.MC_VERSION }}-${{ steps.mod_props.outputs.VERSION }}.jar
+          file_path: neoforge-1.21.11/build/libs/tatamicraft-neoforge-${{ steps.mod_props.outputs.MC_VERSION }}-${{ steps.mod_props.outputs.VERSION }}.jar
           display_name: TatamiCraft ${{ steps.mod_props.outputs.VERSION }} (NeoForge)
           game_versions: Minecraft 1.21:1.21.11,Java 21,NeoForge
           changelog: Release version ${{ steps.mod_props.outputs.VERSION }}
@@ -64,7 +64,7 @@ jobs:
           version: ${{ steps.mod_props.outputs.VERSION }}+fabric
           loaders: fabric
           game-versions: 1.21.11
-          files: "fabric/build/libs/tatamicraft-fabric-${{ steps.mod_props.outputs.MC_VERSION }}-${{ steps.mod_props.outputs.VERSION }}.jar"
+          files: "fabric-1.21.11/build/libs/tatamicraft-fabric-${{ steps.mod_props.outputs.MC_VERSION }}-${{ steps.mod_props.outputs.VERSION }}.jar"
           changelog: "Release version ${{ steps.mod_props.outputs.VERSION }}"
 
       - name: Publish NeoForge to Modrinth
@@ -75,5 +75,5 @@ jobs:
           version: ${{ steps.mod_props.outputs.VERSION }}+neoforge
           loaders: neoforge
           game-versions: 1.21.11
-          files: "neoforge/build/libs/tatamicraft-neoforge-${{ steps.mod_props.outputs.MC_VERSION }}-${{ steps.mod_props.outputs.VERSION }}.jar"
+          files: "neoforge-1.21.11/build/libs/tatamicraft-neoforge-${{ steps.mod_props.outputs.MC_VERSION }}-${{ steps.mod_props.outputs.VERSION }}.jar"
           changelog: "Release version ${{ steps.mod_props.outputs.VERSION }}"
