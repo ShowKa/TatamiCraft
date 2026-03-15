@@ -21,6 +21,9 @@ dependencies {
     compileOnly group: 'org.spongepowered', name: 'mixin', version: '0.8.5'
 }
 
+// Shared resources (textures, icon) from common-resources
+sourceSets.main.resources.srcDirs += rootProject.file('common-resources')
+
 // Tatami color variant JSON asset generation (must be applied before artifacts)
 apply from: rootProject.file('gradle/tatami-assets.gradle')
 
@@ -43,6 +46,7 @@ artifacts {
     commonJava file('src/main/java')
     commonKotlin file('src/main/kotlin')
     commonResources file('src/main/resources')
+    commonResources rootProject.file('common-resources')
     commonResources(layout.buildDirectory.dir('generated-tatami-resources')) {
         builtBy tasks.named('generateTatamiAssets')
     }
