@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "tatamicraft:milk_white_tatami"
+  ],
+  "result": {
+    "count": 2,
+    "item": "tatamicraft:milk_white_tatami_half"
+  }
+}

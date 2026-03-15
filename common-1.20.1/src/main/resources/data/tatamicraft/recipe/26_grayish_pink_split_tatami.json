@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "tatamicraft:grayish_pink_tatami"
+  ],
+  "result": {
+    "count": 2,
+    "item": "tatamicraft:grayish_pink_tatami_half"
+  }
+}

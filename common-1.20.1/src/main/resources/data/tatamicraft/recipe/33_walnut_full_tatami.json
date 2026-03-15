@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "minecraft:brown_dye",
+    "tatamicraft:tatami"
+  ],
+  "result": {
+    "count": 1,
+    "item": "tatamicraft:walnut_tatami"
+  }
+}
