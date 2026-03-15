@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "minecraft:light_gray_dye"
+    },
+    {
+      "item": "minecraft:pink_dye"
+    },
+    {
+      "item": "tatamicraft:tatami_half"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "item": "tatamicraft:grayish_pink_tatami_half"
+  }
+}

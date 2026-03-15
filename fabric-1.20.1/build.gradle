@@ -46,6 +46,15 @@ loom {
 }
 
 
+// Local data resources (recipes, advancements) override common-resources
+// because common-resources uses 1.21.x JSON format which is incompatible with 1.20.1
+processResources {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+sourcesJar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
 // Implement mcgradleconventions loader attribute
 def loaderAttribute = Attribute.of('io.github.mcgradleconventions.loader', String)
 ['apiElements', 'runtimeElements', 'sourcesElements'].each { variant ->

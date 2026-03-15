@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "tatamicraft:20_sky_blue_split_tatami"
+      }
+    },
+    "has_sky_blue_tatami": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "tatamicraft:sky_blue_tatami"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_sky_blue_tatami"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "tatamicraft:20_sky_blue_split_tatami"
+    ]
+  }
+}
