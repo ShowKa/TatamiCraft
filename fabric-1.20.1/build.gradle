@@ -16,9 +16,9 @@ kotlin {
 dependencies {
     minecraft "com.mojang:minecraft:${fabric_1_20_1_minecraft_version}"
     mappings loom.officialMojangMappings()
-    modImplementation "net.fabricmc:fabric-loader:${fabric_1_20_1_loader_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_1_20_1_version}"
-    modImplementation "net.fabricmc:fabric-language-kotlin:${fabric_1_20_1_kotlin_version}"
+    modImplementation "net.fabricmc:fabric-loader:${fabric_1_20_1_fabric_loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_1_20_1_fabric_version}"
+    modImplementation "net.fabricmc:fabric-language-kotlin:${fabric_1_20_1_fabric_kotlin_version}"
 }
 
 loom {
@@ -45,33 +45,6 @@ loom {
     }
 }
 
-// Override processResources to expand 1.20.1-specific properties into fabric.mod.json
-processResources {
-    var expandProps = [
-            'version'                 : version,
-            'group'                   : project.group,
-            'minecraft_version'       : fabric_1_20_1_minecraft_version,
-            'minecraft_version_range' : fabric_1_20_1_minecraft_version_range,
-            'fabric_version'          : fabric_1_20_1_version,
-            'fabric_loader_version'   : fabric_1_20_1_loader_version,
-            'mod_name'                : mod_name,
-            'mod_author'              : mod_author,
-            'mod_id'                  : mod_id,
-            'license'                 : license,
-            'description'             : project.description,
-            'java_version'            : fabric_1_20_1_java_version
-    ]
-
-    var jsonExpandProps = expandProps.collectEntries {
-        key, value -> [(key): value instanceof String ? value.replace("\n", "\\\\n") : value]
-    }
-
-    filesMatching(['pack.mcmeta', 'fabric.mod.json', '*.mixins.json']) {
-        expand jsonExpandProps
-    }
-
-    inputs.properties(expandProps)
-}
 
 // Implement mcgradleconventions loader attribute
 def loaderAttribute = Attribute.of('io.github.mcgradleconventions.loader', String)
