@@ -7,6 +7,17 @@
         "recipe": "tatamicraft:09_peach_full_tatami"
       }
     },
+    "has_pink_dye": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:pink_dye",
+            "items": "minecraft:pink_dye"
+          }
+        ]
+      }
+    },
     "has_tatami": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
@@ -17,27 +28,16 @@
           }
         ]
       }
-    },
-    "has_peach_dye": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "item": "minecraft:pink_dye",
-            "items": "minecraft:pink_dye"
-          }
-        ]
-      }
     }
   },
   "requirements": [
     [
       "has_the_recipe",
-      "has_tatami"
+      "has_pink_dye"
     ],
     [
       "has_the_recipe",
-      "has_peach_dye"
+      "has_tatami"
     ]
   ],
   "rewards": {

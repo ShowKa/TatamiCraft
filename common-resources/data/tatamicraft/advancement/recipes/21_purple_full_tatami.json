@@ -7,17 +7,6 @@
         "recipe": "tatamicraft:21_purple_full_tatami"
       }
     },
-    "has_tatami": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "item": "tatamicraft:tatami",
-            "items": "tatamicraft:tatami"
-          }
-        ]
-      }
-    },
     "has_purple_dye": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
@@ -28,16 +17,27 @@
           }
         ]
       }
+    },
+    "has_tatami": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "tatamicraft:tatami",
+            "items": "tatamicraft:tatami"
+          }
+        ]
+      }
     }
   },
   "requirements": [
     [
       "has_the_recipe",
-      "has_tatami"
+      "has_purple_dye"
     ],
     [
       "has_the_recipe",
-      "has_purple_dye"
+      "has_tatami"
     ]
   ],
   "rewards": {

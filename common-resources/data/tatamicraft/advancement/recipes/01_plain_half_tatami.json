@@ -7,17 +7,6 @@
         "recipe": "tatamicraft:01_plain_half_tatami"
       }
     },
-    "has_wheat": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "item": "minecraft:wheat",
-            "items": "minecraft:wheat"
-          }
-        ]
-      }
-    },
     "has_string": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
@@ -28,16 +17,27 @@
           }
         ]
       }
+    },
+    "has_wheat": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:wheat",
+            "items": "minecraft:wheat"
+          }
+        ]
+      }
     }
   },
   "requirements": [
     [
       "has_the_recipe",
-      "has_wheat"
+      "has_string"
     ],
     [
       "has_the_recipe",
-      "has_string"
+      "has_wheat"
     ]
   ],
   "rewards": {

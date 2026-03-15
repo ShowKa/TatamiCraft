@@ -7,6 +7,17 @@
         "recipe": "tatamicraft:27_milk_white_full_tatami"
       }
     },
+    "has_white_dye": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:white_dye",
+            "items": "minecraft:white_dye"
+          }
+        ]
+      }
+    },
     "has_tatami": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
@@ -17,27 +28,16 @@
           }
         ]
       }
-    },
-    "has_milk_white_dye": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "item": "minecraft:white_dye",
-            "items": "minecraft:white_dye"
-          }
-        ]
-      }
     }
   },
   "requirements": [
     [
       "has_the_recipe",
-      "has_tatami"
+      "has_white_dye"
     ],
     [
       "has_the_recipe",
-      "has_milk_white_dye"
+      "has_tatami"
     ]
   ],
   "rewards": {
