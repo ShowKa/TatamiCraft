@@ -51,26 +51,30 @@ jobs:
           files: "neoforge-1.21.11/build/libs/tatamicraft-neoforge-1.21.11-${{ steps.mod_props.outputs.VERSION }}.jar"
           changelog: "Release version ${{ steps.mod_props.outputs.VERSION }}"
 
+      ###
+      # 1.20.1 still doesn't work yet.
+      ###
+
       # --- Fabric 1.20.1 ---
-      - name: Publish Fabric 1.20.1 to Modrinth
-        uses: cloudnode-pro/modrinth-publish@v2
-        with:
-          token: ${{ secrets.MODRINTH_TOKEN }}
-          project: 8L1DTZf2
-          version: ${{ steps.mod_props.outputs.VERSION }}+fabric-1.20.1
-          loaders: fabric
-          game-versions: 1.20.1
-          files: "fabric-1.20.1/build/libs/tatamicraft-fabric-1.20.1-${{ steps.mod_props.outputs.VERSION }}.jar"
-          changelog: "Release version ${{ steps.mod_props.outputs.VERSION }}"
+#      - name: Publish Fabric 1.20.1 to Modrinth
+#        uses: cloudnode-pro/modrinth-publish@v2
+#        with:
+#          token: ${{ secrets.MODRINTH_TOKEN }}
+#          project: 8L1DTZf2
+#          version: ${{ steps.mod_props.outputs.VERSION }}+fabric-1.20.1
+#          loaders: fabric
+#          game-versions: 1.20.1
+#          files: "fabric-1.20.1/build/libs/tatamicraft-fabric-1.20.1-${{ steps.mod_props.outputs.VERSION }}.jar"
+#          changelog: "Release version ${{ steps.mod_props.outputs.VERSION }}"
 
       # --- Forge 1.20.1 ---
-      - name: Publish Forge 1.20.1 to Modrinth
-        uses: cloudnode-pro/modrinth-publish@v2
-        with:
-          token: ${{ secrets.MODRINTH_TOKEN }}
-          project: 8L1DTZf2
-          version: ${{ steps.mod_props.outputs.VERSION }}+forge-1.20.1
-          loaders: forge
-          game-versions: 1.20.1
-          files: "neoforge-1.20.1/build/libs/tatamicraft-neoforge-1.20.1-${{ steps.mod_props.outputs.VERSION }}.jar"
-          changelog: "Release version ${{ steps.mod_props.outputs.VERSION }}"
+#      - name: Publish Forge 1.20.1 to Modrinth
+#        uses: cloudnode-pro/modrinth-publish@v2
+#        with:
+#          token: ${{ secrets.MODRINTH_TOKEN }}
+#          project: 8L1DTZf2
+#          version: ${{ steps.mod_props.outputs.VERSION }}+forge-1.20.1
+#          loaders: forge
+#          game-versions: 1.20.1
+#          files: "neoforge-1.20.1/build/libs/tatamicraft-neoforge-1.20.1-${{ steps.mod_props.outputs.VERSION }}.jar"
+#          changelog: "Release version ${{ steps.mod_props.outputs.VERSION }}"

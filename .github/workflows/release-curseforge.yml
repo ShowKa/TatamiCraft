@@ -53,28 +53,32 @@ jobs:
           changelog: Release version ${{ steps.mod_props.outputs.VERSION }}
           changelog_type: text
 
+      ###
+      # 1.20.1 still doesn't work yet.
+      ###
+
       # --- Fabric 1.20.1 ---
-      - name: Publish Fabric 1.20.1 to CurseForge
-        uses: itsmeow/curseforge-upload@v3
-        with:
-          token: ${{ secrets.CF_API_TOKEN }}
-          project_id: 1483308
-          game_endpoint: minecraft
-          file_path: fabric-1.20.1/build/libs/tatamicraft-fabric-1.20.1-${{ steps.mod_props.outputs.VERSION }}.jar
-          display_name: TatamiCraft ${{ steps.mod_props.outputs.VERSION }} (Fabric 1.20.1)
-          game_versions: Minecraft 1.20:1.20.1,Java 17,Fabric
-          changelog: Release version ${{ steps.mod_props.outputs.VERSION }}
-          changelog_type: text
+#      - name: Publish Fabric 1.20.1 to CurseForge
+#        uses: itsmeow/curseforge-upload@v3
+#        with:
+#          token: ${{ secrets.CF_API_TOKEN }}
+#          project_id: 1483308
+#          game_endpoint: minecraft
+#          file_path: fabric-1.20.1/build/libs/tatamicraft-fabric-1.20.1-${{ steps.mod_props.outputs.VERSION }}.jar
+#          display_name: TatamiCraft ${{ steps.mod_props.outputs.VERSION }} (Fabric 1.20.1)
+#          game_versions: Minecraft 1.20:1.20.1,Java 17,Fabric
+#          changelog: Release version ${{ steps.mod_props.outputs.VERSION }}
+#          changelog_type: text
 
       # --- Forge 1.20.1 ---
-      - name: Publish Forge 1.20.1 to CurseForge
-        uses: itsmeow/curseforge-upload@v3
-        with:
-          token: ${{ secrets.CF_API_TOKEN }}
-          project_id: 1483308
-          game_endpoint: minecraft
-          file_path: neoforge-1.20.1/build/libs/tatamicraft-neoforge-1.20.1-${{ steps.mod_props.outputs.VERSION }}.jar
-          display_name: TatamiCraft ${{ steps.mod_props.outputs.VERSION }} (Forge 1.20.1)
-          game_versions: Minecraft 1.20:1.20.1,Java 17,Forge
-          changelog: Release version ${{ steps.mod_props.outputs.VERSION }}
-          changelog_type: text
+#      - name: Publish Forge 1.20.1 to CurseForge
+#        uses: itsmeow/curseforge-upload@v3
+#        with:
+#          token: ${{ secrets.CF_API_TOKEN }}
+#          project_id: 1483308
+#          game_endpoint: minecraft
+#          file_path: neoforge-1.20.1/build/libs/tatamicraft-neoforge-1.20.1-${{ steps.mod_props.outputs.VERSION }}.jar
+#          display_name: TatamiCraft ${{ steps.mod_props.outputs.VERSION }} (Forge 1.20.1)
+#          game_versions: Minecraft 1.20:1.20.1,Java 17,Forge
+#          changelog: Release version ${{ steps.mod_props.outputs.VERSION }}
+#          changelog_type: text
