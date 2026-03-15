@@ -7,6 +7,17 @@
         "recipe": "tatamicraft:16_green_half_tatami"
       }
     },
+    "has_green_dye": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:green_dye",
+            "items": "minecraft:green_dye"
+          }
+        ]
+      }
+    },
     "has_tatami_half": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
@@ -17,27 +28,16 @@
           }
         ]
       }
-    },
-    "has_green_dye": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "item": "minecraft:lime_dye",
-            "items": "minecraft:lime_dye"
-          }
-        ]
-      }
     }
   },
   "requirements": [
     [
       "has_the_recipe",
-      "has_tatami_half"
+      "has_green_dye"
     ],
     [
       "has_the_recipe",
-      "has_green_dye"
+      "has_tatami_half"
     ]
   ],
   "rewards": {
