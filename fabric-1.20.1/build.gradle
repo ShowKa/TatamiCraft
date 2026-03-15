@@ -46,12 +46,101 @@ loom {
 }
 
 
-// Local data resources (recipes, advancements) override common-resources
-// because common-resources uses 1.21.x JSON format which is incompatible with 1.20.1
+// Convert 1.21.x-format recipe/advancement JSON from common-resources to 1.20.1 format at build time.
+// This avoids maintaining duplicate data files for each MC version.
+def convertedDataDir = layout.buildDirectory.dir('converted-data-1.20.1')
+
+tasks.register('convertDataJson') {
+    def sourceDir = rootProject.file('common-resources/data')
+    inputs.dir(sourceDir)
+    outputs.dir(convertedDataDir)
+
+    doLast {
+        def outDir = convertedDataDir.get().asFile
+        if (outDir.exists()) outDir.deleteDir()
+
+        def slurper = new groovy.json.JsonSlurper()
+        def generator = new groovy.json.JsonGenerator.Options().build()
+
+        sourceDir.eachFileRecurse(groovy.io.FileType.FILES) { file ->
+            if (!file.name.endsWith('.json')) return
+            def relPath = sourceDir.toPath().relativize(file.toPath()).toString()
+            def outFile = new File(outDir, "data/${relPath}")
+            outFile.parentFile.mkdirs()
+
+            def json = slurper.parse(file)
+            def isRecipe = relPath.contains('recipe/')
+            def isAdvancement = relPath.contains('advancement/')
+
+            if (isRecipe) {
+                // Convert result: {id: "x"} -> {item: "x"}
+                if (json.result instanceof Map && json.result.containsKey('id')) {
+                    json.result.item = json.result.remove('id')
+                }
+                // Convert shaped recipe key: "W": "x" -> "W": {item: "x"}
+                if (json.key instanceof Map) {
+                    json.key = json.key.collectEntries { k, v ->
+                        [(k): v instanceof String ? [item: v] : v]
+                    }
+                }
+                // Convert shapeless recipe ingredients: "x" -> {item: "x"}
+                if (json.ingredients instanceof List) {
+                    json.ingredients = json.ingredients.collect { ing ->
+                        ing instanceof String ? [item: ing] : ing
+                    }
+                }
+            }
+
+            if (isAdvancement) {
+                // Remove sends_telemetry_event (not in 1.20.1)
+                json.remove('sends_telemetry_event')
+                // Convert criteria item predicates: {item: "x", items: "x"} -> {items: ["x"]}
+                if (json.criteria instanceof Map) {
+                    json.criteria.each { critName, critData ->
+                        if (critData.conditions?.items instanceof List) {
+                            critData.conditions.items = critData.conditions.items.collect { item ->
+                                if (item instanceof Map) {
+                                    def newItem = [:]
+                                    if (item.containsKey('items')) {
+                                        def val = item.items
+                                        newItem.items = val instanceof String ? [val] : val
+                                    } else if (item.containsKey('item')) {
+                                        newItem.items = [item.item]
+                                    }
+                                    return newItem
+                                }
+                                return item
+                            }
+                        }
+                    }
+                }
+            }
+
+            outFile.text = groovy.json.JsonOutput.prettyPrint(generator.toJson(json)) + '\n'
+        }
+    }
+}
+
+// Include converted 1.20.1-format data, excluding 1.21.x originals from common-resources
 processResources {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    dependsOn tasks.named('convertDataJson')
+    from(convertedDataDir)
+    // Use INCLUDE to allow converted files alongside other resources;
+    // the exclude below removes the 1.21.x originals from common-resources
+    eachFile { details ->
+        // Skip 1.21.x-format data files from common-resources (they will be replaced by converted versions)
+        if (details.sourcePath.startsWith('data/tatamicraft/recipe/') ||
+            details.sourcePath.startsWith('data/tatamicraft/advancement/')) {
+            // Only keep files from the converted-data directory
+            if (!details.file.absolutePath.contains('converted-data-1.20.1')) {
+                details.exclude()
+            }
+        }
+    }
 }
 sourcesJar {
+    dependsOn tasks.named('convertDataJson')
+    from(convertedDataDir)
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
