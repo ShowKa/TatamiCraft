@@ -65,7 +65,11 @@ tasks.register('convertDataJson') {
         sourceDir.eachFileRecurse(groovy.io.FileType.FILES) { file ->
             if (!file.name.endsWith('.json')) return
             def relPath = sourceDir.toPath().relativize(file.toPath()).toString()
-            def outFile = new File(outDir, "data/${relPath}")
+            // 1.20.1 uses plural directory names: recipe/ -> recipes/, advancement/ -> advancements/
+            def convertedRelPath = relPath
+                .replaceFirst('(/|^)recipe/', '$1recipes/')
+                .replaceFirst('(/|^)advancement/', '$1advancements/')
+            def outFile = new File(outDir, "data/${convertedRelPath}")
             outFile.parentFile.mkdirs()
 
             def json = slurper.parse(file)
@@ -125,18 +129,10 @@ tasks.register('convertDataJson') {
 processResources {
     dependsOn tasks.named('convertDataJson')
     from(convertedDataDir)
-    // Use INCLUDE to allow converted files alongside other resources;
-    // the exclude below removes the 1.21.x originals from common-resources
-    eachFile { details ->
-        // Skip 1.21.x-format data files from common-resources (they will be replaced by converted versions)
-        if (details.sourcePath.startsWith('data/tatamicraft/recipe/') ||
-            details.sourcePath.startsWith('data/tatamicraft/advancement/')) {
-            // Only keep files from the converted-data directory
-            if (!details.file.absolutePath.contains('converted-data-1.20.1')) {
-                details.exclude()
-            }
-        }
-    }
+    // Exclude 1.21.x-format data files (singular dirs: recipe/, advancement/) from common-resources.
+    // The converted files use 1.20.1 plural dirs (recipes/, advancements/) so no conflict.
+    exclude 'data/tatamicraft/recipe/**'
+    exclude 'data/tatamicraft/advancement/**'
 }
 sourcesJar {
     dependsOn tasks.named('convertDataJson')
