@@ -50,6 +50,6 @@ plugins {
 }
 
 rootProject.name = 'tatamicraft'
-include('common')
-include('fabric')
-include('neoforge')
+include('common-1.21.11')
+include('fabric-1.21.11')
+include('neoforge-1.21.11')
