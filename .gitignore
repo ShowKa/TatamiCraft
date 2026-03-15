@@ -31,8 +31,8 @@ bin/
 # fabric and neoforge
 
 run/
-fabric/runs/
-neoforge/run/
+fabric*/runs/
+neoforge*/run/
 
 # java
 
