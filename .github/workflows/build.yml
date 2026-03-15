@@ -28,18 +28,18 @@ jobs:
         with:
           name: Fabric 1.20.1 Artifacts
           path: fabric-1.20.1/build/libs/
-      - name: capture fabric-1.21.x artifacts
+      - name: capture fabric-1.21.11 artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: Fabric 1.21.x Artifacts
-          path: fabric-1.21.x/build/libs/
+          name: Fabric 1.21.11 Artifacts
+          path: fabric-1.21.11/build/libs/
       - name: capture neoforge-1.20.1 artifacts
         uses: actions/upload-artifact@v4
         with:
           name: NeoForge 1.20.1 Artifacts
           path: neoforge-1.20.1/build/libs/
-      - name: capture neoforge-1.21.x artifacts
+      - name: capture neoforge-1.21.11 artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: NeoForge 1.21.x Artifacts
-          path: neoforge-1.21.x/build/libs/
+          name: NeoForge 1.21.11 Artifacts
+          path: neoforge-1.21.11/build/libs/
