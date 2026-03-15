@@ -7,14 +7,37 @@
         "recipe": "tatamicraft:30_light_brown_full_tatami"
       }
     },
-    "has_items": {
-      "trigger": "minecraft:inventory_changed"
+    "has_tatami": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "tatamicraft:tatami",
+            "items": "tatamicraft:tatami"
+          }
+        ]
+      }
+    },
+    "has_light_brown_dye": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:brown_dye",
+            "items": "minecraft:brown_dye"
+          }
+        ]
+      }
     }
   },
   "requirements": [
     [
       "has_the_recipe",
-      "has_items"
+      "has_tatami"
+    ],
+    [
+      "has_the_recipe",
+      "has_light_brown_dye"
     ]
   ],
   "rewards": {

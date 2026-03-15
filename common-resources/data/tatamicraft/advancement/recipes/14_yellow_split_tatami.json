@@ -7,14 +7,22 @@
         "recipe": "tatamicraft:14_yellow_split_tatami"
       }
     },
-    "has_items": {
-      "trigger": "minecraft:inventory_changed"
+    "has_yellow_tatami": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "tatamicraft:yellow_tatami",
+            "items": "tatamicraft:yellow_tatami"
+          }
+        ]
+      }
     }
   },
   "requirements": [
     [
       "has_the_recipe",
-      "has_items"
+      "has_yellow_tatami"
     ]
   ],
   "rewards": {

@@ -7,14 +7,37 @@
         "recipe": "tatamicraft:18_sky_blue_full_tatami"
       }
     },
-    "has_items": {
-      "trigger": "minecraft:inventory_changed"
+    "has_tatami": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "tatamicraft:tatami",
+            "items": "tatamicraft:tatami"
+          }
+        ]
+      }
+    },
+    "has_sky_blue_dye": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:light_blue_dye",
+            "items": "minecraft:light_blue_dye"
+          }
+        ]
+      }
     }
   },
   "requirements": [
     [
       "has_the_recipe",
-      "has_items"
+      "has_tatami"
+    ],
+    [
+      "has_the_recipe",
+      "has_sky_blue_dye"
     ]
   ],
   "rewards": {

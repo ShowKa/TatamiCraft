@@ -7,14 +7,37 @@
         "recipe": "tatamicraft:33_walnut_full_tatami"
       }
     },
-    "has_items": {
-      "trigger": "minecraft:inventory_changed"
+    "has_tatami": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "tatamicraft:tatami",
+            "items": "tatamicraft:tatami"
+          }
+        ]
+      }
+    },
+    "has_walnut_dye": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:cocoa_beans",
+            "items": "minecraft:cocoa_beans"
+          }
+        ]
+      }
     }
   },
   "requirements": [
     [
       "has_the_recipe",
-      "has_items"
+      "has_tatami"
+    ],
+    [
+      "has_the_recipe",
+      "has_walnut_dye"
     ]
   ],
   "rewards": {

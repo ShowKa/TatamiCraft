@@ -7,14 +7,22 @@
         "recipe": "tatamicraft:29_milk_white_split_tatami"
       }
     },
-    "has_items": {
-      "trigger": "minecraft:inventory_changed"
+    "has_milk_white_tatami": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "tatamicraft:milk_white_tatami",
+            "items": "tatamicraft:milk_white_tatami"
+          }
+        ]
+      }
     }
   },
   "requirements": [
     [
       "has_the_recipe",
-      "has_items"
+      "has_milk_white_tatami"
     ]
   ],
   "rewards": {

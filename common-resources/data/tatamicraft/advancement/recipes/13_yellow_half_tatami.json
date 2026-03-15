@@ -7,14 +7,37 @@
         "recipe": "tatamicraft:13_yellow_half_tatami"
       }
     },
-    "has_items": {
-      "trigger": "minecraft:inventory_changed"
+    "has_tatami_half": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "tatamicraft:tatami_half",
+            "items": "tatamicraft:tatami_half"
+          }
+        ]
+      }
+    },
+    "has_yellow_dye": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:yellow_dye",
+            "items": "minecraft:yellow_dye"
+          }
+        ]
+      }
     }
   },
   "requirements": [
     [
       "has_the_recipe",
-      "has_items"
+      "has_tatami_half"
+    ],
+    [
+      "has_the_recipe",
+      "has_yellow_dye"
     ]
   ],
   "rewards": {

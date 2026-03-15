@@ -7,14 +7,22 @@
         "recipe": "tatamicraft:20_sky_blue_split_tatami"
       }
     },
-    "has_items": {
-      "trigger": "minecraft:inventory_changed"
+    "has_sky_blue_tatami": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "tatamicraft:sky_blue_tatami",
+            "items": "tatamicraft:sky_blue_tatami"
+          }
+        ]
+      }
     }
   },
   "requirements": [
     [
       "has_the_recipe",
-      "has_items"
+      "has_sky_blue_tatami"
     ]
   ],
   "rewards": {
