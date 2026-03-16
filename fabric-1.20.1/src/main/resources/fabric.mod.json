@@ -22,6 +22,11 @@
 			}
 		]
 	},
+	"mixins": [
+		{
+			"config": "tatamicraft.mixins.json"
+		}
+	],
 	"depends": {
 		"fabricloader": ">=${fabric_loader_version}",
 		"minecraft": "${minecraft_version_range}",
