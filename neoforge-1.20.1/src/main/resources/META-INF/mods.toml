@@ -29,3 +29,6 @@ mandatory=true
 versionRange="[4.0,)"
 ordering="NONE"
 side="BOTH"
+
+[[mixins]]
+config="tatamicraft.mixins.json"
