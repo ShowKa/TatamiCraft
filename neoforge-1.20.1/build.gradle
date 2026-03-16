@@ -34,6 +34,18 @@ legacyForge {
     }
 }
 
+// Mixin annotation processor for refmap generation (Mojang -> SRG name mapping)
+mixin {
+    add sourceSets.main, "${mod_id}.refmap.json"
+    config "${mod_id}.mixins.json"
+}
+
+jar {
+    manifest.attributes([
+        'MixinConfigs': "${mod_id}.mixins.json"
+    ])
+}
+
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
@@ -46,6 +58,7 @@ repositories {
 
 dependencies {
     implementation "thedarkcolour:kotlinforforge:${neoforge_1_20_1_kotlin_for_forge_version}"
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
 // Convert 1.21.x-format recipe/advancement JSON from common-resources to 1.20.1 format at build time.
