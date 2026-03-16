@@ -7,7 +7,6 @@ import com.showka.util.orderedTatamiItems
 import net.minecraft.world.item.CreativeModeTabs
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent
 import net.minecraftforge.fml.common.Mod
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
 import thedarkcolour.kotlinforforge.forge.MOD_BUS
 
 @Mod(TatamiCraftNeoForge.MOD_ID)
