@@ -23,57 +23,108 @@ jobs:
         id: mod_props
         run: |
           echo "VERSION=$(grep '^version=' gradle.properties | cut -d'=' -f2)" >> $GITHUB_OUTPUT
-          echo "MC_VERSION=$(grep '^minecraft_version=' gradle.properties | cut -d'=' -f2)" >> $GITHUB_OUTPUT
 
       - name: Build
         run: chmod +x ./gradlew && ./gradlew build
 
       # ── CurseForge ──────────────────────────────
+      # 1.21.11
 
-      - name: Publish Fabric to CurseForge
+      - name: Publish Fabric 1.21.11 to CurseForge
         uses: itsmeow/curseforge-upload@v3
         with:
           token: ${{ secrets.CF_API_TOKEN }}
           project_id: 1483308
           game_endpoint: minecraft
-          file_path: fabric-1.21.11/build/libs/tatamicraft-fabric-${{ steps.mod_props.outputs.MC_VERSION }}-${{ steps.mod_props.outputs.VERSION }}.jar
-          display_name: TatamiCraft ${{ steps.mod_props.outputs.VERSION }} (Fabric)
+          file_path: fabric-1.21.11/build/libs/tatamicraft-fabric-1.21.11-${{ steps.mod_props.outputs.VERSION }}.jar
+          display_name: TatamiCraft ${{ steps.mod_props.outputs.VERSION }} for Minecraft 1.21.11 (Fabric)
           game_versions: Minecraft 1.21:1.21.11,Java 21,Fabric
-          changelog: Release version ${{ steps.mod_props.outputs.VERSION }}
+          changelog: Release version ${{ steps.mod_props.outputs.VERSION }} for Minecraft 1.21.11 (Fabric)
           changelog_type: text
 
-      - name: Publish NeoForge to CurseForge
+      - name: Publish NeoForge 1.21.11 to CurseForge
         uses: itsmeow/curseforge-upload@v3
         with:
           token: ${{ secrets.CF_API_TOKEN }}
           project_id: 1483308
           game_endpoint: minecraft
-          file_path: neoforge-1.21.11/build/libs/tatamicraft-neoforge-${{ steps.mod_props.outputs.MC_VERSION }}-${{ steps.mod_props.outputs.VERSION }}.jar
-          display_name: TatamiCraft ${{ steps.mod_props.outputs.VERSION }} (NeoForge)
+          file_path: neoforge-1.21.11/build/libs/tatamicraft-neoforge-1.21.11-${{ steps.mod_props.outputs.VERSION }}.jar
+          display_name: TatamiCraft ${{ steps.mod_props.outputs.VERSION }} for Minecraft 1.21.11 (NeoForge)
           game_versions: Minecraft 1.21:1.21.11,Java 21,NeoForge
-          changelog: Release version ${{ steps.mod_props.outputs.VERSION }}
+          changelog: Release version ${{ steps.mod_props.outputs.VERSION }} for Minecraft 1.21.11 (NeoForge)
           changelog_type: text
 
-      # ── Modrinth ─────────────────────────────────
+      # 1.20.1
 
-      - name: Publish Fabric to Modrinth
+      - name: Publish Fabric 1.20.1 to CurseForge
+        uses: itsmeow/curseforge-upload@v3
+        with:
+          token: ${{ secrets.CF_API_TOKEN }}
+          project_id: 1483308
+          game_endpoint: minecraft
+          file_path: fabric-1.20.1/build/libs/tatamicraft-fabric-1.20.1-${{ steps.mod_props.outputs.VERSION }}.jar
+          display_name: TatamiCraft ${{ steps.mod_props.outputs.VERSION }} for Minecraft 1.20.1 (Fabric)
+          game_versions: Minecraft 1.20:1.20.1,Fabric
+          changelog: Release version ${{ steps.mod_props.outputs.VERSION }} for Minecraft 1.20.1 (Fabric)
+          changelog_type: text
+
+      - name: Publish NeoForge 1.20.1 to CurseForge
+        uses: itsmeow/curseforge-upload@v3
+        with:
+          token: ${{ secrets.CF_API_TOKEN }}
+          project_id: 1483308
+          game_endpoint: minecraft
+          file_path: neoforge-1.20.1/build/libs/tatamicraft-neoforge-1.20.1-${{ steps.mod_props.outputs.VERSION }}.jar
+          display_name: TatamiCraft ${{ steps.mod_props.outputs.VERSION }} for Minecraft 1.20.1 (NeoForge)
+          game_versions: Minecraft 1.20:1.20.1,NeoForge
+          changelog: Release version ${{ steps.mod_props.outputs.VERSION }} for Minecraft 1.20.1 (NeoForge)
+          changelog_type: text
+
+      # ── Modrinth ────────────────────────────────
+      # 1.21.11
+
+      - name: Publish Fabric 1.21.11 to Modrinth
         uses: cloudnode-pro/modrinth-publish@v2
         with:
           token: ${{ secrets.MODRINTH_TOKEN }}
           project: 8L1DTZf2
-          version: ${{ steps.mod_props.outputs.VERSION }}+fabric
+          version: ${{ steps.mod_props.outputs.VERSION }}+fabric+mc1.21.11
           loaders: fabric
           game-versions: 1.21.11
-          files: "fabric-1.21.11/build/libs/tatamicraft-fabric-${{ steps.mod_props.outputs.MC_VERSION }}-${{ steps.mod_props.outputs.VERSION }}.jar"
-          changelog: "Release version ${{ steps.mod_props.outputs.VERSION }}"
+          files: "fabric-1.21.11/build/libs/tatamicraft-fabric-1.21.11-${{ steps.mod_props.outputs.VERSION }}.jar"
+          changelog: "Release version ${{ steps.mod_props.outputs.VERSION }} for Minecraft 1.21.11 (Fabric)"
 
-      - name: Publish NeoForge to Modrinth
+      - name: Publish NeoForge 1.21.11 to Modrinth
         uses: cloudnode-pro/modrinth-publish@v2
         with:
           token: ${{ secrets.MODRINTH_TOKEN }}
           project: 8L1DTZf2
-          version: ${{ steps.mod_props.outputs.VERSION }}+neoforge
+          version: ${{ steps.mod_props.outputs.VERSION }}+neoforge+mc1.21.11
           loaders: neoforge
           game-versions: 1.21.11
-          files: "neoforge-1.21.11/build/libs/tatamicraft-neoforge-${{ steps.mod_props.outputs.MC_VERSION }}-${{ steps.mod_props.outputs.VERSION }}.jar"
-          changelog: "Release version ${{ steps.mod_props.outputs.VERSION }}"
+          files: "neoforge-1.21.11/build/libs/tatamicraft-neoforge-1.21.11-${{ steps.mod_props.outputs.VERSION }}.jar"
+          changelog: "Release version ${{ steps.mod_props.outputs.VERSION }} for Minecraft 1.21.11 (NeoForge)"
+
+      # 1.20.1
+
+      - name: Publish Fabric 1.20.1 to Modrinth
+        uses: cloudnode-pro/modrinth-publish@v2
+        with:
+          token: ${{ secrets.MODRINTH_TOKEN }}
+          project: 8L1DTZf2
+          version: ${{ steps.mod_props.outputs.VERSION }}+fabric+mc1.20.1
+          loaders: fabric
+          game-versions: 1.20.1
+          files: "fabric-1.20.1/build/libs/tatamicraft-fabric-1.20.1-${{ steps.mod_props.outputs.VERSION }}.jar"
+          changelog: "Release version ${{ steps.mod_props.outputs.VERSION }} for Minecraft 1.20.1 (Fabric)"
+
+      - name: Publish NeoForge 1.20.1 to Modrinth
+        uses: cloudnode-pro/modrinth-publish@v2
+        with:
+          token: ${{ secrets.MODRINTH_TOKEN }}
+          project: 8L1DTZf2
+          version: ${{ steps.mod_props.outputs.VERSION }}+neoforge+mc1.20.1
+          loaders: neoforge
+          game-versions: 1.20.1
+          files: "neoforge-1.20.1/build/libs/tatamicraft-neoforge-1.20.1-${{ steps.mod_props.outputs.VERSION }}.jar"
+          changelog: "Release version ${{ steps.mod_props.outputs.VERSION }} for Minecraft 1.20.1 (NeoForge)"
