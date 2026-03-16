@@ -1,0 +1,162 @@
+plugins {
+    id 'multiloader-loader'
+    id 'net.neoforged.moddev.legacyforge'
+    id 'org.jetbrains.kotlin.jvm'
+}
+
+// 1.20.1 uses Java 17
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(neoforge_1_20_1_java_version as int)
+}
+
+kotlin {
+    jvmToolchain(neoforge_1_20_1_java_version as int)
+}
+
+legacyForge {
+    version = "${neoforge_1_20_1_minecraft_version}-${neoforge_1_20_1_forge_version}"
+    runs {
+        configureEach {
+            systemProperty('forge.enabledGameTestNamespaces', mod_id)
+            ideName = "Forge ${it.name.capitalize()} (${project.path})"
+        }
+        client {
+            client()
+        }
+        server {
+            server()
+        }
+    }
+    mods {
+        "${mod_id}" {
+            sourceSet sourceSets.main
+        }
+    }
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+repositories {
+    maven {
+        name = 'Kotlin for Forge'
+        url = 'https://thedarkcolour.github.io/KotlinForForge/'
+        content { includeGroup 'thedarkcolour' }
+    }
+}
+
+dependencies {
+    implementation "thedarkcolour:kotlinforforge:${neoforge_1_20_1_kotlin_for_forge_version}"
+}
+
+// Convert 1.21.x-format recipe/advancement JSON from common-resources to 1.20.1 format at build time.
+// This avoids maintaining duplicate data files for each MC version.
+def convertedDataDir = layout.buildDirectory.dir('converted-data-1.20.1')
+
+tasks.register('convertDataJson') {
+    def sourceDir = rootProject.file('common-resources/data')
+    inputs.dir(sourceDir)
+    outputs.dir(convertedDataDir)
+
+    doLast {
+        def outDir = convertedDataDir.get().asFile
+        if (outDir.exists()) outDir.deleteDir()
+
+        def slurper = new groovy.json.JsonSlurper()
+        def generator = new groovy.json.JsonGenerator.Options().build()
+
+        sourceDir.eachFileRecurse(groovy.io.FileType.FILES) { file ->
+            if (!file.name.endsWith('.json')) return
+            def relPath = sourceDir.toPath().relativize(file.toPath()).toString()
+            // 1.20.1 uses plural directory names: recipe/ -> recipes/, advancement/ -> advancements/
+            def convertedRelPath = relPath
+                .replaceFirst('(/|^)recipe/', '$1recipes/')
+                .replaceFirst('(/|^)advancement/', '$1advancements/')
+            def outFile = new File(outDir, "data/${convertedRelPath}")
+            outFile.parentFile.mkdirs()
+
+            def json = slurper.parse(file)
+            def isRecipe = relPath.contains('recipe/')
+            def isAdvancement = relPath.contains('advancement/')
+
+            if (isRecipe) {
+                // Convert result: {id: "x"} -> {item: "x"}
+                if (json.result instanceof Map && json.result.containsKey('id')) {
+                    json.result.item = json.result.remove('id')
+                }
+                // Convert shaped recipe key: "W": "x" -> "W": {item: "x"}
+                if (json.key instanceof Map) {
+                    json.key = json.key.collectEntries { k, v ->
+                        [(k): v instanceof String ? [item: v] : v]
+                    }
+                }
+                // Convert shapeless recipe ingredients: "x" -> {item: "x"}
+                if (json.ingredients instanceof List) {
+                    json.ingredients = json.ingredients.collect { ing ->
+                        ing instanceof String ? [item: ing] : ing
+                    }
+                }
+            }
+
+            if (isAdvancement) {
+                // Remove sends_telemetry_event (not in 1.20.1)
+                json.remove('sends_telemetry_event')
+                // Convert criteria item predicates: {item: "x", items: "x"} -> {items: ["x"]}
+                if (json.criteria instanceof Map) {
+                    json.criteria.each { critName, critData ->
+                        if (critData.conditions?.items instanceof List) {
+                            critData.conditions.items = critData.conditions.items.collect { item ->
+                                if (item instanceof Map) {
+                                    def newItem = [:]
+                                    if (item.containsKey('items')) {
+                                        def val = item.items
+                                        newItem.items = val instanceof String ? [val] : val
+                                    } else if (item.containsKey('item')) {
+                                        newItem.items = [item.item]
+                                    }
+                                    return newItem
+                                }
+                                return item
+                            }
+                        }
+                    }
+                }
+            }
+
+            outFile.text = groovy.json.JsonOutput.prettyPrint(generator.toJson(json)) + '\n'
+        }
+    }
+}
+
+// Include converted 1.20.1-format data, excluding 1.21.x originals from common-resources
+processResources {
+    dependsOn tasks.named('convertDataJson')
+    from(convertedDataDir)
+    // Exclude 1.21.x-format data files (singular dirs: recipe/, advancement/) from common-resources.
+    // The converted files use 1.20.1 plural dirs (recipes/, advancements/) so no conflict.
+    exclude 'data/tatamicraft/recipe/**'
+    exclude 'data/tatamicraft/advancement/**'
+}
+sourcesJar {
+    dependsOn tasks.named('convertDataJson')
+    from(convertedDataDir)
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+// Implement mcgradleconventions loader attribute
+def loaderAttribute = Attribute.of('io.github.mcgradleconventions.loader', String)
+['apiElements', 'runtimeElements', 'sourcesElements'].each { variant ->
+    configurations.named("$variant") {
+        attributes {
+            attribute(loaderAttribute, 'neoforge')
+        }
+    }
+}
+sourceSets.configureEach {
+    [it.compileClasspathConfigurationName, it.runtimeClasspathConfigurationName].each { variant ->
+        configurations.named("$variant") {
+            attributes {
+                attribute(loaderAttribute, 'neoforge')
+            }
+        }
+    }
+}
