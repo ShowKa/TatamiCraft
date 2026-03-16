@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "com.showka.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "tatamicraft.refmap.json",
+  "client": [
+    "ClientRecipeBookMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

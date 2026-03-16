@@ -79,22 +79,38 @@ jar {
     }
 }
 
+// Helper: resolve a property with version-specific override.
+// For a project like 'fabric-1.20.1', checks for e.g. 'fabric_1_20_1_version' first,
+// then falls back to the global property (e.g. 'fabric_version').
+def versionPrefix = projectMcVersion.replace('.', '_')
+def resolveProperty = { String propName ->
+    def versionedKey = "${loaderName}_${versionPrefix}_${propName}"
+    project.hasProperty(versionedKey) ? project.property(versionedKey) : project.property(propName)
+}
+// Safe version: returns null if neither versioned nor global property exists
+def resolvePropertyOrNull = { String propName ->
+    def versionedKey = "${loaderName}_${versionPrefix}_${propName}"
+    if (project.hasProperty(versionedKey)) return project.property(versionedKey)
+    if (project.hasProperty(propName)) return project.property(propName)
+    return null
+}
+
 processResources {
     var expandProps = [
             'version'                      : version,
             'group'                        : project.group,
-            'minecraft_version'            : minecraft_version,
-            'minecraft_version_range'      : minecraft_version_range,
-            'fabric_version'               : fabric_version,
-            'fabric_loader_version'        : fabric_loader_version,
+            'minecraft_version'            : resolveProperty('minecraft_version'),
+            'minecraft_version_range'      : resolveProperty('minecraft_version_range'),
+            'fabric_version'               : resolvePropertyOrNull('fabric_version') ?: '',
+            'fabric_loader_version'        : resolvePropertyOrNull('fabric_loader_version') ?: '',
             'mod_name'                     : mod_name,
             'mod_author'                   : mod_author,
             'mod_id'                       : mod_id,
             'license'                      : license,
             'description'                  : project.description,
-            'neoforge_version'             : neoforge_version,
-            'neoforge_loader_version_range': neoforge_loader_version_range,
-            'java_version'                 : java_version
+            'neoforge_version'             : resolvePropertyOrNull('neoforge_version') ?: '',
+            'neoforge_loader_version_range': resolvePropertyOrNull('neoforge_loader_version_range') ?: '',
+            'java_version'                 : resolveProperty('java_version')
     ]
 
     var jsonExpandProps = expandProps.collectEntries {

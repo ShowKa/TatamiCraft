@@ -2,6 +2,10 @@ plugins {
     id 'multiloader-common'
 }
 
+// Derive MC version from project name (e.g. 'fabric-1.20.1' -> '1.20.1')
+def projectMcVersion = project.name.contains('-') ? project.name.replaceFirst(/^[^-]+-/, '') : minecraft_version
+def commonProject = ":common-${projectMcVersion}"
+
 configurations {
     commonJava {
         canBeResolved = true
@@ -15,7 +19,7 @@ configurations {
 }
 
 dependencies {
-    compileOnly(project(':common-1.21.11')) {
+    compileOnly(project(commonProject)) {
         capabilities {
             requireCapability "$group:$mod_id"
         }
@@ -24,9 +28,9 @@ dependencies {
             attribute(loaderAttribute, 'common')
         }
     }
-    commonJava project(path: ':common-1.21.11', configuration: 'commonJava')
-    commonKotlin project(path: ':common-1.21.11', configuration: 'commonKotlin')
-    commonResources project(path: ':common-1.21.11', configuration: 'commonResources')
+    commonJava project(path: commonProject, configuration: 'commonJava')
+    commonKotlin project(path: commonProject, configuration: 'commonKotlin')
+    commonResources project(path: commonProject, configuration: 'commonResources')
 }
 
 tasks.named('compileJava', JavaCompile) {
