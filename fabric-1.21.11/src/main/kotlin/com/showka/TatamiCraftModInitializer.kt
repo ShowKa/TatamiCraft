@@ -26,6 +26,8 @@ object TatamiCraftModInitializer : ModInitializer {
                 ModItems::getTatamiItem,
                 ModItems::getTatamiHalfItem
             ).forEach { entries.accept(it) }
+            // Fusuma
+            entries.accept(ModItems.FUSUMA_ITEM)
         }
     }
 }

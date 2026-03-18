@@ -18,6 +18,20 @@ import net.minecraft.world.level.block.state.BlockBehaviour
  */
 object ModBlocks {
 
+    fun init() {
+        // Trigger static initialization
+    }
+
+    private fun registerBlock(
+        path: String,
+        settingsFactory: (String) -> BlockBehaviour.Properties = ::tatamiSettings,
+        factory: (BlockBehaviour.Properties) -> Block
+    ): Block {
+        val id = Identifier.fromNamespaceAndPath(TatamiCraftConstants.MOD_ID, path)
+        val block = factory(settingsFactory(path))
+        return Registry.register(BuiltInRegistries.BLOCK, id, block)
+    }
+
     // -- Default tatami --
 
     val TATAMI_PART: Block = registerBlock("tatami_part") { props ->
@@ -72,12 +86,6 @@ object ModBlocks {
             .noCollision()
     }
 
-    private fun registerBlock(path: String, factory: (BlockBehaviour.Properties) -> Block): Block {
-        val id = Identifier.fromNamespaceAndPath(TatamiCraftConstants.MOD_ID, path)
-        val block = factory(tatamiSettings(path))
-        return Registry.register(BuiltInRegistries.BLOCK, id, block)
-    }
-
     fun getTatamiPart(color: TatamiColor): Block =
         if (color == TatamiColor.DEFAULT) TATAMI_PART else COLORED_TATAMI_PARTS.getValue(color)
 
@@ -90,7 +98,24 @@ object ModBlocks {
     fun allTatamiHalfParts(): List<Block> =
         listOf(TATAMI_HALF_PART) + COLORED_TATAMI_HALF_PARTS.values
 
-    fun init() {
-        // Trigger static initialization
+    // –------
+    // FUSUMA
+    // –------
+
+    val FUSUMA: Block = registerBlock("fusuma", ::fusumaSettings) { props ->
+        FusumaBlock(props)
+    }
+
+    private fun fusumaSettings(path: String): BlockBehaviour.Properties {
+        val key = ResourceKey.create(
+            Registries.BLOCK,
+            Identifier.fromNamespaceAndPath(TatamiCraftConstants.MOD_ID, path)
+        )
+
+        return BlockBehaviour.Properties.of()
+            .setId(key)
+            .strength(0.5f)
+            .sound(SoundType.WOOD)
+            .noOcclusion()
     }
 }
