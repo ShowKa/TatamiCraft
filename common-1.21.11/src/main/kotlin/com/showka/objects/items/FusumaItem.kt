@@ -1,5 +1,6 @@
 package com.showka.objects.items
 
+import com.showka.objects.FusumaOpenState
 import com.showka.objects.FusumaSide
 import com.showka.objects.blocks.FusumaBlockEntity
 import com.showka.objects.blocks.FusumaPartBlock
@@ -53,7 +54,7 @@ class FusumaItem(
                             .setValue(FusumaPartBlock.SIDE, side)
                             .setValue(FusumaPartBlock.PART_X, px)
                             .setValue(FusumaPartBlock.PART_Y, py)
-                            .setValue(FusumaPartBlock.OPEN, false)
+                            .setValue(FusumaPartBlock.DOOR_STATE, FusumaOpenState.CLOSED)
                         level.setBlock(pos, state, Block.UPDATE_ALL)
 
                         val be = level.getBlockEntity(pos) as? FusumaBlockEntity

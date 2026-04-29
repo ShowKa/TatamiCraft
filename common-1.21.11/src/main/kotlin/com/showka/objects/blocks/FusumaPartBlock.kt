@@ -1,5 +1,6 @@
 package com.showka.objects.blocks
 
+import com.showka.objects.FusumaOpenState
 import com.showka.objects.FusumaSide
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -20,7 +21,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
-import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.level.block.state.properties.EnumProperty
 import net.minecraft.world.level.block.state.properties.IntegerProperty
 import net.minecraft.world.phys.BlockHitResult
@@ -35,14 +35,13 @@ import net.minecraft.world.phys.shapes.VoxelShape
  *   - Left panel:  SIDE=LEFT,  PART_X=0..1, PART_Y=0..2
  *   - Right panel: SIDE=RIGHT, PART_X=0..1, PART_Y=0..2
  *
- * Origin = bottom-left corner of the entire fusuma.
- * Width expands in the FACING.getClockWise() direction.
+ * DOOR_STATE tracks the open/close state of the whole fusuma:
+ *   - CLOSED:     both panels visible and solid
+ *   - LEFT_OPEN:  left panel invisible/passable; right side shows 2-panel overlap
+ *   - RIGHT_OPEN: right panel invisible/passable; left side shows 2-panel overlap
  *
- * When OPEN=false: thin panel collision shape (3/16 thick).
- * When OPEN=true:  no collision (player can pass through).
- *
- * Opening a panel slides it toward the other panel (visually shown via
- * model elements placed outside the 0–16 local coordinate range).
+ * RIGHT panel = front channel (Z=13..16 for FACING=NORTH).
+ * LEFT panel  = back channel  (Z=10..13 for FACING=NORTH).
  */
 class FusumaPartBlock(
     properties: Properties,
@@ -57,12 +56,12 @@ class FusumaPartBlock(
                 .setValue(SIDE, FusumaSide.LEFT)
                 .setValue(PART_X, 0)
                 .setValue(PART_Y, 0)
-                .setValue(OPEN, false)
+                .setValue(DOOR_STATE, FusumaOpenState.CLOSED)
         )
     }
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
-        builder.add(FACING, SIDE, PART_X, PART_Y, OPEN)
+        builder.add(FACING, SIDE, PART_X, PART_Y, DOOR_STATE)
     }
 
     companion object {
@@ -70,10 +69,9 @@ class FusumaPartBlock(
         val SIDE: EnumProperty<FusumaSide> = EnumProperty.create("side", FusumaSide::class.java)
         val PART_X: IntegerProperty = IntegerProperty.create("part_x", 0, 1)
         val PART_Y: IntegerProperty = IntegerProperty.create("part_y", 0, 2)
-        val OPEN: BooleanProperty = BlockStateProperties.OPEN
+        val DOOR_STATE: EnumProperty<FusumaOpenState> = EnumProperty.create("door_state", FusumaOpenState::class.java)
 
-        // RIGHT panel = front channel (near face); LEFT panel = back channel (3px behind).
-        // FACING=NORTH: near face = south side. RIGHT: Z=13..16, LEFT: Z=10..13.
+        // RIGHT panel = front channel; LEFT panel = back channel (3 px behind).
         private val SHAPES_CLOSED: Map<Pair<Direction, FusumaSide>, VoxelShape> = mapOf(
             Pair(Direction.NORTH, FusumaSide.RIGHT) to box( 0.0, 0.0, 13.0, 16.0, 16.0, 16.0),
             Pair(Direction.NORTH, FusumaSide.LEFT)  to box( 0.0, 0.0, 10.0, 16.0, 16.0, 13.0),
@@ -87,6 +85,11 @@ class FusumaPartBlock(
 
         private val BREAKING_GROUP: ThreadLocal<Boolean> = ThreadLocal.withInitial { false }
         private val PLAYER_BREAKING: ThreadLocal<Boolean> = ThreadLocal.withInitial { false }
+
+        /** Returns true when this block position has no visible panel (the open-side original location). */
+        private fun isBlockInvisible(side: FusumaSide, doorState: FusumaOpenState): Boolean =
+            (side == FusumaSide.LEFT  && doorState == FusumaOpenState.LEFT_OPEN) ||
+            (side == FusumaSide.RIGHT && doorState == FusumaOpenState.RIGHT_OPEN)
 
         fun getAllPositions(origin: BlockPos, facing: Direction): List<BlockPos> {
             val right = facing.getClockWise()
@@ -114,16 +117,23 @@ class FusumaPartBlock(
 
     // ── Shape ────────────────────────────────────────────────────────────────
 
-    // Always return a shape for hit detection so the block can be clicked when open.
     override fun getShape(
         state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext
-    ): VoxelShape = SHAPES_CLOSED[Pair(state.getValue(FACING), state.getValue(SIDE))] ?: Shapes.block()
+    ): VoxelShape {
+        val side = state.getValue(SIDE)
+        val doorState = state.getValue(DOOR_STATE)
+        if (isBlockInvisible(side, doorState)) return Shapes.empty()
+        return SHAPES_CLOSED[Pair(state.getValue(FACING), side)] ?: Shapes.block()
+    }
 
-    // Only block passage when the panel is closed.
     override fun getCollisionShape(
         state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext
-    ): VoxelShape = if (state.getValue(OPEN)) Shapes.empty()
-    else SHAPES_CLOSED[Pair(state.getValue(FACING), state.getValue(SIDE))] ?: Shapes.block()
+    ): VoxelShape {
+        val side = state.getValue(SIDE)
+        val doorState = state.getValue(DOOR_STATE)
+        if (isBlockInvisible(side, doorState)) return Shapes.empty()
+        return SHAPES_CLOSED[Pair(state.getValue(FACING), side)] ?: Shapes.block()
+    }
 
     // ── BlockEntity ───────────────────────────────────────────────────────────
 
@@ -139,45 +149,37 @@ class FusumaPartBlock(
         if (level.isClientSide) return InteractionResult.SUCCESS
 
         val side = state.getValue(SIDE)
-        val isOpen = state.getValue(OPEN)
+        val doorState = state.getValue(DOOR_STATE)
         val facing = state.getValue(FACING)
 
         val be = level.getBlockEntity(pos) as? FusumaBlockEntity
         val origin = be?.origin ?: reconstructOrigin(state, pos)
 
-        // Prevent opening when the other panel is already open
-        if (!isOpen) {
-            val otherSide = if (side == FusumaSide.LEFT) FusumaSide.RIGHT else FusumaSide.LEFT
-            if (isSideOpen(level, origin, facing, otherSide)) return InteractionResult.PASS
+        val newDoorState = when (doorState) {
+            FusumaOpenState.CLOSED ->
+                if (side == FusumaSide.LEFT) FusumaOpenState.LEFT_OPEN else FusumaOpenState.RIGHT_OPEN
+            else -> FusumaOpenState.CLOSED
         }
 
-        val newOpen = !isOpen
-        toggleSide(level, origin, facing, side, newOpen)
+        setDoorState(level, origin, facing, newDoorState)
 
-        val sound = if (newOpen) SoundEvents.WOODEN_DOOR_OPEN else SoundEvents.WOODEN_DOOR_CLOSE
+        val sound = if (newDoorState != FusumaOpenState.CLOSED) SoundEvents.WOODEN_DOOR_OPEN else SoundEvents.WOODEN_DOOR_CLOSE
         level.playSound(null, pos, sound, SoundSource.BLOCKS, 1.0f, 1.0f)
 
         return InteractionResult.SUCCESS
     }
 
-    private fun isSideOpen(level: Level, origin: BlockPos, facing: Direction, side: FusumaSide): Boolean {
+    private fun setDoorState(level: Level, origin: BlockPos, facing: Direction, newState: FusumaOpenState) {
         val right = facing.getClockWise()
-        val sideOff = if (side == FusumaSide.LEFT) 0 else 2
-        for (px in 0..1) for (py in 0..2) {
-            val s = level.getBlockState(origin.relative(right, sideOff + px).above(py))
-            if (s.`is`(this) && s.getValue(OPEN)) return true
-        }
-        return false
-    }
-
-    private fun toggleSide(level: Level, origin: BlockPos, facing: Direction, side: FusumaSide, open: Boolean) {
-        val right = facing.getClockWise()
-        val sideOff = if (side == FusumaSide.LEFT) 0 else 2
-        for (px in 0..1) for (py in 0..2) {
-            val p = origin.relative(right, sideOff + px).above(py)
-            val s = level.getBlockState(p)
-            if (s.`is`(this) && s.getValue(SIDE) == side) {
-                level.setBlock(p, s.setValue(OPEN, open), UPDATE_CLIENTS)
+        for (sideOff in listOf(0, 2)) {
+            for (px in 0..1) {
+                for (py in 0..2) {
+                    val p = origin.relative(right, sideOff + px).above(py)
+                    val s = level.getBlockState(p)
+                    if (s.`is`(this)) {
+                        level.setBlock(p, s.setValue(DOOR_STATE, newState), UPDATE_CLIENTS)
+                    }
+                }
             }
         }
     }
