@@ -72,10 +72,12 @@ class FusumaPartBlock(
         val PART_Y: IntegerProperty = IntegerProperty.create("part_y", 0, 2)
         val OPEN: BooleanProperty = BlockStateProperties.OPEN
 
-        private val SHAPE_NORTH = box(0.0, 0.0, 0.0, 16.0, 16.0, 3.0)
-        private val SHAPE_SOUTH = box(0.0, 0.0, 13.0, 16.0, 16.0, 16.0)
-        private val SHAPE_EAST  = box(13.0, 0.0, 0.0, 16.0, 16.0, 16.0)
-        private val SHAPE_WEST  = box(0.0, 0.0, 0.0, 3.0, 16.0, 16.0)
+        // Panel is placed on the near face (the face toward the player who placed it).
+        // FACING=NORTH: player faces north → stands south → near face = south (Z=13..16)
+        private val SHAPE_NORTH = box(0.0, 0.0, 13.0, 16.0, 16.0, 16.0)
+        private val SHAPE_SOUTH = box(0.0, 0.0, 0.0, 16.0, 16.0, 3.0)
+        private val SHAPE_EAST  = box(0.0, 0.0, 0.0, 3.0, 16.0, 16.0)
+        private val SHAPE_WEST  = box(13.0, 0.0, 0.0, 16.0, 16.0, 16.0)
 
         private val SHAPES_CLOSED: Map<Direction, VoxelShape> = mapOf(
             Direction.NORTH to SHAPE_NORTH,

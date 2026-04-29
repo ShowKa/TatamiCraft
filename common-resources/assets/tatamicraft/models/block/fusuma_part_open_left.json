@@ -10,16 +10,16 @@
       "from": [
         32,
         0,
-        0
+        13
       ],
       "to": [
         48,
         16,
-        3
+        16
       ],
       "faces": {
         "north": {
-          "texture": "#front",
+          "texture": "#back",
           "uv": [
             0,
             0,
@@ -28,7 +28,7 @@
           ]
         },
         "south": {
-          "texture": "#back",
+          "texture": "#front",
           "uv": [
             0,
             0,
