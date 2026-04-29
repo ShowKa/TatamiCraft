@@ -31,6 +31,15 @@ object ModBlockEntities {
         ).build()
     )
 
+    val FUSUMA_PART_BLOCK_ENTITY: BlockEntityType<FusumaBlockEntity> = Registry.register(
+        BuiltInRegistries.BLOCK_ENTITY_TYPE,
+        Identifier.fromNamespaceAndPath(TatamiCraftConstants.MOD_ID, "fusuma_part"),
+        FabricBlockEntityTypeBuilder.create(
+            { pos, state -> FusumaBlockEntity(FUSUMA_PART_BLOCK_ENTITY, pos, state) },
+            ModBlocks.FUSUMA_PART
+        ).build()
+    )
+
     fun init() {
         // Trigger static initialization
     }

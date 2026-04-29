@@ -164,6 +164,13 @@ def generateLangFiles(File baseDir, String modId, List colors) {
     def enMap = new LinkedHashMap()
     def jaMap = new LinkedHashMap()
 
+    // 襖
+    enMap["block.${modId}.fusuma_part"] = 'Fusuma'
+    enMap["item.${modId}.fusuma"]       = 'Fusuma'
+
+    jaMap["block.${modId}.fusuma_part"] = '襖'
+    jaMap["item.${modId}.fusuma"]       = '襖'
+
     // デフォルト
     enMap["block.${modId}.tatami_part"]      = 'Tatami'
     enMap["item.${modId}.tatami"]            = 'Tatami'

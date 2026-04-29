@@ -2,6 +2,7 @@ package com.showka.objects.blocks
 
 import com.showka.TatamiCraftConstants
 import com.showka.objects.TatamiColor
+import com.showka.objects.blocks.FusumaPartBlock
 import com.showka.objects.items.ModItems
 import com.showka.util.TatamiLayout
 import net.minecraft.core.Registry
@@ -58,7 +59,29 @@ object ModBlocks {
         }
     }
 
+    // -- Fusuma --
+
+    val FUSUMA_PART: Block = registerFusumaBlock("fusuma_part") { props ->
+        FusumaPartBlock(
+            props,
+            dropItemProvider = { ModItems.FUSUMA_ITEM },
+            blockEntityTypeProvider = { ModBlockEntities.FUSUMA_PART_BLOCK_ENTITY }
+        )
+    }
+
     // -- Helpers --
+
+    private fun fusumaSettings(path: String): BlockBehaviour.Properties {
+        val key = ResourceKey.create(
+            Registries.BLOCK,
+            Identifier.fromNamespaceAndPath(TatamiCraftConstants.MOD_ID, path)
+        )
+        return BlockBehaviour.Properties.of()
+            .setId(key)
+            .strength(1.5f)
+            .sound(SoundType.WOOD)
+            .noOcclusion()
+    }
 
     private fun tatamiSettings(path: String): BlockBehaviour.Properties {
         val key = ResourceKey.create(
@@ -75,6 +98,12 @@ object ModBlocks {
     private fun registerBlock(path: String, factory: (BlockBehaviour.Properties) -> Block): Block {
         val id = Identifier.fromNamespaceAndPath(TatamiCraftConstants.MOD_ID, path)
         val block = factory(tatamiSettings(path))
+        return Registry.register(BuiltInRegistries.BLOCK, id, block)
+    }
+
+    private fun registerFusumaBlock(path: String, factory: (BlockBehaviour.Properties) -> Block): Block {
+        val id = Identifier.fromNamespaceAndPath(TatamiCraftConstants.MOD_ID, path)
+        val block = factory(fusumaSettings(path))
         return Registry.register(BuiltInRegistries.BLOCK, id, block)
     }
 

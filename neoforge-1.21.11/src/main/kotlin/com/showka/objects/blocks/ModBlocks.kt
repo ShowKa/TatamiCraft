@@ -2,6 +2,7 @@ package com.showka.objects.blocks
 
 import com.showka.TatamiCraftConstants
 import com.showka.objects.TatamiColor
+import com.showka.objects.blocks.FusumaPartBlock
 import com.showka.objects.items.ModItems
 import com.showka.util.TatamiLayout
 import net.minecraft.world.level.block.Block
@@ -75,7 +76,27 @@ object ModBlocks {
             )
         }
 
+    // ── Fusuma ───────────────────────────────────────
+
+    val FUSUMA_PART: DeferredBlock<FusumaPartBlock> = BLOCKS.registerBlock(
+        "fusuma_part",
+        { props: BlockBehaviour.Properties ->
+            FusumaPartBlock(
+                props,
+                dropItemProvider = { ModItems.FUSUMA_ITEM.get() },
+                blockEntityTypeProvider = { ModBlockEntities.FUSUMA_PART_BLOCK_ENTITY.get() }
+            )
+        },
+        java.util.function.Supplier { fusumaSettings() }
+    )
+
     // ── Helpers ─────────────────────────────────────
+
+    private fun fusumaSettings(): BlockBehaviour.Properties =
+        BlockBehaviour.Properties.of()
+            .strength(1.5f)
+            .sound(SoundType.WOOD)
+            .noOcclusion()
 
     private fun tatamiSettings(): BlockBehaviour.Properties =
         BlockBehaviour.Properties.of()

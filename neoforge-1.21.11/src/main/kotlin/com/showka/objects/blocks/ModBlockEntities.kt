@@ -31,4 +31,13 @@ object ModBlockEntities {
                 *ModBlocks.allTatamiHalfParts().map { it.get() }.toTypedArray()
             )
         }
+
+    val FUSUMA_PART_BLOCK_ENTITY: Supplier<BlockEntityType<FusumaBlockEntity>> =
+        BLOCK_ENTITY_TYPES.register("fusuma_part") { ->
+            BlockEntityType(
+                { pos, state -> FusumaBlockEntity(FUSUMA_PART_BLOCK_ENTITY.get(), pos, state) },
+                false,
+                ModBlocks.FUSUMA_PART.get()
+            )
+        }
 }

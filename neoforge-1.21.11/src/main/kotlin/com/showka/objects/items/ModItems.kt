@@ -3,7 +3,9 @@ package com.showka.objects.items
 import com.showka.TatamiCraftConstants
 import com.showka.objects.TatamiColor
 import com.showka.objects.blocks.AbstractTatamiPartBlock
+import com.showka.objects.blocks.FusumaPartBlock
 import com.showka.objects.blocks.ModBlocks
+import com.showka.objects.items.FusumaItem
 import net.minecraft.world.item.Item
 import net.neoforged.neoforge.registries.DeferredItem
 import net.neoforged.neoforge.registries.DeferredRegister
@@ -14,6 +16,12 @@ import net.neoforged.neoforge.registries.DeferredRegister
 object ModItems {
 
     val ITEMS: DeferredRegister.Items = DeferredRegister.createItems(TatamiCraftConstants.MOD_ID)
+
+    // ── Fusuma ───────────────────────────────────────
+
+    val FUSUMA_ITEM: DeferredItem<Item> = ITEMS.registerItem(
+        "fusuma"
+    ) { props: Item.Properties -> FusumaItem(props) { ModBlocks.FUSUMA_PART.get() as FusumaPartBlock } }
 
     // ── Default tatami items ──────────────────────────
 
