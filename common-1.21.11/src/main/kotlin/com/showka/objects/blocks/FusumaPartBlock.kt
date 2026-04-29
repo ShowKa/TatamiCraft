@@ -72,18 +72,17 @@ class FusumaPartBlock(
         val PART_Y: IntegerProperty = IntegerProperty.create("part_y", 0, 2)
         val OPEN: BooleanProperty = BlockStateProperties.OPEN
 
-        // Panel is placed on the near face (the face toward the player who placed it).
-        // FACING=NORTH: player faces north → stands south → near face = south (Z=13..16)
-        private val SHAPE_NORTH = box(0.0, 0.0, 13.0, 16.0, 16.0, 16.0)
-        private val SHAPE_SOUTH = box(0.0, 0.0, 0.0, 16.0, 16.0, 3.0)
-        private val SHAPE_EAST  = box(0.0, 0.0, 0.0, 3.0, 16.0, 16.0)
-        private val SHAPE_WEST  = box(13.0, 0.0, 0.0, 16.0, 16.0, 16.0)
-
-        private val SHAPES_CLOSED: Map<Direction, VoxelShape> = mapOf(
-            Direction.NORTH to SHAPE_NORTH,
-            Direction.SOUTH to SHAPE_SOUTH,
-            Direction.EAST  to SHAPE_EAST,
-            Direction.WEST  to SHAPE_WEST,
+        // RIGHT panel = front channel (near face); LEFT panel = back channel (3px behind).
+        // FACING=NORTH: near face = south side. RIGHT: Z=13..16, LEFT: Z=10..13.
+        private val SHAPES_CLOSED: Map<Pair<Direction, FusumaSide>, VoxelShape> = mapOf(
+            Pair(Direction.NORTH, FusumaSide.RIGHT) to box( 0.0, 0.0, 13.0, 16.0, 16.0, 16.0),
+            Pair(Direction.NORTH, FusumaSide.LEFT)  to box( 0.0, 0.0, 10.0, 16.0, 16.0, 13.0),
+            Pair(Direction.SOUTH, FusumaSide.RIGHT) to box( 0.0, 0.0,  0.0, 16.0, 16.0,  3.0),
+            Pair(Direction.SOUTH, FusumaSide.LEFT)  to box( 0.0, 0.0,  3.0, 16.0, 16.0,  6.0),
+            Pair(Direction.EAST,  FusumaSide.RIGHT) to box( 0.0, 0.0,  0.0,  3.0, 16.0, 16.0),
+            Pair(Direction.EAST,  FusumaSide.LEFT)  to box( 3.0, 0.0,  0.0,  6.0, 16.0, 16.0),
+            Pair(Direction.WEST,  FusumaSide.RIGHT) to box(13.0, 0.0,  0.0, 16.0, 16.0, 16.0),
+            Pair(Direction.WEST,  FusumaSide.LEFT)  to box(10.0, 0.0,  0.0, 13.0, 16.0, 16.0),
         )
 
         private val BREAKING_GROUP: ThreadLocal<Boolean> = ThreadLocal.withInitial { false }
@@ -118,13 +117,13 @@ class FusumaPartBlock(
     // Always return a shape for hit detection so the block can be clicked when open.
     override fun getShape(
         state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext
-    ): VoxelShape = SHAPES_CLOSED[state.getValue(FACING)] ?: Shapes.block()
+    ): VoxelShape = SHAPES_CLOSED[Pair(state.getValue(FACING), state.getValue(SIDE))] ?: Shapes.block()
 
     // Only block passage when the panel is closed.
     override fun getCollisionShape(
         state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext
     ): VoxelShape = if (state.getValue(OPEN)) Shapes.empty()
-    else SHAPES_CLOSED[state.getValue(FACING)] ?: Shapes.block()
+    else SHAPES_CLOSED[Pair(state.getValue(FACING), state.getValue(SIDE))] ?: Shapes.block()
 
     // ── BlockEntity ───────────────────────────────────────────────────────────
 
