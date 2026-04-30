@@ -164,15 +164,63 @@ def fusumaZRange(String s, boolean flip) {
     return outer ? [13, 16] : [10, 13]
 }
 
-/** 全フェース定義を生成 (front/back キーは呼び出し元が指定) */
-def fusumaFaces(String frontKey, String backKey) {
+/**
+ * タイル位置 (s, px, py) に対応するテクスチャ名を返す。
+ * 3種類のタイル:
+ *   corner     (2辺フレーム、引手なし) — 上下行の全ポジション
+ *   edge       (1辺フレーム+引手)     — 外列中段 (sl_x0_y1, sr_x1_y1)
+ *   edge_plain (1辺フレーム、引手なし) — 内列中段 (sl_x1_y1, sr_x0_y1)
+ */
+def fusumaTexForTile(String modId, String s, int px, int py) {
+    if (py != 1) return "${modId}:block/fusuma_tile_corner"
+    boolean outer = (s == 'sl' && px == 0) || (s == 'sr' && px == 1)
+    return outer ? "${modId}:block/fusuma_tile_edge" : "${modId}:block/fusuma_tile_edge_plain"
+}
+
+/**
+ * タイル位置 (s, px, py) に対する south フェースの UV 回転角 (0/90/180/270°) を返す。
+ *
+ * Minecraft UV rotation の変換則 (rotation: 90 → UV を 90°CW 回転):
+ *   face-TOP   ← texture-LEFT
+ *   face-RIGHT ← texture-TOP
+ *   face-BOTTOM← texture-RIGHT
+ *   face-LEFT  ← texture-BOTTOM
+ *
+ * corner テクスチャ: フレームが TOP+LEFT にある
+ *   0°→TL, 90°→TR, 180°→BR, 270°→BL
+ * edge テクスチャ: フレームが LEFT にある
+ *   0°→LEFT, 90°→TOP, 180°→RIGHT, 270°→BOTTOM
+ */
+def fusumaRotForTile(String s, int px, int py) {
+    if (py == 2) {
+        // 上行: px=0→TL(0°), px=1→TR(90°)
+        return (px == 0) ? 0 : 90
+    } else if (py == 0) {
+        // 下行: px=0→BL(270°), px=1→BR(180°)
+        return (px == 0) ? 270 : 180
+    } else {
+        // 中段
+        if (s == 'sl' && px == 0) return 0    // 左外辺 (引手)
+        if (s == 'sl' && px == 1) return 180  // 右内仕切り
+        if (s == 'sr' && px == 0) return 0    // 左内仕切り
+        return 180                             // 右外辺 (引手)
+    }
+}
+
+/** 全フェース定義を生成。south の UV 回転角を受け取り north は対称的に補正する。 */
+def fusumaFaces(String frontKey, String backKey, int southRot) {
+    int northRot = (360 - southRot) % 360
+    def southFace = new LinkedHashMap([texture: "#${frontKey}", uv: [0, 0, 16, 16]])
+    if (southRot != 0) southFace.rotation = southRot
+    def northFace = new LinkedHashMap([texture: "#${backKey}", uv: [16, 0, 0, 16]])
+    if (northRot != 0) northFace.rotation = northRot
     return new LinkedHashMap([
-        north: [texture: "#${backKey}",  uv: [16, 0,  0, 16]],
-        south: [texture: "#${frontKey}", uv: [ 0, 0, 16, 16]],
-        east:  [texture: '#edge',        uv: [ 0, 0,  3, 16]],
-        west:  [texture: '#edge',        uv: [ 0, 0,  3, 16]],
-        up:    [texture: '#edge',        uv: [ 0, 0, 16,  3]],
-        down:  [texture: '#edge',        uv: [ 0, 0, 16,  3]],
+        north: northFace,
+        south: southFace,
+        east:  [texture: '#edge', uv: [ 0, 0,  3, 16]],
+        west:  [texture: '#edge', uv: [ 0, 0,  3, 16]],
+        up:    [texture: '#edge', uv: [ 0, 0, 16,  3]],
+        down:  [texture: '#edge', uv: [ 0, 0, 16,  3]],
     ])
 }
 
@@ -182,7 +230,8 @@ def fusumaFaces(String frontKey, String backKey) {
 def generateFusumaClosedModel(File baseDir, String modId, String s, boolean flip, int px, int py) {
     def z = fusumaZRange(s, flip)
     def flipStr = flip ? '_flip' : ''
-    def tex = "${modId}:block/fusuma_${s}_x${px}_y${py}"
+    def tex = fusumaTexForTile(modId, s, px, py)
+    def rot = fusumaRotForTile(s, px, py)
     def data = new LinkedHashMap([
         textures: new LinkedHashMap([
             particle: tex, front: tex, back: tex,
@@ -190,7 +239,7 @@ def generateFusumaClosedModel(File baseDir, String modId, String s, boolean flip
         ]),
         elements: [[
             from: [0, 0, z[0]], to: [16, 16, z[1]],
-            faces: fusumaFaces('front', 'back'),
+            faces: fusumaFaces('front', 'back', rot),
         ]],
     ])
     writeJson(baseDir, "assets/${modId}/models/block/fusuma_part_closed_${s}${flipStr}_x${px}_y${py}.json", data)
@@ -206,8 +255,10 @@ def generateFusumaOverlapModel(File baseDir, String modId, String s, boolean fli
     def ownZ   = fusumaZRange(s, flip)
     def otherZ = (ownZ[0] == 10) ? [13, 16] : [10, 13]
     def xOff   = (s == 'sl') ? 4 : -4
-    def ownTex   = "${modId}:block/fusuma_${s}_x${px}_y${py}"
-    def otherTex = "${modId}:block/fusuma_${other}_x${px}_y${py}"
+    def ownTex   = fusumaTexForTile(modId, s, px, py)
+    def otherTex = fusumaTexForTile(modId, other, px, py)
+    def ownRot   = fusumaRotForTile(s, px, py)
+    def otherRot = fusumaRotForTile(other, px, py)
     def data = new LinkedHashMap([
         textures: new LinkedHashMap([
             particle: ownTex,
@@ -216,8 +267,8 @@ def generateFusumaOverlapModel(File baseDir, String modId, String s, boolean fli
             edge: "${modId}:block/fusuma_edge",
         ]),
         elements: [
-            [from: [0,    0, ownZ[0]],   to: [16,    16, ownZ[1]],   faces: fusumaFaces('front_l', 'back_l')],
-            [from: [xOff, 0, otherZ[0]], to: [xOff + 16, 16, otherZ[1]], faces: fusumaFaces('front_r', 'back_r')],
+            [from: [0,    0, ownZ[0]],   to: [16,    16, ownZ[1]],   faces: fusumaFaces('front_l', 'back_l', ownRot)],
+            [from: [xOff, 0, otherZ[0]], to: [xOff + 16, 16, otherZ[1]], faces: fusumaFaces('front_r', 'back_r', otherRot)],
         ],
     ])
     writeJson(baseDir, "assets/${modId}/models/block/fusuma_part_overlap_${s}${flipStr}_x${px}_y${py}.json", data)
