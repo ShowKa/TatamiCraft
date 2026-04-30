@@ -2,17 +2,12 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "pattern": [
-    "WPW",
-    "WPW",
-    "WPW"
+    "PPP",
+    " W "
   ],
   "key": {
-    "W": {
-      "item": "minecraft:oak_planks"
-    },
-    "P": {
-      "item": "minecraft:paper"
-    }
+    "W": {"tag": "minecraft:planks"},
+    "P": "minecraft:paper"
   },
   "result": {
     "id": "tatamicraft:fusuma",
