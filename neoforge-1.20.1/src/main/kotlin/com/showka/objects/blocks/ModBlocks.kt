@@ -2,6 +2,7 @@ package com.showka.objects.blocks
 
 import com.showka.TatamiCraftNeoForge
 import com.showka.objects.TatamiColor
+import com.showka.objects.blocks.FusumaPartBlock
 import com.showka.objects.items.ModItems
 import com.showka.util.TatamiLayout
 import net.minecraft.world.level.block.Block
@@ -17,6 +18,16 @@ import net.minecraftforge.registries.RegistryObject
 object ModBlocks {
 
     val BLOCKS: DeferredRegister<Block> = DeferredRegister.create(ForgeRegistries.BLOCKS, TatamiCraftNeoForge.MOD_ID)
+
+    // -- Fusuma --
+
+    val FUSUMA_PART: RegistryObject<FusumaPartBlock> = BLOCKS.register("fusuma_part") {
+        FusumaPartBlock(
+            fusumaSettings(),
+            dropItemProvider = { ModItems.FUSUMA_ITEM.get() },
+            blockEntityTypeProvider = { ModBlockEntities.FUSUMA_PART_BLOCK_ENTITY.get() }
+        )
+    }
 
     // -- Default tatami --
 
@@ -61,6 +72,12 @@ object ModBlocks {
         }
 
     // -- Helpers --
+
+    private fun fusumaSettings(): BlockBehaviour.Properties =
+        BlockBehaviour.Properties.of()
+            .strength(1.5f)
+            .sound(SoundType.WOOD)
+            .noOcclusion()
 
     private fun tatamiSettings(): BlockBehaviour.Properties =
         BlockBehaviour.Properties.of()
