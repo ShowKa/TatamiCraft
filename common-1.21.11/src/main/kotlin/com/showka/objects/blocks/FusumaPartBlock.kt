@@ -183,31 +183,18 @@ class FusumaPartBlock(
         return InteractionResult.SUCCESS
     }
 
-    private fun setDoorState(level: Level, origin: BlockPos, facing: Direction, newState: FusumaOpenState) {
-        val right = facing.getClockWise()
-        for (sideOff in listOf(0, 2)) {
-            for (px in 0..1) {
-                for (py in 0..2) {
-                    val p = origin.relative(right, sideOff + px).above(py)
-                    val s = level.getBlockState(p)
-                    if (s.`is`(this)) level.setBlock(p, s.setValue(DOOR_STATE, newState), UPDATE_CLIENTS)
-                }
-            }
+    private fun updateAllBlocks(level: Level, origin: BlockPos, facing: Direction, transform: (BlockState) -> BlockState) {
+        for (p in getAllPositions(origin, facing)) {
+            val s = level.getBlockState(p)
+            if (s.`is`(this)) level.setBlock(p, transform(s), UPDATE_CLIENTS)
         }
     }
 
-    private fun setFlipped(level: Level, origin: BlockPos, facing: Direction, flipped: Boolean) {
-        val right = facing.getClockWise()
-        for (sideOff in listOf(0, 2)) {
-            for (px in 0..1) {
-                for (py in 0..2) {
-                    val p = origin.relative(right, sideOff + px).above(py)
-                    val s = level.getBlockState(p)
-                    if (s.`is`(this)) level.setBlock(p, s.setValue(FLIPPED_HORIZONTAL, flipped), UPDATE_CLIENTS)
-                }
-            }
-        }
-    }
+    private fun setDoorState(level: Level, origin: BlockPos, facing: Direction, newState: FusumaOpenState) =
+        updateAllBlocks(level, origin, facing) { it.setValue(DOOR_STATE, newState) }
+
+    private fun setFlipped(level: Level, origin: BlockPos, facing: Direction, flipped: Boolean) =
+        updateAllBlocks(level, origin, facing) { it.setValue(FLIPPED_HORIZONTAL, flipped) }
 
     // ── Break handling ────────────────────────────────────────────────────────
 

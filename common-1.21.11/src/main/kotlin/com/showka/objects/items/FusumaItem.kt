@@ -74,16 +74,10 @@ class FusumaItem(
     }
 
     private fun canPlaceAll(level: Level, origin: BlockPos, facing: Direction): Boolean {
-        val right = facing.getClockWise()
-        for (sideOff in listOf(0, 2)) {
-            for (px in 0..1) {
-                for (py in 0..2) {
-                    val pos = origin.relative(right, sideOff + px).above(py)
-                    if (!level.isInWorldBounds(pos)) return false
-                    if (!level.getBlockState(pos).canBeReplaced()) return false
-                    if (py == 0 && level.getBlockState(pos.below()).isAir) return false
-                }
-            }
+        for (pos in FusumaPartBlock.getAllPositions(origin, facing)) {
+            if (!level.isInWorldBounds(pos)) return false
+            if (!level.getBlockState(pos).canBeReplaced()) return false
+            if (pos.y == origin.y && level.getBlockState(pos.below()).isAir) return false
         }
         return true
     }
