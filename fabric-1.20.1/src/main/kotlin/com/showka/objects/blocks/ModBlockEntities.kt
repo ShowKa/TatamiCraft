@@ -13,6 +13,15 @@ import net.minecraft.world.level.block.entity.BlockEntityType
  */
 object ModBlockEntities {
 
+    val FUSUMA_PART_BLOCK_ENTITY: BlockEntityType<FusumaBlockEntity> = Registry.register(
+        BuiltInRegistries.BLOCK_ENTITY_TYPE,
+        ResourceLocation(TatamiCraftModInitializer.MOD_ID, "fusuma_part"),
+        FabricBlockEntityTypeBuilder.create(
+            { pos, state -> FusumaBlockEntity(FUSUMA_PART_BLOCK_ENTITY, pos, state) },
+            ModBlocks.FUSUMA_PART
+        ).build()
+    )
+
     val TATAMI_PART_BLOCK_ENTITY: BlockEntityType<TatamiBlockEntity> = Registry.register(
         BuiltInRegistries.BLOCK_ENTITY_TYPE,
         ResourceLocation(TatamiCraftModInitializer.MOD_ID, "tatami_part"),

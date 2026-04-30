@@ -14,6 +14,14 @@ object ModBlockEntities {
     val BLOCK_ENTITY_TYPES: DeferredRegister<BlockEntityType<*>> =
         DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, TatamiCraftNeoForge.MOD_ID)
 
+    val FUSUMA_PART_BLOCK_ENTITY: RegistryObject<BlockEntityType<FusumaBlockEntity>> =
+        BLOCK_ENTITY_TYPES.register("fusuma_part") {
+            BlockEntityType.Builder.of(
+                { pos, state -> FusumaBlockEntity(FUSUMA_PART_BLOCK_ENTITY.get(), pos, state) },
+                ModBlocks.FUSUMA_PART.get()
+            ).build(null)
+        }
+
     val TATAMI_PART_BLOCK_ENTITY: RegistryObject<BlockEntityType<TatamiBlockEntity>> =
         BLOCK_ENTITY_TYPES.register("tatami_part") {
             BlockEntityType.Builder.of(

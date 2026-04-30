@@ -28,6 +28,7 @@ object TatamiCraftNeoForge {
 
     private fun addCreative(event: BuildCreativeModeTabContentsEvent) {
         if (event.tabKey == CreativeModeTabs.BUILDING_BLOCKS) {
+            event.accept(ModItems.FUSUMA_ITEM.get())
             orderedTatamiItems(
                 ModItems.TATAMI_ITEM.get(),
                 ModItems.TATAMI_HALF_ITEM.get(),
