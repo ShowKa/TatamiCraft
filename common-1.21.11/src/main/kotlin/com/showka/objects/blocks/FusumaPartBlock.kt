@@ -21,6 +21,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
+import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.level.block.state.properties.EnumProperty
 import net.minecraft.world.level.block.state.properties.IntegerProperty
 import net.minecraft.world.phys.BlockHitResult
@@ -31,17 +32,9 @@ import net.minecraft.world.phys.shapes.VoxelShape
 /**
  * Fusuma (Japanese sliding door) part block.
  *
- * A full fusuma consists of 12 blocks arranged in a 4-wide × 3-tall grid:
- *   - Left panel:  SIDE=LEFT,  PART_X=0..1, PART_Y=0..2
- *   - Right panel: SIDE=RIGHT, PART_X=0..1, PART_Y=0..2
- *
- * DOOR_STATE tracks the open/close state of the whole fusuma:
- *   - CLOSED:     both panels visible and solid
- *   - LEFT_OPEN:  left panel invisible/passable; right side shows 2-panel overlap
- *   - RIGHT_OPEN: right panel invisible/passable; left side shows 2-panel overlap
- *
- * RIGHT panel = front channel (Z=13..16 for FACING=NORTH).
- * LEFT panel  = back channel  (Z=10..13 for FACING=NORTH).
+ * DOOR_STATE:         CLOSED / LEFT_OPEN / RIGHT_OPEN
+ * FLIPPED_HORIZONTAL: false = right panel is front channel
+ *                     true  = left panel is front channel (mirror of default)
  */
 class FusumaPartBlock(
     properties: Properties,
@@ -57,11 +50,12 @@ class FusumaPartBlock(
                 .setValue(PART_X, 0)
                 .setValue(PART_Y, 0)
                 .setValue(DOOR_STATE, FusumaOpenState.CLOSED)
+                .setValue(FLIPPED_HORIZONTAL, false)
         )
     }
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
-        builder.add(FACING, SIDE, PART_X, PART_Y, DOOR_STATE)
+        builder.add(FACING, SIDE, PART_X, PART_Y, DOOR_STATE, FLIPPED_HORIZONTAL)
     }
 
     companion object {
@@ -70,23 +64,35 @@ class FusumaPartBlock(
         val PART_X: IntegerProperty = IntegerProperty.create("part_x", 0, 1)
         val PART_Y: IntegerProperty = IntegerProperty.create("part_y", 0, 2)
         val DOOR_STATE: EnumProperty<FusumaOpenState> = EnumProperty.create("door_state", FusumaOpenState::class.java)
+        val FLIPPED_HORIZONTAL: BooleanProperty = BooleanProperty.create("flipped_horizontal")
 
-        // RIGHT panel = front channel; LEFT panel = back channel (3 px behind).
-        private val SHAPES_CLOSED: Map<Pair<Direction, FusumaSide>, VoxelShape> = mapOf(
-            Pair(Direction.NORTH, FusumaSide.RIGHT) to box( 0.0, 0.0, 13.0, 16.0, 16.0, 16.0),
-            Pair(Direction.NORTH, FusumaSide.LEFT)  to box( 0.0, 0.0, 10.0, 16.0, 16.0, 13.0),
-            Pair(Direction.SOUTH, FusumaSide.RIGHT) to box( 0.0, 0.0,  0.0, 16.0, 16.0,  3.0),
-            Pair(Direction.SOUTH, FusumaSide.LEFT)  to box( 0.0, 0.0,  3.0, 16.0, 16.0,  6.0),
-            Pair(Direction.EAST,  FusumaSide.RIGHT) to box( 0.0, 0.0,  0.0,  3.0, 16.0, 16.0),
-            Pair(Direction.EAST,  FusumaSide.LEFT)  to box( 3.0, 0.0,  0.0,  6.0, 16.0, 16.0),
-            Pair(Direction.WEST,  FusumaSide.RIGHT) to box(13.0, 0.0,  0.0, 16.0, 16.0, 16.0),
-            Pair(Direction.WEST,  FusumaSide.LEFT)  to box(10.0, 0.0,  0.0, 13.0, 16.0, 16.0),
+        // Collision shapes keyed by (Direction, FusumaSide, flipped).
+        // Normal (flipped=false): RIGHT=front, LEFT=back.
+        // Flipped (flipped=true): LEFT=front, RIGHT=back.
+        private val SHAPES_CLOSED: Map<Triple<Direction, FusumaSide, Boolean>, VoxelShape> = mapOf(
+            // ── normal ────────────────────────────────────────────────────────
+            Triple(Direction.NORTH, FusumaSide.RIGHT, false) to box( 0.0, 0.0, 13.0, 16.0, 16.0, 16.0),
+            Triple(Direction.NORTH, FusumaSide.LEFT,  false) to box( 0.0, 0.0, 10.0, 16.0, 16.0, 13.0),
+            Triple(Direction.SOUTH, FusumaSide.RIGHT, false) to box( 0.0, 0.0,  0.0, 16.0, 16.0,  3.0),
+            Triple(Direction.SOUTH, FusumaSide.LEFT,  false) to box( 0.0, 0.0,  3.0, 16.0, 16.0,  6.0),
+            Triple(Direction.EAST,  FusumaSide.RIGHT, false) to box( 0.0, 0.0,  0.0,  3.0, 16.0, 16.0),
+            Triple(Direction.EAST,  FusumaSide.LEFT,  false) to box( 3.0, 0.0,  0.0,  6.0, 16.0, 16.0),
+            Triple(Direction.WEST,  FusumaSide.RIGHT, false) to box(13.0, 0.0,  0.0, 16.0, 16.0, 16.0),
+            Triple(Direction.WEST,  FusumaSide.LEFT,  false) to box(10.0, 0.0,  0.0, 13.0, 16.0, 16.0),
+            // ── flipped ───────────────────────────────────────────────────────
+            Triple(Direction.NORTH, FusumaSide.LEFT,  true)  to box( 0.0, 0.0, 13.0, 16.0, 16.0, 16.0),
+            Triple(Direction.NORTH, FusumaSide.RIGHT, true)  to box( 0.0, 0.0, 10.0, 16.0, 16.0, 13.0),
+            Triple(Direction.SOUTH, FusumaSide.LEFT,  true)  to box( 0.0, 0.0,  0.0, 16.0, 16.0,  3.0),
+            Triple(Direction.SOUTH, FusumaSide.RIGHT, true)  to box( 0.0, 0.0,  3.0, 16.0, 16.0,  6.0),
+            Triple(Direction.EAST,  FusumaSide.LEFT,  true)  to box( 0.0, 0.0,  0.0,  3.0, 16.0, 16.0),
+            Triple(Direction.EAST,  FusumaSide.RIGHT, true)  to box( 3.0, 0.0,  0.0,  6.0, 16.0, 16.0),
+            Triple(Direction.WEST,  FusumaSide.LEFT,  true)  to box(13.0, 0.0,  0.0, 16.0, 16.0, 16.0),
+            Triple(Direction.WEST,  FusumaSide.RIGHT, true)  to box(10.0, 0.0,  0.0, 13.0, 16.0, 16.0),
         )
 
         private val BREAKING_GROUP: ThreadLocal<Boolean> = ThreadLocal.withInitial { false }
         private val PLAYER_BREAKING: ThreadLocal<Boolean> = ThreadLocal.withInitial { false }
 
-        /** Returns true when this block position has no visible panel (the open-side original location). */
         private fun isBlockInvisible(side: FusumaSide, doorState: FusumaOpenState): Boolean =
             (side == FusumaSide.LEFT  && doorState == FusumaOpenState.LEFT_OPEN) ||
             (side == FusumaSide.RIGHT && doorState == FusumaOpenState.RIGHT_OPEN)
@@ -123,7 +129,8 @@ class FusumaPartBlock(
         val side = state.getValue(SIDE)
         val doorState = state.getValue(DOOR_STATE)
         if (isBlockInvisible(side, doorState)) return Shapes.empty()
-        return SHAPES_CLOSED[Pair(state.getValue(FACING), side)] ?: Shapes.block()
+        return SHAPES_CLOSED[Triple(state.getValue(FACING), side, state.getValue(FLIPPED_HORIZONTAL))]
+            ?: Shapes.block()
     }
 
     override fun getCollisionShape(
@@ -132,7 +139,8 @@ class FusumaPartBlock(
         val side = state.getValue(SIDE)
         val doorState = state.getValue(DOOR_STATE)
         if (isBlockInvisible(side, doorState)) return Shapes.empty()
-        return SHAPES_CLOSED[Pair(state.getValue(FACING), side)] ?: Shapes.block()
+        return SHAPES_CLOSED[Triple(state.getValue(FACING), side, state.getValue(FLIPPED_HORIZONTAL))]
+            ?: Shapes.block()
     }
 
     // ── BlockEntity ───────────────────────────────────────────────────────────
@@ -140,7 +148,7 @@ class FusumaPartBlock(
     override fun newBlockEntity(pos: BlockPos, state: BlockState): BlockEntity =
         FusumaBlockEntity(blockEntityTypeProvider(), pos, state)
 
-    // ── Interaction (open / close) ────────────────────────────────────────────
+    // ── Interaction ───────────────────────────────────────────────────────────
 
     @Suppress("OVERRIDE_DEPRECATION")
     override fun useWithoutItem(
@@ -148,19 +156,25 @@ class FusumaPartBlock(
     ): InteractionResult {
         if (level.isClientSide) return InteractionResult.SUCCESS
 
-        val side = state.getValue(SIDE)
-        val doorState = state.getValue(DOOR_STATE)
         val facing = state.getValue(FACING)
-
         val be = level.getBlockEntity(pos) as? FusumaBlockEntity
         val origin = be?.origin ?: reconstructOrigin(state, pos)
 
+        // Sneak right-click → toggle FLIPPED_HORIZONTAL
+        if (player.isCrouching) {
+            val newFlipped = !state.getValue(FLIPPED_HORIZONTAL)
+            setFlipped(level, origin, facing, newFlipped)
+            return InteractionResult.SUCCESS
+        }
+
+        // Normal right-click → open / close
+        val side = state.getValue(SIDE)
+        val doorState = state.getValue(DOOR_STATE)
         val newDoorState = when (doorState) {
             FusumaOpenState.CLOSED ->
                 if (side == FusumaSide.LEFT) FusumaOpenState.LEFT_OPEN else FusumaOpenState.RIGHT_OPEN
             else -> FusumaOpenState.CLOSED
         }
-
         setDoorState(level, origin, facing, newDoorState)
 
         val sound = if (newDoorState != FusumaOpenState.CLOSED) SoundEvents.WOODEN_DOOR_OPEN else SoundEvents.WOODEN_DOOR_CLOSE
@@ -176,9 +190,20 @@ class FusumaPartBlock(
                 for (py in 0..2) {
                     val p = origin.relative(right, sideOff + px).above(py)
                     val s = level.getBlockState(p)
-                    if (s.`is`(this)) {
-                        level.setBlock(p, s.setValue(DOOR_STATE, newState), UPDATE_CLIENTS)
-                    }
+                    if (s.`is`(this)) level.setBlock(p, s.setValue(DOOR_STATE, newState), UPDATE_CLIENTS)
+                }
+            }
+        }
+    }
+
+    private fun setFlipped(level: Level, origin: BlockPos, facing: Direction, flipped: Boolean) {
+        val right = facing.getClockWise()
+        for (sideOff in listOf(0, 2)) {
+            for (px in 0..1) {
+                for (py in 0..2) {
+                    val p = origin.relative(right, sideOff + px).above(py)
+                    val s = level.getBlockState(p)
+                    if (s.`is`(this)) level.setBlock(p, s.setValue(FLIPPED_HORIZONTAL, flipped), UPDATE_CLIENTS)
                 }
             }
         }

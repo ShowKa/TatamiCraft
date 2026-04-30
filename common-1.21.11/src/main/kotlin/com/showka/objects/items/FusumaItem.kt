@@ -44,6 +44,7 @@ class FusumaItem(
         if (!level.isClientSide) {
             val partBlock = partBlockProvider()
             val right = facing.getClockWise()
+            val flipped = player.isCrouching
             for (side in FusumaSide.entries) {
                 val sideOff = if (side == FusumaSide.LEFT) 0 else 2
                 for (px in 0..1) {
@@ -55,6 +56,7 @@ class FusumaItem(
                             .setValue(FusumaPartBlock.PART_X, px)
                             .setValue(FusumaPartBlock.PART_Y, py)
                             .setValue(FusumaPartBlock.DOOR_STATE, FusumaOpenState.CLOSED)
+                            .setValue(FusumaPartBlock.FLIPPED_HORIZONTAL, flipped)
                         level.setBlock(pos, state, Block.UPDATE_ALL)
 
                         val be = level.getBlockEntity(pos) as? FusumaBlockEntity
