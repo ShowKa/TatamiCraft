@@ -39,7 +39,11 @@ class FusumaItem(
         }
 
         val facing = player.direction
-        if (!canPlaceAll(level, placePos, facing)) return InteractionResult.FAIL
+        val ccw = facing.getCounterClockWise()
+        val origin = (0..3)
+            .map { offset -> placePos.relative(ccw, offset) }
+            .firstOrNull { canPlaceAll(level, it, facing) }
+            ?: return InteractionResult.FAIL
 
         if (!level.isClientSide) {
             val partBlock = partBlockProvider()
@@ -49,7 +53,7 @@ class FusumaItem(
                 val sideOff = if (side == FusumaSide.LEFT) 0 else 2
                 for (px in 0..1) {
                     for (py in 0..2) {
-                        val pos = placePos.relative(right, sideOff + px).above(py)
+                        val pos = origin.relative(right, sideOff + px).above(py)
                         val state = partBlock.defaultBlockState()
                             .setValue(FusumaPartBlock.FACING, facing)
                             .setValue(FusumaPartBlock.SIDE, side)
@@ -61,7 +65,7 @@ class FusumaItem(
 
                         val be = level.getBlockEntity(pos) as? FusumaBlockEntity
                         if (be != null) {
-                            be.origin = placePos
+                            be.origin = origin
                             be.setChanged()
                         }
                     }
