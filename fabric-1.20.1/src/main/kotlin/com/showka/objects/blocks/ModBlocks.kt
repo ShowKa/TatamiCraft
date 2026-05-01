@@ -56,13 +56,35 @@ object ModBlocks {
         }
     }
 
+    // -- Fusuma --
+
+    val FUSUMA_PART: Block = registerFusumaBlock("fusuma_part") { props ->
+        FusumaPartBlock(
+            props,
+            dropItemProvider = { ModItems.FUSUMA_ITEM },
+            blockEntityTypeProvider = { ModBlockEntities.FUSUMA_PART_BLOCK_ENTITY }
+        )
+    }
+
     // -- Helpers --
+
+    private fun fusumaSettings(): BlockBehaviour.Properties =
+        BlockBehaviour.Properties.of()
+            .strength(1.5f)
+            .sound(SoundType.WOOD)
+            .noOcclusion()
 
     private fun tatamiSettings(): BlockBehaviour.Properties {
         return BlockBehaviour.Properties.of()
             .strength(0.1f)
             .sound(SoundType.WOOL)
             .noCollission()
+    }
+
+    private fun registerFusumaBlock(path: String, factory: (BlockBehaviour.Properties) -> Block): Block {
+        val id = ResourceLocation(TatamiCraftModInitializer.MOD_ID, path)
+        val block = factory(fusumaSettings())
+        return Registry.register(BuiltInRegistries.BLOCK, id, block)
     }
 
     private fun registerBlock(path: String, factory: (BlockBehaviour.Properties) -> Block): Block {

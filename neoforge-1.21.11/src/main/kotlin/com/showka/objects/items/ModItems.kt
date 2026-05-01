@@ -3,6 +3,7 @@ package com.showka.objects.items
 import com.showka.TatamiCraftConstants
 import com.showka.objects.TatamiColor
 import com.showka.objects.blocks.AbstractTatamiPartBlock
+import com.showka.objects.blocks.FusumaPartBlock
 import com.showka.objects.blocks.ModBlocks
 import net.minecraft.world.item.Item
 import net.neoforged.neoforge.registries.DeferredItem
@@ -40,6 +41,12 @@ object ModItems {
                 color.tatamiHalfId()
             ) { props: Item.Properties -> AbstractTatamiItem.tatamiHalf(props) { ModBlocks.getTatamiHalfPart(color) as AbstractTatamiPartBlock } }
         }
+
+    // ── Fusuma ───────────────────────────────────────
+
+    val FUSUMA_ITEM: DeferredItem<Item> = ITEMS.registerItem(
+        "fusuma"
+    ) { props: Item.Properties -> FusumaItem(props) { ModBlocks.FUSUMA_PART.get() as FusumaPartBlock } }
 
     // ── Helpers ─────────────────────────────────────
 

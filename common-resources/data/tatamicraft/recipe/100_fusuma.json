@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "PPP",
+    " W "
+  ],
+  "key": {
+    "W": "minecraft:oak_planks",
+    "P": "minecraft:paper"
+  },
+  "result": {
+    "id": "tatamicraft:fusuma",
+    "count": 1
+  }
+}

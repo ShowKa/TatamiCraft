@@ -60,7 +60,23 @@ object ModBlocks {
             }
         }
 
+    // -- Fusuma --
+
+    val FUSUMA_PART: RegistryObject<FusumaPartBlock> = BLOCKS.register("fusuma_part") {
+        FusumaPartBlock(
+            fusumaSettings(),
+            dropItemProvider = { ModItems.FUSUMA_ITEM.get() },
+            blockEntityTypeProvider = { ModBlockEntities.FUSUMA_PART_BLOCK_ENTITY.get() }
+        )
+    }
+
     // -- Helpers --
+
+    private fun fusumaSettings(): BlockBehaviour.Properties =
+        BlockBehaviour.Properties.of()
+            .strength(1.5f)
+            .sound(SoundType.WOOD)
+            .noOcclusion()
 
     private fun tatamiSettings(): BlockBehaviour.Properties =
         BlockBehaviour.Properties.of()

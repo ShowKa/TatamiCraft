@@ -20,12 +20,15 @@ object TatamiCraftModInitializer : ModInitializer {
 
         // Add tatami items to creative tab (default + all colors, same color tatami & half tatami adjacent)
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.BUILDING_BLOCKS).register { entries ->
+            // tatami
             orderedTatamiItems(
                 ModItems.TATAMI_ITEM,
                 ModItems.TATAMI_HALF_ITEM,
                 ModItems::getTatamiItem,
                 ModItems::getTatamiHalfItem
             ).forEach { entries.accept(it) }
+            // fusuma
+            entries.accept(ModItems.FUSUMA_ITEM)
         }
     }
 }

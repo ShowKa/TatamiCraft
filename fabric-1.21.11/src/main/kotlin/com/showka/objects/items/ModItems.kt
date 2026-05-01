@@ -3,6 +3,7 @@ package com.showka.objects.items
 import com.showka.TatamiCraftConstants
 import com.showka.objects.TatamiColor
 import com.showka.objects.blocks.AbstractTatamiPartBlock
+import com.showka.objects.blocks.FusumaPartBlock
 import com.showka.objects.blocks.ModBlocks
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
@@ -38,6 +39,12 @@ object ModItems {
         registerItem(color.tatamiHalfId()) { props ->
             AbstractTatamiItem.tatamiHalf(props) { ModBlocks.getTatamiHalfPart(color) as AbstractTatamiPartBlock }
         }
+    }
+
+    // -- Fusuma --
+
+    val FUSUMA_ITEM: Item = registerItem("fusuma") { props ->
+        FusumaItem(props) { ModBlocks.FUSUMA_PART as FusumaPartBlock }
     }
 
     // -- Helpers --
