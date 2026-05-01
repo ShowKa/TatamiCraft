@@ -6,7 +6,7 @@
     " W "
   ],
   "key": {
-    "W": {"tag": "minecraft:planks"},
+    "W": "minecraft:oak_planks",
     "P": "minecraft:paper"
   },
   "result": {
