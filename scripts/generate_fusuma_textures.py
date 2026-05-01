@@ -14,6 +14,7 @@ Using only 2 averaged endpoints eliminates per-pixel tatami noise entirely;
 the smoothness of the output depends solely on the fusuma source texture.
 """
 
+import colorsys
 import sys
 from pathlib import Path
 
@@ -40,6 +41,8 @@ VARIANTS = [
     "walnut",
 ]
 
+SATURATION_BOOST = 1.8  # multiply saturation after remap (1.0 = no change)
+
 def lum(r: int, g: int, b: int) -> float:
     return 0.299 * r + 0.587 * g + 0.114 * b
 
@@ -65,8 +68,15 @@ def extract_endpoints(tatami_path: Path) -> tuple:
     return avg(all_px[:quarter]), avg(all_px[-quarter:])
 
 
+def saturate(r: int, g: int, b: int) -> tuple:
+    h, s, v = colorsys.rgb_to_hsv(r / 255, g / 255, b / 255)
+    s = min(1.0, s * SATURATION_BOOST)
+    r2, g2, b2 = colorsys.hsv_to_rgb(h, s, v)
+    return int(r2 * 255), int(g2 * 255), int(b2 * 255)
+
+
 def remap(base: Image.Image, dark: tuple, light: tuple) -> Image.Image:
-    """Linearly remap ALL opaque pixels (frame + panel) between dark and light."""
+    """Linearly remap ALL opaque pixels between dark and light, then boost saturation."""
     base_rgba = base.convert("RGBA")
     result = base_rgba.copy()
     out_px = result.load()
@@ -88,12 +98,11 @@ def remap(base: Image.Image, dark: tuple, light: tuple) -> Image.Image:
             r, g, b, a = in_px[x, y]
             if a > 128:
                 t = (lum(r, g, b) - lo) / rng
-                out_px[x, y] = (
-                    int(dark[0] + (light[0] - dark[0]) * t),
-                    int(dark[1] + (light[1] - dark[1]) * t),
-                    int(dark[2] + (light[2] - dark[2]) * t),
-                    a,
-                )
+                nr = int(dark[0] + (light[0] - dark[0]) * t)
+                ng = int(dark[1] + (light[1] - dark[1]) * t)
+                nb = int(dark[2] + (light[2] - dark[2]) * t)
+                nr, ng, nb = saturate(nr, ng, nb)
+                out_px[x, y] = (nr, ng, nb, a)
     return result
 
 
