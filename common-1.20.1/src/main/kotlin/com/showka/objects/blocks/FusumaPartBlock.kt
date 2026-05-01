@@ -30,6 +30,13 @@ import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 
+/**
+ * Fusuma (Japanese sliding door) part block.
+ *
+ * DOOR_STATE:         CLOSED / LEFT_OPEN / RIGHT_OPEN
+ * FLIPPED_HORIZONTAL: false = right panel is front channel
+ *                     true  = left panel is front channel (mirror of default)
+ */
 class FusumaPartBlock(
     properties: Properties,
     private val dropItemProvider: () -> Item,
@@ -110,6 +117,8 @@ class FusumaPartBlock(
         }
     }
 
+    // ── Shape ────────────────────────────────────────────────────────────────
+
     @Suppress("OVERRIDE_DEPRECATION")
     override fun getShape(
         state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext
@@ -132,8 +141,12 @@ class FusumaPartBlock(
             ?: Shapes.block()
     }
 
+    // ── BlockEntity ───────────────────────────────────────────────────────────
+
     override fun newBlockEntity(pos: BlockPos, state: BlockState): BlockEntity =
         FusumaBlockEntity(blockEntityTypeProvider(), pos, state)
+
+    // ── Interaction ───────────────────────────────────────────────────────────
 
     @Suppress("OVERRIDE_DEPRECATION")
     override fun use(
@@ -179,6 +192,8 @@ class FusumaPartBlock(
 
     private fun setFlipped(level: Level, origin: BlockPos, facing: Direction, flipped: Boolean) =
         updateAllBlocks(level, origin, facing) { it.setValue(FLIPPED_HORIZONTAL, flipped) }
+
+    // ── Break handling ────────────────────────────────────────────────────────
 
     override fun playerWillDestroy(level: Level, pos: BlockPos, state: BlockState, player: Player) {
         if (!level.isClientSide) {

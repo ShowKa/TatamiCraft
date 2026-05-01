@@ -12,6 +12,15 @@ import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 
+/**
+ * Fusuma placement item.
+ *
+ * Right-clicking a surface checks for a 4-wide × 3-tall empty space
+ * (expanding in the FACING.getClockWise() direction) and places all 12
+ * fusuma part blocks if the space is clear.
+ *
+ * Only the bottom row requires solid ground support.
+ */
 class FusumaItem(
     properties: Properties,
     private val partBlockProvider: () -> FusumaPartBlock
