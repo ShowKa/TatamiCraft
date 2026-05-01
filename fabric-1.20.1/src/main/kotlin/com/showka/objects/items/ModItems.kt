@@ -5,7 +5,6 @@ import com.showka.objects.TatamiColor
 import com.showka.objects.blocks.AbstractTatamiPartBlock
 import com.showka.objects.blocks.FusumaPartBlock
 import com.showka.objects.blocks.ModBlocks
-import com.showka.objects.items.FusumaItem
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
@@ -15,12 +14,6 @@ import net.minecraft.world.item.Item
  * Fabric 1.20.1 item registration
  */
 object ModItems {
-
-    // -- Fusuma --
-
-    val FUSUMA_ITEM: Item = registerItem("fusuma") { props ->
-        FusumaItem(props) { ModBlocks.FUSUMA_PART as FusumaPartBlock }
-    }
 
     // -- Default tatami items --
 
@@ -44,6 +37,12 @@ object ModItems {
         registerItem(color.tatamiHalfId()) { props ->
             AbstractTatamiItem.tatamiHalf(props) { ModBlocks.getTatamiHalfPart(color) as AbstractTatamiPartBlock }
         }
+    }
+
+    // -- Fusuma --
+
+    val FUSUMA_ITEM: Item = registerItem("fusuma") { props ->
+        FusumaItem(props) { ModBlocks.FUSUMA_PART as FusumaPartBlock }
     }
 
     // -- Helpers --

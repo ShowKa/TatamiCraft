@@ -2,7 +2,6 @@ package com.showka.objects.blocks
 
 import com.showka.TatamiCraftModInitializer
 import com.showka.objects.TatamiColor
-import com.showka.objects.blocks.FusumaPartBlock
 import com.showka.objects.items.ModItems
 import com.showka.util.TatamiLayout
 import net.minecraft.core.Registry
@@ -16,16 +15,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour
  * Fabric 1.20.1 block registration
  */
 object ModBlocks {
-
-    // -- Fusuma --
-
-    val FUSUMA_PART: Block = registerFusumaBlock("fusuma_part") { props ->
-        FusumaPartBlock(
-            props,
-            dropItemProvider = { ModItems.FUSUMA_ITEM },
-            blockEntityTypeProvider = { ModBlockEntities.FUSUMA_PART_BLOCK_ENTITY }
-        )
-    }
 
     // -- Default tatami --
 
@@ -65,6 +54,16 @@ object ModBlocks {
                 blockEntityTypeProvider = { ModBlockEntities.TATAMI_HALF_PART_BLOCK_ENTITY }
             )
         }
+    }
+
+    // -- Fusuma --
+
+    val FUSUMA_PART: Block = registerFusumaBlock("fusuma_part") { props ->
+        FusumaPartBlock(
+            props,
+            dropItemProvider = { ModItems.FUSUMA_ITEM },
+            blockEntityTypeProvider = { ModBlockEntities.FUSUMA_PART_BLOCK_ENTITY }
+        )
     }
 
     // -- Helpers --
