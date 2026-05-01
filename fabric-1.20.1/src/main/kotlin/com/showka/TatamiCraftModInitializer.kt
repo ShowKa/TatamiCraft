@@ -1,9 +1,9 @@
 package com.showka
 
-import com.showka.objects.ModColor
 import com.showka.objects.blocks.ModBlockEntities
 import com.showka.objects.blocks.ModBlocks
 import com.showka.objects.items.ModItems
+import com.showka.util.orderedFusumaItems
 import com.showka.util.orderedTatamiItems
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
@@ -30,9 +30,11 @@ object TatamiCraftModInitializer : ModInitializer {
                 ModItems::getTatamiItem,
                 ModItems::getTatamiHalfItem
             ).forEach { entries.accept(it) }
-            // fusuma (default + colored)
-            entries.accept(ModItems.FUSUMA_ITEM)
-            ModColor.FUSUMA_COLORED.forEach { color -> entries.accept(ModItems.getFusumaItem(color)) }
+            // fusuma
+            orderedFusumaItems(
+                ModItems.FUSUMA_ITEM,
+                ModItems::getFusumaItem
+            ).forEach { entries.accept(it) }
         }
     }
 }

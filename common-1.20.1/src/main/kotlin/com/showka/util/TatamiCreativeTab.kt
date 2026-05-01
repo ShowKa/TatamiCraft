@@ -20,3 +20,13 @@ fun orderedTatamiItems(
         add(getColoredTatamiHalf(color))
     }
 }
+
+fun orderedFusumaItems(
+    defaultFusuma: Item,
+    getColoredFusuma: (ModColor) -> Item
+): List<Item> = buildList {
+    add(defaultFusuma)
+    for (color in ModColor.FUSUMA_COLORED) {
+        add(getColoredFusuma(color))
+    }
+}

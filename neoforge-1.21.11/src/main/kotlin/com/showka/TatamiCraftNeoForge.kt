@@ -1,9 +1,9 @@
 package com.showka
 
-import com.showka.objects.ModColor
 import com.showka.objects.blocks.ModBlockEntities
 import com.showka.objects.blocks.ModBlocks
 import com.showka.objects.items.ModItems
+import com.showka.util.orderedFusumaItems
 import com.showka.util.orderedTatamiItems
 import net.minecraft.world.item.CreativeModeTabs
 import net.neoforged.bus.api.IEventBus
@@ -32,9 +32,11 @@ class TatamiCraftNeoForge(modBus: IEventBus) {
                 ModItems::getTatamiItem,
                 ModItems::getTatamiHalfItem
             ).forEach { event.accept(it) }
-            // fusuma (default + colored)
-            event.accept(ModItems.FUSUMA_ITEM.get())
-            ModColor.FUSUMA_COLORED.forEach { color -> event.accept(ModItems.getFusumaItem(color)) }
+            // fusuma
+            orderedFusumaItems(
+                ModItems.FUSUMA_ITEM.get(),
+                ModItems::getFusumaItem
+            ).forEach { event.accept(it) }
         }
     }
 }
