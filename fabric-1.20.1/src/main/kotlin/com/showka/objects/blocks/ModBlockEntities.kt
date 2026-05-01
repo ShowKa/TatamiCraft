@@ -16,12 +16,6 @@ import net.minecraft.world.level.block.state.BlockState
  */
 object ModBlockEntities {
 
-    val FUSUMA_PART_BLOCK_ENTITY: BlockEntityType<FusumaBlockEntity> = register(
-        "fusuma_part",
-        { pos, state -> FusumaBlockEntity(FUSUMA_PART_BLOCK_ENTITY, pos, state) },
-        ModBlocks.FUSUMA_PART
-    )
-
     val TATAMI_PART_BLOCK_ENTITY: BlockEntityType<TatamiBlockEntity> = register(
         "tatami_part",
         { pos, state -> TatamiBlockEntity(TATAMI_PART_BLOCK_ENTITY, pos, state) },
@@ -32,6 +26,12 @@ object ModBlockEntities {
         "tatami_half_part",
         { pos, state -> TatamiBlockEntity(TATAMI_HALF_PART_BLOCK_ENTITY, pos, state) },
         *ModBlocks.allTatamiHalfParts().toTypedArray<Block>()
+    )
+
+    val FUSUMA_PART_BLOCK_ENTITY: BlockEntityType<FusumaBlockEntity> = register(
+        "fusuma_part",
+        { pos, state -> FusumaBlockEntity(FUSUMA_PART_BLOCK_ENTITY, pos, state) },
+        ModBlocks.FUSUMA_PART
     )
 
     fun init() {

@@ -18,12 +18,6 @@ object ModBlockEntities {
     val BLOCK_ENTITY_TYPES: DeferredRegister<BlockEntityType<*>> =
         DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, TatamiCraftNeoForge.MOD_ID)
 
-    val FUSUMA_PART_BLOCK_ENTITY: RegistryObject<BlockEntityType<FusumaBlockEntity>> = register(
-        "fusuma_part",
-        { pos, state -> FusumaBlockEntity(FUSUMA_PART_BLOCK_ENTITY.get(), pos, state) },
-        { arrayOf(ModBlocks.FUSUMA_PART.get()) }
-    )
-
     val TATAMI_PART_BLOCK_ENTITY: RegistryObject<BlockEntityType<TatamiBlockEntity>> = register(
         "tatami_part",
         { pos, state -> TatamiBlockEntity(TATAMI_PART_BLOCK_ENTITY.get(), pos, state) },
@@ -34,6 +28,12 @@ object ModBlockEntities {
         "tatami_half_part",
         { pos, state -> TatamiBlockEntity(TATAMI_HALF_PART_BLOCK_ENTITY.get(), pos, state) },
         { ModBlocks.allTatamiHalfParts().map { it.get() }.toTypedArray() }
+    )
+
+    val FUSUMA_PART_BLOCK_ENTITY: RegistryObject<BlockEntityType<FusumaBlockEntity>> = register(
+        "fusuma_part",
+        { pos, state -> FusumaBlockEntity(FUSUMA_PART_BLOCK_ENTITY.get(), pos, state) },
+        { arrayOf(ModBlocks.FUSUMA_PART.get()) }
     )
 
     private fun <T : BlockEntity> register(
