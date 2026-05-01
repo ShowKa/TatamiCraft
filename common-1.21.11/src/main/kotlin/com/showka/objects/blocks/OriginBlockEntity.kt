@@ -7,12 +7,17 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.storage.ValueInput
 import net.minecraft.world.level.storage.ValueOutput
 
+/**
+ * BlockEntity for tatami/fusuma/and more parts.
+ * Stores the origin coordinate of the multi-block set.
+ */
 abstract class OriginBlockEntity(
     type: BlockEntityType<out OriginBlockEntity>,
     pos: BlockPos,
     state: BlockState
 ) : BlockEntity(type, pos, state) {
 
+    /** Origin coordinate of the multi-block set */
     var origin: BlockPos? = null
 
     override fun saveAdditional(output: ValueOutput) {
