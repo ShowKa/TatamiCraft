@@ -24,13 +24,15 @@ class TatamiCraftNeoForge(modBus: IEventBus) {
 
     private fun addCreative(event: BuildCreativeModeTabContentsEvent) {
         if (event.tabKey == CreativeModeTabs.BUILDING_BLOCKS) {
-            event.accept(ModItems.FUSUMA_ITEM.get())
+            // tatami
             orderedTatamiItems(
                 ModItems.TATAMI_ITEM.get(),
                 ModItems.TATAMI_HALF_ITEM.get(),
                 ModItems::getTatamiItem,
                 ModItems::getTatamiHalfItem
             ).forEach { event.accept(it) }
+            // fusuma
+            event.accept(ModItems.FUSUMA_ITEM.get())
         }
     }
 }
