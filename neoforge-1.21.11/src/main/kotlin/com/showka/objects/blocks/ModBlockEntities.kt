@@ -40,7 +40,7 @@ object ModBlockEntities {
         name: String,
         factory: (BlockPos, BlockState) -> T,
         blocksProvider: () -> Array<out Block>
-    ): Supplier<BlockEntityType<T>> = BLOCK_ENTITY_TYPES.register(name) {
+    ): Supplier<BlockEntityType<T>> = BLOCK_ENTITY_TYPES.register(name, Supplier {
         BlockEntityType(factory, false, *blocksProvider())
-    }
+    })
 }
