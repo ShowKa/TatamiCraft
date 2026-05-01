@@ -1,7 +1,7 @@
 package com.showka.objects.blocks
 
 import com.showka.TatamiCraftNeoForge
-import com.showka.objects.TatamiColor
+import com.showka.objects.ModColor
 import com.showka.objects.items.ModItems
 import com.showka.util.TatamiLayout
 import net.minecraft.world.level.block.Block
@@ -38,8 +38,8 @@ object ModBlocks {
 
     // -- Color variations --
 
-    val COLORED_TATAMI_PARTS: Map<TatamiColor, RegistryObject<AbstractTatamiPartBlock>> =
-        TatamiColor.COLORED.associateWith { color ->
+    val COLORED_TATAMI_PARTS: Map<ModColor, RegistryObject<AbstractTatamiPartBlock>> =
+        ModColor.COLORED.associateWith { color ->
             BLOCKS.register(color.tatamiPartId()) {
                 AbstractTatamiPartBlock(
                     tatamiSettings(), TatamiLayout.TATAMI,
@@ -49,8 +49,8 @@ object ModBlocks {
             }
         }
 
-    val COLORED_TATAMI_HALF_PARTS: Map<TatamiColor, RegistryObject<AbstractTatamiPartBlock>> =
-        TatamiColor.COLORED.associateWith { color ->
+    val COLORED_TATAMI_HALF_PARTS: Map<ModColor, RegistryObject<AbstractTatamiPartBlock>> =
+        ModColor.COLORED.associateWith { color ->
             BLOCKS.register(color.tatamiHalfPartId()) {
                 AbstractTatamiPartBlock(
                     tatamiSettings(), TatamiLayout.TATAMI_HALF,
@@ -70,8 +70,8 @@ object ModBlocks {
         )
     }
 
-    val COLORED_FUSUMA_PARTS: Map<TatamiColor, RegistryObject<FusumaPartBlock>> =
-        TatamiColor.FUSUMA_COLORED.associateWith { color ->
+    val COLORED_FUSUMA_PARTS: Map<ModColor, RegistryObject<FusumaPartBlock>> =
+        ModColor.FUSUMA_COLORED.associateWith { color ->
             BLOCKS.register(color.fusumaPartId()) {
                 FusumaPartBlock(
                     fusumaSettings(),
@@ -95,14 +95,14 @@ object ModBlocks {
             .sound(SoundType.WOOL)
             .noCollission()
 
-    fun getTatamiPart(color: TatamiColor): Block =
-        if (color == TatamiColor.DEFAULT) TATAMI_PART.get() else COLORED_TATAMI_PARTS.getValue(color).get()
+    fun getTatamiPart(color: ModColor): Block =
+        if (color == ModColor.DEFAULT) TATAMI_PART.get() else COLORED_TATAMI_PARTS.getValue(color).get()
 
-    fun getTatamiHalfPart(color: TatamiColor): Block =
-        if (color == TatamiColor.DEFAULT) TATAMI_HALF_PART.get() else COLORED_TATAMI_HALF_PARTS.getValue(color).get()
+    fun getTatamiHalfPart(color: ModColor): Block =
+        if (color == ModColor.DEFAULT) TATAMI_HALF_PART.get() else COLORED_TATAMI_HALF_PARTS.getValue(color).get()
 
-    fun getFusumaPart(color: TatamiColor): Block =
-        if (color == TatamiColor.DEFAULT) FUSUMA_PART.get() else COLORED_FUSUMA_PARTS.getValue(color).get()
+    fun getFusumaPart(color: ModColor): Block =
+        if (color == ModColor.DEFAULT) FUSUMA_PART.get() else COLORED_FUSUMA_PARTS.getValue(color).get()
 
     fun allTatamiParts(): List<RegistryObject<AbstractTatamiPartBlock>> =
         listOf(TATAMI_PART) + COLORED_TATAMI_PARTS.values

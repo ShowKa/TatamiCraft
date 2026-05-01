@@ -1,6 +1,6 @@
 package com.showka
 
-import com.showka.objects.TatamiColor
+import com.showka.objects.ModColor
 import com.showka.objects.blocks.ModBlockEntities
 import com.showka.objects.blocks.ModBlocks
 import com.showka.objects.items.ModItems
@@ -32,7 +32,7 @@ object TatamiCraftModInitializer : ModInitializer {
             ).forEach { entries.accept(it) }
             // fusuma (default + colored)
             entries.accept(ModItems.FUSUMA_ITEM)
-            TatamiColor.FUSUMA_COLORED.forEach { color -> entries.accept(ModItems.getFusumaItem(color)) }
+            ModColor.FUSUMA_COLORED.forEach { color -> entries.accept(ModItems.getFusumaItem(color)) }
         }
     }
 }

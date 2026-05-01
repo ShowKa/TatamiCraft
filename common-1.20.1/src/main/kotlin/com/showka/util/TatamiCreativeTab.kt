@@ -1,6 +1,6 @@
 package com.showka.util
 
-import com.showka.objects.TatamiColor
+import com.showka.objects.ModColor
 import net.minecraft.world.item.Item
 
 /**
@@ -10,12 +10,12 @@ import net.minecraft.world.item.Item
 fun orderedTatamiItems(
     defaultTatami: Item,
     defaultTatamiHalf: Item,
-    getColoredTatami: (TatamiColor) -> Item,
-    getColoredTatamiHalf: (TatamiColor) -> Item
+    getColoredTatami: (ModColor) -> Item,
+    getColoredTatamiHalf: (ModColor) -> Item
 ): List<Item> = buildList {
     add(defaultTatami)
     add(defaultTatamiHalf)
-    for (color in TatamiColor.COLORED) {
+    for (color in ModColor.COLORED) {
         add(getColoredTatami(color))
         add(getColoredTatamiHalf(color))
     }

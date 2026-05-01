@@ -7,7 +7,7 @@ package com.showka.objects
  * @param englishName  English display name (e.g., "Red")
  * @param japaneseName Japanese display name (e.g., "紅色")
  */
-enum class TatamiColor(
+enum class ModColor(
     val id: String,
     val englishName: String,
     val japaneseName: String
