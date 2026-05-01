@@ -47,6 +47,12 @@ object ModItems {
         FusumaItem(props) { ModBlocks.FUSUMA_PART as FusumaPartBlock }
     }
 
+    val COLORED_FUSUMA_ITEMS: Map<TatamiColor, Item> = TatamiColor.FUSUMA_COLORED.associateWith { color ->
+        registerItem(color.fusumaId()) { props ->
+            FusumaItem(props) { ModBlocks.getFusumaPart(color) as FusumaPartBlock }
+        }
+    }
+
     // -- Helpers --
 
     private fun registerItem(path: String, factory: (Item.Properties) -> Item): Item {
@@ -61,6 +67,9 @@ object ModItems {
 
     fun getTatamiHalfItem(color: TatamiColor): Item =
         if (color == TatamiColor.DEFAULT) TATAMI_HALF_ITEM else COLORED_TATAMI_HALF_ITEMS.getValue(color)
+
+    fun getFusumaItem(color: TatamiColor): Item =
+        if (color == TatamiColor.DEFAULT) FUSUMA_ITEM else COLORED_FUSUMA_ITEMS.getValue(color)
 
     fun init() {
         // Trigger static initialization

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "minecraft:brown_dye",
+    "tatamicraft:fusuma"
+  ],
+  "result": {
+    "id": "tatamicraft:walnut_fusuma",
+    "count": 1
+  }
+}

@@ -1,5 +1,6 @@
 package com.showka
 
+import com.showka.objects.TatamiColor
 import com.showka.objects.blocks.ModBlockEntities
 import com.showka.objects.blocks.ModBlocks
 import com.showka.objects.items.ModItems
@@ -35,8 +36,9 @@ object TatamiCraftNeoForge {
                 ModItems::getTatamiItem,
                 ModItems::getTatamiHalfItem
             ).forEach { event.accept(it) }
-            // fusuma
+            // fusuma (default + colored)
             event.accept(ModItems.FUSUMA_ITEM.get())
+            TatamiColor.FUSUMA_COLORED.forEach { color -> event.accept(ModItems.getFusumaItem(color)) }
         }
     }
 }

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "minecraft:white_dye",
+    "tatamicraft:fusuma"
+  ],
+  "result": {
+    "id": "tatamicraft:milk_white_fusuma",
+    "count": 1
+  }
+}

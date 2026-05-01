@@ -70,6 +70,17 @@ object ModBlocks {
         )
     }
 
+    val COLORED_FUSUMA_PARTS: Map<TatamiColor, RegistryObject<FusumaPartBlock>> =
+        TatamiColor.FUSUMA_COLORED.associateWith { color ->
+            BLOCKS.register(color.fusumaPartId()) {
+                FusumaPartBlock(
+                    fusumaSettings(),
+                    dropItemProvider = { ModItems.getFusumaItem(color) },
+                    blockEntityTypeProvider = { ModBlockEntities.FUSUMA_PART_BLOCK_ENTITY.get() }
+                )
+            }
+        }
+
     // -- Helpers --
 
     private fun fusumaSettings(): BlockBehaviour.Properties =
@@ -90,9 +101,15 @@ object ModBlocks {
     fun getTatamiHalfPart(color: TatamiColor): Block =
         if (color == TatamiColor.DEFAULT) TATAMI_HALF_PART.get() else COLORED_TATAMI_HALF_PARTS.getValue(color).get()
 
+    fun getFusumaPart(color: TatamiColor): Block =
+        if (color == TatamiColor.DEFAULT) FUSUMA_PART.get() else COLORED_FUSUMA_PARTS.getValue(color).get()
+
     fun allTatamiParts(): List<RegistryObject<AbstractTatamiPartBlock>> =
         listOf(TATAMI_PART) + COLORED_TATAMI_PARTS.values
 
     fun allTatamiHalfParts(): List<RegistryObject<AbstractTatamiPartBlock>> =
         listOf(TATAMI_HALF_PART) + COLORED_TATAMI_HALF_PARTS.values
+
+    fun allFusumaParts(): List<RegistryObject<FusumaPartBlock>> =
+        listOf(FUSUMA_PART) + COLORED_FUSUMA_PARTS.values
 }

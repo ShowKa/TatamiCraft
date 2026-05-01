@@ -38,8 +38,14 @@ enum class TatamiColor(
     fun tatamiId(): String = "${prefix()}tatami"
     fun tatamiHalfId(): String = "${prefix()}tatami_half"
 
+    fun fusumaPartId(): String = "${prefix()}fusuma_part"
+    fun fusumaId(): String = "${prefix()}fusuma"
+
     companion object {
         /** All colors except DEFAULT */
         val COLORED = entries.filter { it != DEFAULT }
+
+        /** Colors available for Fusuma variants */
+        val FUSUMA_COLORED = listOf(GRAYISH_PINK, MILK_WHITE, LIGHT_BROWN, WALNUT)
     }
 }
