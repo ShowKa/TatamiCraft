@@ -1,0 +1,49 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "tatamicraft:104_walnut_fusuma"
+      }
+    },
+    "has_brown_dye": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:brown_dye",
+            "items": "minecraft:brown_dye"
+          }
+        ]
+      }
+    },
+    "has_fusuma": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "tatamicraft:fusuma",
+            "items": "tatamicraft:fusuma"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_brown_dye"
+    ],
+    [
+      "has_the_recipe",
+      "has_fusuma"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "tatamicraft:104_walnut_fusuma"
+    ]
+  },
+  "sends_telemetry_event": false
+}

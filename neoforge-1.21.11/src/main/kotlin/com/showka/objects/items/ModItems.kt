@@ -1,7 +1,7 @@
 package com.showka.objects.items
 
 import com.showka.TatamiCraftConstants
-import com.showka.objects.TatamiColor
+import com.showka.objects.ModColor
 import com.showka.objects.blocks.AbstractTatamiPartBlock
 import com.showka.objects.blocks.FusumaPartBlock
 import com.showka.objects.blocks.ModBlocks
@@ -28,15 +28,15 @@ object ModItems {
 
     // ── Color variations ──────────────────────────
 
-    val COLORED_TATAMI_ITEMS: Map<TatamiColor, DeferredItem<Item>> =
-        TatamiColor.COLORED.associateWith { color ->
+    val COLORED_TATAMI_ITEMS: Map<ModColor, DeferredItem<Item>> =
+        ModColor.COLORED.associateWith { color ->
             ITEMS.registerItem(
                 color.tatamiId()
             ) { props: Item.Properties -> AbstractTatamiItem.tatami(props) { ModBlocks.getTatamiPart(color) as AbstractTatamiPartBlock } }
         }
 
-    val COLORED_TATAMI_HALF_ITEMS: Map<TatamiColor, DeferredItem<Item>> =
-        TatamiColor.COLORED.associateWith { color ->
+    val COLORED_TATAMI_HALF_ITEMS: Map<ModColor, DeferredItem<Item>> =
+        ModColor.COLORED.associateWith { color ->
             ITEMS.registerItem(
                 color.tatamiHalfId()
             ) { props: Item.Properties -> AbstractTatamiItem.tatamiHalf(props) { ModBlocks.getTatamiHalfPart(color) as AbstractTatamiPartBlock } }
@@ -48,11 +48,21 @@ object ModItems {
         "fusuma"
     ) { props: Item.Properties -> FusumaItem(props) { ModBlocks.FUSUMA_PART.get() as FusumaPartBlock } }
 
+    val COLORED_FUSUMA_ITEMS: Map<ModColor, DeferredItem<Item>> =
+        ModColor.FUSUMA_COLORED.associateWith { color ->
+            ITEMS.registerItem(color.fusumaId()) { props: Item.Properties ->
+                FusumaItem(props) { ModBlocks.getFusumaPart(color) as FusumaPartBlock }
+            }
+        }
+
     // ── Helpers ─────────────────────────────────────
 
-    fun getTatamiItem(color: TatamiColor): Item =
-        if (color == TatamiColor.DEFAULT) TATAMI_ITEM.get() else COLORED_TATAMI_ITEMS.getValue(color).get()
+    fun getTatamiItem(color: ModColor): Item =
+        if (color == ModColor.DEFAULT) TATAMI_ITEM.get() else COLORED_TATAMI_ITEMS.getValue(color).get()
 
-    fun getTatamiHalfItem(color: TatamiColor): Item =
-        if (color == TatamiColor.DEFAULT) TATAMI_HALF_ITEM.get() else COLORED_TATAMI_HALF_ITEMS.getValue(color).get()
+    fun getTatamiHalfItem(color: ModColor): Item =
+        if (color == ModColor.DEFAULT) TATAMI_HALF_ITEM.get() else COLORED_TATAMI_HALF_ITEMS.getValue(color).get()
+
+    fun getFusumaItem(color: ModColor): Item =
+        if (color == ModColor.DEFAULT) FUSUMA_ITEM.get() else COLORED_FUSUMA_ITEMS.getValue(color).get()
 }

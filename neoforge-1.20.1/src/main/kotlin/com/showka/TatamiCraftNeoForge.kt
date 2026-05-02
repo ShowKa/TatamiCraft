@@ -3,6 +3,7 @@ package com.showka
 import com.showka.objects.blocks.ModBlockEntities
 import com.showka.objects.blocks.ModBlocks
 import com.showka.objects.items.ModItems
+import com.showka.util.orderedFusumaItems
 import com.showka.util.orderedTatamiItems
 import net.minecraft.world.item.CreativeModeTabs
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent
@@ -36,7 +37,10 @@ object TatamiCraftNeoForge {
                 ModItems::getTatamiHalfItem
             ).forEach { event.accept(it) }
             // fusuma
-            event.accept(ModItems.FUSUMA_ITEM.get())
+            orderedFusumaItems(
+                ModItems.FUSUMA_ITEM.get(),
+                ModItems::getFusumaItem
+            ).forEach { event.accept(it) }
         }
     }
 }

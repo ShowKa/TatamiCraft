@@ -1,0 +1,49 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "tatamicraft:102_milk_white_fusuma"
+      }
+    },
+    "has_white_dye": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:white_dye",
+            "items": "minecraft:white_dye"
+          }
+        ]
+      }
+    },
+    "has_fusuma": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "tatamicraft:fusuma",
+            "items": "tatamicraft:fusuma"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_white_dye"
+    ],
+    [
+      "has_the_recipe",
+      "has_fusuma"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "tatamicraft:102_milk_white_fusuma"
+    ]
+  },
+  "sends_telemetry_event": false
+}
