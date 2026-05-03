@@ -33,6 +33,8 @@ object TatamiCraftModInitializer : ModInitializer {
                 ModItems.FUSUMA_ITEM,
                 ModItems::getFusumaItem
             ).forEach { entries.accept(it) }
+            // sliding door variants
+            entries.accept(ModItems.SHOJI_ITEM)
         }
     }
 }

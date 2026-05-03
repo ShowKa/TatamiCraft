@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "PPP",
+    "S S",
+    " W "
+  ],
+  "key": {
+    "P": "minecraft:paper",
+    "S": "minecraft:stick",
+    "W": "minecraft:oak_planks"
+  },
+  "result": {
+    "id": "tatamicraft:shoji",
+    "count": 1
+  }
+}

@@ -53,6 +53,12 @@ object ModItems {
         }
     }
 
+    // -- Sliding Door Variants --
+
+    val SHOJI_ITEM: Item = registerItem("shoji") { props ->
+        FusumaItem(props) { ModBlocks.SHOJI_PART as FusumaPartBlock }
+    }
+
     // -- Helpers --
 
     private fun registerItem(path: String, factory: (Item.Properties) -> Item): Item {

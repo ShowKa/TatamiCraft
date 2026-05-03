@@ -55,6 +55,12 @@ object ModItems {
             }
         }
 
+    // ── Sliding Door Variants ─────────────────────────
+
+    val SHOJI_ITEM: DeferredItem<Item> = ITEMS.registerItem(
+        "shoji"
+    ) { props: Item.Properties -> FusumaItem(props) { ModBlocks.SHOJI_PART.get() as FusumaPartBlock } }
+
     // ── Helpers ─────────────────────────────────────
 
     fun getTatamiItem(color: ModColor): Item =

@@ -37,6 +37,8 @@ class TatamiCraftNeoForge(modBus: IEventBus) {
                 ModItems.FUSUMA_ITEM.get(),
                 ModItems::getFusumaItem
             ).forEach { event.accept(it) }
+            // sliding door variants
+            event.accept(ModItems.SHOJI_ITEM.get())
         }
     }
 }
