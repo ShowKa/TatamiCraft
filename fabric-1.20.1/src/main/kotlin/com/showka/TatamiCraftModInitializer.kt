@@ -37,6 +37,7 @@ object TatamiCraftModInitializer : ModInitializer {
             ).forEach { entries.accept(it) }
             // sliding door variants
             entries.accept(ModItems.SHOJI_ITEM)
+            entries.accept(ModItems.FROSTED_GLASS_SLIDING_DOOR_ITEM)
         }
     }
 }

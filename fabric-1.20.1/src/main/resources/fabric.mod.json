@@ -20,6 +20,12 @@
 				"value": "com.showka.TatamiCraftModInitializer",
 				"adapter": "kotlin"
 			}
+		],
+		"client": [
+			{
+				"value": "com.showka.TatamiCraftClientInitializer",
+				"adapter": "kotlin"
+			}
 		]
 	},
 	"mixins": [

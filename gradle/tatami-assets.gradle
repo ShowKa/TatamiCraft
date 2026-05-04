@@ -354,6 +354,7 @@ def generateFusumaItemDefinition(File baseDir, String modId, String colorPrefix 
 
 def slidingDoorVariants = [
     [blockPartId: 'shoji_part', itemId: 'shoji', texBase: 'shoji', en: 'Shoji', ja: '障子'],
+    [blockPartId: 'frosted_glass_sliding_door_part', itemId: 'frosted_glass_sliding_door', texBase: 'frosted_glass_sliding_door', en: 'Frosted Glass Sliding Door', ja: 'すりガラスの引き戸', renderType: 'translucent'],
 ]
 
 /** タイル位置に対応するテクスチャ名を返す（汎用版） */
@@ -367,8 +368,9 @@ def slidingDoorTexForTile(String modId, String texBase, String s, int px, int py
 /**
  * 派生スライドドアブロックの全アセットを生成する。
  * blockstate / closed models / overlap models / item model / item definition / loot table
+ * renderType が指定されている場合、各ブロックモデルに "render_type" フィールドを追加する（NeoForge 用）。
  */
-def generateSlidingDoorVariant(File outDir, String modId, String blockPartId, String itemId, String texBase, boolean isLegacy) {
+def generateSlidingDoorVariant(File outDir, String modId, String blockPartId, String itemId, String texBase, boolean isLegacy, String renderType = null) {
     // ── Blockstate (288 バリアント) ──
     def variants = new LinkedHashMap()
     def facings = [
@@ -425,12 +427,12 @@ def generateSlidingDoorVariant(File outDir, String modId, String blockPartId, St
                     def rot     = fusumaRotForTile(s, px, py)
 
                     // closed
-                    writeJson(outDir, "assets/${modId}/models/block/${blockPartId}_closed_${s}${flipStr}_x${px}_y${py}.json",
-                        new LinkedHashMap([
-                            textures: new LinkedHashMap([particle: tex, front: tex, back: tex, edge: "${modId}:block/fusuma_edge"]),
-                            elements: [[from: [0, 0, z[0]], to: [16, 16, z[1]], faces: fusumaFaces('front', 'back', rot)]],
-                        ])
-                    )
+                    def closedModel = new LinkedHashMap([
+                        textures: new LinkedHashMap([particle: tex, front: tex, back: tex, edge: "${modId}:block/fusuma_edge"]),
+                        elements: [[from: [0, 0, z[0]], to: [16, 16, z[1]], faces: fusumaFaces('front', 'back', rot)]],
+                    ])
+                    if (renderType) closedModel.render_type = renderType
+                    writeJson(outDir, "assets/${modId}/models/block/${blockPartId}_closed_${s}${flipStr}_x${px}_y${py}.json", closedModel)
 
                     // overlap
                     def other    = (s == 'sl') ? 'sr' : 'sl'
@@ -438,19 +440,19 @@ def generateSlidingDoorVariant(File outDir, String modId, String blockPartId, St
                     def xOff     = (s == 'sl') ? 4 : -4
                     def otherTex = slidingDoorTexForTile(modId, texBase, other, px, py)
                     def otherRot = fusumaRotForTile(other, px, py)
-                    writeJson(outDir, "assets/${modId}/models/block/${blockPartId}_overlap_${s}${flipStr}_x${px}_y${py}.json",
-                        new LinkedHashMap([
-                            textures: new LinkedHashMap([
-                                particle: tex, front_l: tex, back_l: tex,
-                                front_r: otherTex, back_r: otherTex,
-                                edge: "${modId}:block/fusuma_edge",
-                            ]),
-                            elements: [
-                                [from: [0,    0, z[0]],      to: [16,         16, z[1]],      faces: fusumaFaces('front_l', 'back_l', rot)],
-                                [from: [xOff, 0, otherZ[0]], to: [xOff + 16,  16, otherZ[1]], faces: fusumaFaces('front_r', 'back_r', otherRot)],
-                            ],
-                        ])
-                    )
+                    def overlapModel = new LinkedHashMap([
+                        textures: new LinkedHashMap([
+                            particle: tex, front_l: tex, back_l: tex,
+                            front_r: otherTex, back_r: otherTex,
+                            edge: "${modId}:block/fusuma_edge",
+                        ]),
+                        elements: [
+                            [from: [0,    0, z[0]],      to: [16,         16, z[1]],      faces: fusumaFaces('front_l', 'back_l', rot)],
+                            [from: [xOff, 0, otherZ[0]], to: [xOff + 16,  16, otherZ[1]], faces: fusumaFaces('front_r', 'back_r', otherRot)],
+                        ],
+                    ])
+                    if (renderType) overlapModel.render_type = renderType
+                    writeJson(outDir, "assets/${modId}/models/block/${blockPartId}_overlap_${s}${flipStr}_x${px}_y${py}.json", overlapModel)
                 }
             }
         }
@@ -638,7 +640,7 @@ tasks.register('generateTatamiAssets') {
 
         // ── 派生スライドドア ──
         slidingDoorVariants.each { door ->
-            generateSlidingDoorVariant(outDir, MOD_ID, door.blockPartId, door.itemId, door.texBase, isLegacyFormat)
+            generateSlidingDoorVariant(outDir, MOD_ID, door.blockPartId, door.itemId, door.texBase, isLegacyFormat, door.renderType ?: null)
         }
 
         // ── 言語ファイル ──

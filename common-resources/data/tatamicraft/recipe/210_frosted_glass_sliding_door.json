@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "GGG",
+    "S S",
+    " W "
+  ],
+  "key": {
+    "G": "minecraft:glass_pane",
+    "S": "minecraft:stick",
+    "W": "minecraft:oak_planks"
+  },
+  "result": {
+    "id": "tatamicraft:frosted_glass_sliding_door",
+    "count": 1
+  }
+}

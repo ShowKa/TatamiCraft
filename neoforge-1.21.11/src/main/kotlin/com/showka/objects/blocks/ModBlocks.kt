@@ -119,6 +119,18 @@ object ModBlocks {
         java.util.function.Supplier { fusumaSettings() }
     )
 
+    val FROSTED_GLASS_SLIDING_DOOR_PART: DeferredBlock<FusumaPartBlock> = BLOCKS.registerBlock(
+        "frosted_glass_sliding_door_part",
+        { props: BlockBehaviour.Properties ->
+            FusumaPartBlock(
+                props,
+                dropItemProvider = { ModItems.FROSTED_GLASS_SLIDING_DOOR_ITEM.get() },
+                blockEntityTypeProvider = { ModBlockEntities.FUSUMA_PART_BLOCK_ENTITY.get() }
+            )
+        },
+        java.util.function.Supplier { fusumaSettings() }
+    )
+
     // ── Helpers ─────────────────────────────────────
 
     private fun fusumaSettings(): BlockBehaviour.Properties =
@@ -153,7 +165,7 @@ object ModBlocks {
         listOf(FUSUMA_PART) + COLORED_FUSUMA_PARTS.values
 
     fun allSlidingDoorVariantParts(): List<DeferredBlock<FusumaPartBlock>> =
-        listOf(SHOJI_PART)
+        listOf(SHOJI_PART, FROSTED_GLASS_SLIDING_DOOR_PART)
 
     fun allFusumaAndVariantParts(): List<DeferredBlock<FusumaPartBlock>> =
         allFusumaParts() + allSlidingDoorVariantParts()
