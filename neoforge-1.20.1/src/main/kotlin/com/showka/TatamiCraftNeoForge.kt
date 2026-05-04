@@ -44,6 +44,7 @@ object TatamiCraftNeoForge {
             // sliding door variants
             event.accept(ModItems.SHOJI_ITEM.get())
             event.accept(ModItems.FROSTED_GLASS_SLIDING_DOOR_ITEM.get())
+            event.accept(ModItems.SLIDING_WINDOW_ITEM.get())
         }
     }
 }

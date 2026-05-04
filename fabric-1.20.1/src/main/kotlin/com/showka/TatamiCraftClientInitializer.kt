@@ -11,5 +11,6 @@ import net.minecraft.client.renderer.RenderType
 object TatamiCraftClientInitializer : ClientModInitializer {
     override fun onInitializeClient() {
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.FROSTED_GLASS_SLIDING_DOOR_PART, RenderType.translucent())
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.SLIDING_WINDOW_PART, RenderType.translucent())
     }
 }

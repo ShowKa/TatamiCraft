@@ -61,6 +61,10 @@ object ModItems {
         FusumaItem(props) { ModBlocks.FROSTED_GLASS_SLIDING_DOOR_PART as FusumaPartBlock }
     }
 
+    val SLIDING_WINDOW_ITEM: Item = registerItem("sliding_window") { props ->
+        FusumaItem(props) { ModBlocks.SLIDING_WINDOW_PART as FusumaPartBlock }
+    }
+
     // -- Helpers --
 
     private fun registerItem(path: String, factory: (Item.Properties) -> Item): Item {

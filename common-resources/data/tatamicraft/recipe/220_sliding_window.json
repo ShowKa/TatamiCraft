@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "GGG",
+    "S S",
+    " W "
+  ],
+  "key": {
+    "G": "minecraft:glass_pane",
+    "S": "minecraft:stick",
+    "W": "minecraft:oak_planks"
+  },
+  "result": {
+    "id": "tatamicraft:sliding_window",
+    "count": 1
+  }
+}

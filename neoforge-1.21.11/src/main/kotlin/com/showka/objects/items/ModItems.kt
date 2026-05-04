@@ -65,6 +65,10 @@ object ModItems {
         "frosted_glass_sliding_door"
     ) { props: Item.Properties -> FusumaItem(props) { ModBlocks.FROSTED_GLASS_SLIDING_DOOR_PART.get() as FusumaPartBlock } }
 
+    val SLIDING_WINDOW_ITEM: DeferredItem<Item> = ITEMS.registerItem(
+        "sliding_window"
+    ) { props: Item.Properties -> FusumaItem(props) { ModBlocks.SLIDING_WINDOW_PART.get() as FusumaPartBlock } }
+
     // ── Helpers ─────────────────────────────────────
 
     fun getTatamiItem(color: ModColor): Item =

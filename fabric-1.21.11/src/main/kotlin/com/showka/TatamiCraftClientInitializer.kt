@@ -11,5 +11,6 @@ import net.minecraft.client.renderer.chunk.ChunkSectionLayer
 object TatamiCraftClientInitializer : ClientModInitializer {
     override fun onInitializeClient() {
         BlockRenderLayerMap.putBlock(ModBlocks.FROSTED_GLASS_SLIDING_DOOR_PART, ChunkSectionLayer.TRANSLUCENT)
+        BlockRenderLayerMap.putBlock(ModBlocks.SLIDING_WINDOW_PART, ChunkSectionLayer.TRANSLUCENT)
     }
 }

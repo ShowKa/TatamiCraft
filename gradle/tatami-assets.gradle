@@ -355,6 +355,7 @@ def generateFusumaItemDefinition(File baseDir, String modId, String colorPrefix 
 def slidingDoorVariants = [
     [blockPartId: 'shoji_part', itemId: 'shoji', texBase: 'shoji', en: 'Shoji', ja: '障子'],
     [blockPartId: 'frosted_glass_sliding_door_part', itemId: 'frosted_glass_sliding_door', texBase: 'frosted_glass_sliding_door', en: 'Frosted Glass Sliding Door', ja: 'すりガラスの引き戸', renderType: 'translucent'],
+    [blockPartId: 'sliding_window_part', itemId: 'sliding_window', texBase: 'sliding_window', en: 'Sliding Window', ja: '掃き出し窓', renderType: 'translucent'],
 ]
 
 /** タイル位置に対応するテクスチャ名を返す（汎用版） */
