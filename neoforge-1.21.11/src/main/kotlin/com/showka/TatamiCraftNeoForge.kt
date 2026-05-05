@@ -41,6 +41,7 @@ class TatamiCraftNeoForge(modBus: IEventBus) {
             event.accept(ModItems.SHOJI_ITEM.get())
             event.accept(ModItems.FROSTED_GLASS_SLIDING_DOOR_ITEM.get())
             event.accept(ModItems.SLIDING_WINDOW_ITEM.get())
+            event.accept(ModItems.WOODEN_SLIDING_DOOR_ITEM.get())
         }
     }
 }

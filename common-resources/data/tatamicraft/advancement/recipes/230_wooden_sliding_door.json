@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "tatamicraft:230_wooden_sliding_door"
+      }
+    },
+    "has_oak_planks": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:oak_planks",
+            "items": "minecraft:oak_planks"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_oak_planks"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "tatamicraft:230_wooden_sliding_door"
+    ]
+  },
+  "sends_telemetry_event": false
+}

@@ -107,6 +107,14 @@ object ModBlocks {
         )
     }
 
+    val WOODEN_SLIDING_DOOR_PART: RegistryObject<FusumaPartBlock> = BLOCKS.register("wooden_sliding_door_part") {
+        FusumaPartBlock(
+            fusumaSettings(),
+            dropItemProvider = { ModItems.WOODEN_SLIDING_DOOR_ITEM.get() },
+            blockEntityTypeProvider = { ModBlockEntities.FUSUMA_PART_BLOCK_ENTITY.get() }
+        )
+    }
+
     // -- Helpers --
 
     private fun fusumaSettings(): BlockBehaviour.Properties =
@@ -140,7 +148,7 @@ object ModBlocks {
         listOf(FUSUMA_PART) + COLORED_FUSUMA_PARTS.values
 
     fun allSlidingDoorVariantParts(): List<RegistryObject<FusumaPartBlock>> =
-        listOf(SHOJI_PART, FROSTED_GLASS_SLIDING_DOOR_PART, SLIDING_WINDOW_PART)
+        listOf(SHOJI_PART, FROSTED_GLASS_SLIDING_DOOR_PART, SLIDING_WINDOW_PART, WOODEN_SLIDING_DOOR_PART)
 
     fun allFusumaAndVariantParts(): List<RegistryObject<FusumaPartBlock>> =
         allFusumaParts() + allSlidingDoorVariantParts()

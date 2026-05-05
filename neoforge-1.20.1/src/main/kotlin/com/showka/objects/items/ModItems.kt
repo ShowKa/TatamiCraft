@@ -70,6 +70,10 @@ object ModItems {
         FusumaItem(Item.Properties()) { ModBlocks.SLIDING_WINDOW_PART.get() as FusumaPartBlock }
     }
 
+    val WOODEN_SLIDING_DOOR_ITEM: RegistryObject<Item> = ITEMS.register("wooden_sliding_door") {
+        FusumaItem(Item.Properties()) { ModBlocks.WOODEN_SLIDING_DOOR_PART.get() as FusumaPartBlock }
+    }
+
     // -- Helpers --
 
     fun getTatamiItem(color: ModColor): Item =
