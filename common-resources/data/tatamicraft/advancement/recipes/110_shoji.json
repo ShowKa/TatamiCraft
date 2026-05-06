@@ -4,7 +4,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "tatamicraft:200_shoji"
+        "recipe": "tatamicraft:110_shoji"
       }
     },
     "has_paper": {
@@ -17,17 +17,32 @@
           }
         ]
       }
+    },
+    "has_stick": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:stick",
+            "items": "minecraft:stick"
+          }
+        ]
+      }
     }
   },
   "requirements": [
     [
       "has_the_recipe",
       "has_paper"
+    ],
+    [
+      "has_the_recipe",
+      "has_stick"
     ]
   ],
   "rewards": {
     "recipes": [
-      "tatamicraft:200_shoji"
+      "tatamicraft:110_shoji"
     ]
   },
   "sends_telemetry_event": false

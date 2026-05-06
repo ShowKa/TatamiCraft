@@ -17,17 +17,32 @@
           }
         ]
       }
+    },
+    "has_stick": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:stick",
+            "items": "minecraft:stick"
+          }
+        ]
+      }
     }
   },
   "requirements": [
     [
       "has_the_recipe",
       "has_glass_pane"
+    ],
+    [
+      "has_the_recipe",
+      "has_stick"
     ]
   ],
   "rewards": {
     "recipes": [
-      "tatamicraft:220_sliding_window"
+      "tatamicraft:112_sliding_window"
     ]
   },
   "sends_telemetry_event": false

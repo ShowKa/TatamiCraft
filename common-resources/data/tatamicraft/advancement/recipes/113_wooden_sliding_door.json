@@ -17,17 +17,32 @@
           }
         ]
       }
+    },
+    "has_stick": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:stick",
+            "items": "minecraft:stick"
+          }
+        ]
+      }
     }
   },
   "requirements": [
     [
       "has_the_recipe",
       "has_oak_planks"
+    ],
+    [
+      "has_the_recipe",
+      "has_stick"
     ]
   ],
   "rewards": {
     "recipes": [
-      "tatamicraft:230_wooden_sliding_door"
+      "tatamicraft:113_wooden_sliding_door"
     ]
   },
   "sends_telemetry_event": false

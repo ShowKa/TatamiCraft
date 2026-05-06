@@ -2,13 +2,12 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "pattern": [
-    "GGG",
-    "S S",
-    " W "
+    "WGG",
+    "WGG",
+    "WGG"
   ],
   "key": {
     "G": "minecraft:glass_pane",
-    "S": "minecraft:stick",
     "W": "minecraft:oak_planks"
   },
   "result": {

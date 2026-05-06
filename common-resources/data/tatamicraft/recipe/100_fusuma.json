@@ -2,8 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "pattern": [
-    "PPP",
-    " W "
+    "PWW",
+    "PWW",
+    "PWW"
   ],
   "key": {
     "W": "minecraft:oak_planks",
