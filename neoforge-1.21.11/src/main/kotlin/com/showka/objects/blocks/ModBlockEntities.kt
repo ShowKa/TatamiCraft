@@ -33,7 +33,7 @@ object ModBlockEntities {
     val FUSUMA_PART_BLOCK_ENTITY: Supplier<BlockEntityType<FusumaBlockEntity>> = register(
         "fusuma_part",
         { pos, state -> FusumaBlockEntity(FUSUMA_PART_BLOCK_ENTITY.get(), pos, state) },
-        { ModBlocks.allFusumaParts().map { it.get() }.toTypedArray() }
+        { ModBlocks.allFusumaAndVariantParts().map { it.get() }.toTypedArray() }
     )
 
     private fun <T : BlockEntity> register(

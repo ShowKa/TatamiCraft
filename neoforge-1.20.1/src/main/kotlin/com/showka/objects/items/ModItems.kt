@@ -56,6 +56,24 @@ object ModItems {
             }
         }
 
+    // -- Sliding Door Variants --
+
+    val SHOJI_ITEM: RegistryObject<Item> = ITEMS.register("shoji") {
+        FusumaItem(Item.Properties()) { ModBlocks.SHOJI_PART.get() as FusumaPartBlock }
+    }
+
+    val FROSTED_GLASS_SLIDING_DOOR_ITEM: RegistryObject<Item> = ITEMS.register("frosted_glass_sliding_door") {
+        FusumaItem(Item.Properties()) { ModBlocks.FROSTED_GLASS_SLIDING_DOOR_PART.get() as FusumaPartBlock }
+    }
+
+    val SLIDING_WINDOW_ITEM: RegistryObject<Item> = ITEMS.register("sliding_window") {
+        FusumaItem(Item.Properties()) { ModBlocks.SLIDING_WINDOW_PART.get() as FusumaPartBlock }
+    }
+
+    val WOODEN_SLIDING_DOOR_ITEM: RegistryObject<Item> = ITEMS.register("wooden_sliding_door") {
+        FusumaItem(Item.Properties()) { ModBlocks.WOODEN_SLIDING_DOOR_PART.get() as FusumaPartBlock }
+    }
+
     // -- Helpers --
 
     fun getTatamiItem(color: ModColor): Item =

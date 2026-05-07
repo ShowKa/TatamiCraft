@@ -81,6 +81,40 @@ object ModBlocks {
             }
         }
 
+    // -- Sliding Door Variants --
+
+    val SHOJI_PART: RegistryObject<FusumaPartBlock> = BLOCKS.register("shoji_part") {
+        FusumaPartBlock(
+            fusumaSettings(),
+            dropItemProvider = { ModItems.SHOJI_ITEM.get() },
+            blockEntityTypeProvider = { ModBlockEntities.FUSUMA_PART_BLOCK_ENTITY.get() }
+        )
+    }
+
+    val FROSTED_GLASS_SLIDING_DOOR_PART: RegistryObject<FusumaPartBlock> = BLOCKS.register("frosted_glass_sliding_door_part") {
+        FusumaPartBlock(
+            fusumaSettings(),
+            dropItemProvider = { ModItems.FROSTED_GLASS_SLIDING_DOOR_ITEM.get() },
+            blockEntityTypeProvider = { ModBlockEntities.FUSUMA_PART_BLOCK_ENTITY.get() }
+        )
+    }
+
+    val SLIDING_WINDOW_PART: RegistryObject<FusumaPartBlock> = BLOCKS.register("sliding_window_part") {
+        FusumaPartBlock(
+            fusumaSettings(),
+            dropItemProvider = { ModItems.SLIDING_WINDOW_ITEM.get() },
+            blockEntityTypeProvider = { ModBlockEntities.FUSUMA_PART_BLOCK_ENTITY.get() }
+        )
+    }
+
+    val WOODEN_SLIDING_DOOR_PART: RegistryObject<FusumaPartBlock> = BLOCKS.register("wooden_sliding_door_part") {
+        FusumaPartBlock(
+            fusumaSettings(),
+            dropItemProvider = { ModItems.WOODEN_SLIDING_DOOR_ITEM.get() },
+            blockEntityTypeProvider = { ModBlockEntities.FUSUMA_PART_BLOCK_ENTITY.get() }
+        )
+    }
+
     // -- Helpers --
 
     private fun fusumaSettings(): BlockBehaviour.Properties =
@@ -112,4 +146,10 @@ object ModBlocks {
 
     fun allFusumaParts(): List<RegistryObject<FusumaPartBlock>> =
         listOf(FUSUMA_PART) + COLORED_FUSUMA_PARTS.values
+
+    fun allSlidingDoorVariantParts(): List<RegistryObject<FusumaPartBlock>> =
+        listOf(SHOJI_PART, FROSTED_GLASS_SLIDING_DOOR_PART, SLIDING_WINDOW_PART, WOODEN_SLIDING_DOOR_PART)
+
+    fun allFusumaAndVariantParts(): List<RegistryObject<FusumaPartBlock>> =
+        allFusumaParts() + allSlidingDoorVariantParts()
 }

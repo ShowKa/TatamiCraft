@@ -2,16 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "pattern": [
-    "PWW",
-    "PWW",
-    "PWW"
+    "SWW",
+    "SWW",
+    "SWW"
   ],
   "key": {
     "W": "minecraft:oak_planks",
-    "P": "minecraft:paper"
+    "S": "minecraft:stick"
   },
   "result": {
-    "id": "tatamicraft:fusuma",
+    "id": "tatamicraft:wooden_sliding_door",
     "count": 1
   }
 }

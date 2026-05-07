@@ -2,16 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "pattern": [
-    "PWW",
-    "PWW",
-    "PWW"
+    "SPP",
+    "SPP",
+    "SPP"
   ],
   "key": {
-    "W": "minecraft:oak_planks",
-    "P": "minecraft:paper"
+    "P": "minecraft:paper",
+    "S": "minecraft:stick"
   },
   "result": {
-    "id": "tatamicraft:fusuma",
+    "id": "tatamicraft:shoji",
     "count": 1
   }
 }

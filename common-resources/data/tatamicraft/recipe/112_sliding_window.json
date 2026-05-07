@@ -2,16 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "pattern": [
-    "PWW",
-    "PWW",
-    "PWW"
+    "WGG",
+    "WGG",
+    "WGG"
   ],
   "key": {
-    "W": "minecraft:oak_planks",
-    "P": "minecraft:paper"
+    "G": "minecraft:glass_pane",
+    "W": "minecraft:oak_planks"
   },
   "result": {
-    "id": "tatamicraft:fusuma",
+    "id": "tatamicraft:sliding_window",
     "count": 1
   }
 }

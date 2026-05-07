@@ -76,6 +76,40 @@ object ModBlocks {
         }
     }
 
+    // -- Sliding Door Variants --
+
+    val SHOJI_PART: Block = registerFusumaBlock("shoji_part") { props ->
+        FusumaPartBlock(
+            props,
+            dropItemProvider = { ModItems.SHOJI_ITEM },
+            blockEntityTypeProvider = { ModBlockEntities.FUSUMA_PART_BLOCK_ENTITY }
+        )
+    }
+
+    val FROSTED_GLASS_SLIDING_DOOR_PART: Block = registerFusumaBlock("frosted_glass_sliding_door_part") { props ->
+        FusumaPartBlock(
+            props,
+            dropItemProvider = { ModItems.FROSTED_GLASS_SLIDING_DOOR_ITEM },
+            blockEntityTypeProvider = { ModBlockEntities.FUSUMA_PART_BLOCK_ENTITY }
+        )
+    }
+
+    val SLIDING_WINDOW_PART: Block = registerFusumaBlock("sliding_window_part") { props ->
+        FusumaPartBlock(
+            props,
+            dropItemProvider = { ModItems.SLIDING_WINDOW_ITEM },
+            blockEntityTypeProvider = { ModBlockEntities.FUSUMA_PART_BLOCK_ENTITY }
+        )
+    }
+
+    val WOODEN_SLIDING_DOOR_PART: Block = registerFusumaBlock("wooden_sliding_door_part") { props ->
+        FusumaPartBlock(
+            props,
+            dropItemProvider = { ModItems.WOODEN_SLIDING_DOOR_ITEM },
+            blockEntityTypeProvider = { ModBlockEntities.FUSUMA_PART_BLOCK_ENTITY }
+        )
+    }
+
     // -- Helpers --
 
     private fun fusumaSettings(): BlockBehaviour.Properties =
@@ -120,6 +154,12 @@ object ModBlocks {
 
     fun allFusumaParts(): List<Block> =
         listOf(FUSUMA_PART) + COLORED_FUSUMA_PARTS.values
+
+    fun allSlidingDoorVariantParts(): List<Block> =
+        listOf(SHOJI_PART, FROSTED_GLASS_SLIDING_DOOR_PART, SLIDING_WINDOW_PART, WOODEN_SLIDING_DOOR_PART)
+
+    fun allFusumaAndVariantParts(): List<Block> =
+        allFusumaParts() + allSlidingDoorVariantParts()
 
     fun init() {
         // Trigger static initialization
