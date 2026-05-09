@@ -14,18 +14,26 @@ private val tatamiColorDefs = listOf(
     ColorDef("walnut",       "Walnut",         "胡桃色"),
 )
 
-object DefaultTatamiConfig : TatamiSetConfig() {
-    override val prefix    = ""
-    override val texSuffix = ""
-    override val enPrefix  = ""
-    override val jaPrefix  = ""
+private class TatamiBlockConfigImpl(
+    override val prefix: String,
+    override val texSuffix: String,
+    override val blockType: String,
+    override val itemType: String,
+    override val partCount: Int,
+    override val enName: String,
+    override val jaName: String,
+) : TatamiBlockConfig()
 
-    val colorVariants: List<TatamiSetConfig> = tatamiColorDefs.map { c ->
-        object : TatamiSetConfig() {
-            override val prefix    = "${c.id}_"
-            override val texSuffix = "_${c.id}"
-            override val enPrefix  = "${c.en} "
-            override val jaPrefix  = c.ja
-        }
-    }
-}
+private fun tatamiPair(
+    prefix: String,
+    texSuffix: String,
+    enPrefix: String,
+    jaPrefix: String,
+): List<TatamiBlockConfig> = listOf(
+    TatamiBlockConfigImpl(prefix, texSuffix, "tatami_part",      "tatami",      8, "${enPrefix}Tatami",      "${jaPrefix}畳"),
+    TatamiBlockConfigImpl(prefix, texSuffix, "tatami_half_part", "tatami_half", 4, "${enPrefix}Half Tatami", "${jaPrefix}半畳"),
+)
+
+internal val defaultTatamiSeries: List<TatamiBlockConfig> = tatamiPair("", "", "", "")
+internal val coloredTatamiSeries: List<TatamiBlockConfig> =
+    tatamiColorDefs.flatMap { c -> tatamiPair("${c.id}_", "_${c.id}", "${c.en} ", c.ja) }

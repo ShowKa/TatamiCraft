@@ -11,6 +11,5 @@ object BlockRegistry {
         WoodenSlidingDoorConfig,
     )
 
-    val tatamiSeries: List<TatamiSetConfig> =
-        listOf(DefaultTatamiConfig) + DefaultTatamiConfig.colorVariants
+    val tatamiSeries: List<TatamiBlockConfig> = defaultTatamiSeries + coloredTatamiSeries
 }

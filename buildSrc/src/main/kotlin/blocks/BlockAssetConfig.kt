@@ -15,9 +15,14 @@ abstract class SlidingPanelConfig : BlockAssetConfig {
     open val outerEdgeOnly: Boolean = false
 }
 
-abstract class TatamiSetConfig : BlockAssetConfig {
+abstract class TatamiBlockConfig : BlockAssetConfig {
     abstract val prefix: String
     abstract val texSuffix: String
-    abstract val enPrefix: String
-    abstract val jaPrefix: String
+    abstract val blockType: String
+    abstract val itemType: String
+    abstract val partCount: Int
+    abstract val enName: String
+    abstract val jaName: String
+    val blockPartId: String get() = "$prefix$blockType"
+    val itemId: String get() = "$prefix$itemType"
 }

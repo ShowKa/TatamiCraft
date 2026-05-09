@@ -390,15 +390,10 @@ def generateLangFiles(File baseDir, String modId, List tatamiSeries, List fusuma
 
     // 畳シリーズ
     tatamiSeries.each { cfg ->
-        enMap["block.${modId}.${cfg.prefix}tatami_part"]      = "${cfg.enPrefix}Tatami"
-        enMap["item.${modId}.${cfg.prefix}tatami"]            = "${cfg.enPrefix}Tatami"
-        enMap["block.${modId}.${cfg.prefix}tatami_half_part"] = "${cfg.enPrefix}Half Tatami"
-        enMap["item.${modId}.${cfg.prefix}tatami_half"]       = "${cfg.enPrefix}Half Tatami"
-
-        jaMap["block.${modId}.${cfg.prefix}tatami_part"]      = "${cfg.jaPrefix}畳"
-        jaMap["item.${modId}.${cfg.prefix}tatami"]            = "${cfg.jaPrefix}畳"
-        jaMap["block.${modId}.${cfg.prefix}tatami_half_part"] = "${cfg.jaPrefix}半畳"
-        jaMap["item.${modId}.${cfg.prefix}tatami_half"]       = "${cfg.jaPrefix}半畳"
+        enMap["block.${modId}.${cfg.blockPartId}"] = cfg.enName
+        enMap["item.${modId}.${cfg.itemId}"]       = cfg.enName
+        jaMap["block.${modId}.${cfg.blockPartId}"] = cfg.jaName
+        jaMap["item.${modId}.${cfg.itemId}"]       = cfg.jaName
     }
 
     writeJson(baseDir, "assets/${modId}/lang/en_us.json", enMap)
@@ -445,16 +440,12 @@ tasks.register('generateTatamiAssets') {
 
         // ── 畳シリーズ ──
         registry.tatamiSeries.each { cfg ->
-            ['tatami_part', 'tatami_half_part'].each { type ->
-                generateBlockstate(outDir, MOD_ID, cfg.prefix, type, type == 'tatami_part' ? 8 : 4)
-                generateBlockModel(outDir, MOD_ID, cfg.prefix, type, 'left', 270, cfg.texSuffix)
-                generateBlockModel(outDir, MOD_ID, cfg.prefix, type, 'right', 90, cfg.texSuffix)
-                generateLootTable(outDir, MOD_ID, cfg.prefix, type, isLegacyFormat)
-            }
-            ['tatami', 'tatami_half'].each { itemType ->
-                generateItemModel(outDir, MOD_ID, cfg.prefix, itemType, cfg.texSuffix)
-                if (!isLegacyFormat) generateItemDefinition(outDir, MOD_ID, cfg.prefix, itemType)
-            }
+            generateBlockstate(outDir, MOD_ID, cfg.prefix, cfg.blockType, cfg.partCount)
+            generateBlockModel(outDir, MOD_ID, cfg.prefix, cfg.blockType, 'left', 270, cfg.texSuffix)
+            generateBlockModel(outDir, MOD_ID, cfg.prefix, cfg.blockType, 'right', 90, cfg.texSuffix)
+            generateLootTable(outDir, MOD_ID, cfg.prefix, cfg.blockType, isLegacyFormat)
+            generateItemModel(outDir, MOD_ID, cfg.prefix, cfg.itemType, cfg.texSuffix)
+            if (!isLegacyFormat) generateItemDefinition(outDir, MOD_ID, cfg.prefix, cfg.itemType)
         }
 
         // ── 言語ファイル ──
