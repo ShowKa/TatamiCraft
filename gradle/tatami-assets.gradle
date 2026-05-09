@@ -1,26 +1,13 @@
 import groovy.json.JsonOutput
+import blocks.BlockRegistry
 
 /**
  * 畳ブロックのカラーバリエーション用 JSON アセットをビルド時に自動生成する Gradle スクリプト。
  *
- * 色を追加する場合は、このファイルの tatamiColors リストと
+ * ブロック設定は buildSrc/src/main/kotlin/blocks/ 以下の各クラスで管理します。
+ * 色を追加する場合は該当する Config クラスと
  * src/main/kotlin/com/showka/objects/TatamiColor.kt の両方を更新してください。
  */
-
-// ── カラー定義 ─────────────────────────────────────────
-def tatamiColors = [
-        [id: 'red', en: 'Crimson Red', ja: '紅色'],
-        [id: 'orange', en: 'Apricot Orange', ja: '杏色'],
-        [id: 'peach', en: 'Peach', ja: '桃色'],
-        [id: 'yellow', en: 'Mustard Yellow', ja: '芥子色'],
-        [id: 'green', en: 'Light Green', ja: '若竹色'],
-        [id: 'sky_blue', en: 'Sky Blue', ja: '空色'],
-        [id: 'purple', en: 'Mauve Purple', ja: '藤色'],
-        [id: 'grayish_pink', en: 'Grayish Pink', ja: '灰桜色'],
-        [id: 'milk_white', en: 'Milk White', ja: '乳白色'],
-        [id: 'light_brown', en: 'Light Brown', ja: '白茶色'],
-        [id: 'walnut', en: 'Walnut', ja: '胡桃色'],
-]
 
 def MOD_ID = 'tatamicraft'
 
@@ -157,12 +144,6 @@ def generateLootTable(File baseDir, String modId, String prefix, String blockTyp
 }
 
 // ── Fusuma 生成 ───────────────────────────────────────
-def fusumaColors = [
-        [id: 'grayish_pink', en: 'Grayish Pink', ja: '灰桜色'],
-        [id: 'milk_white', en: 'Milk White', ja: '乳白色'],
-        [id: 'light_brown', en: 'Light Brown', ja: '白茶色'],
-        [id: 'walnut', en: 'Walnut', ja: '胡桃色'],
-]
 
 /** channel の z 座標ペアを返す (inner=10..13, outer=13..16) */
 def fusumaZRange(String s, boolean flip) {
@@ -233,15 +214,14 @@ def fusumaFaces(String frontKey, String backKey, int southRot) {
 
 /**
  * スライドパネル1バリアント分の closed/overlap モデル (48ファイル) を生成。
- * opts: colorPrefix='', texBase='fusuma', texSuffix='', renderType=null, outerEdgeOnly=false, partId=auto
+ * opts: partId (必須), texBase='fusuma', texSuffix='', renderType=null, outerEdgeOnly=false
  */
 def generateSlidingPanelModels(File baseDir, String modId, Map opts = [:]) {
-    String colorPrefix    = opts.colorPrefix   ?: ''
+    String partId         = opts.partId
     String texBase        = opts.texBase       ?: 'fusuma'
     String texSuffix      = opts.texSuffix     ?: ''
     String renderType     = opts.renderType    ?: null
     boolean outerEdgeOnly = opts.outerEdgeOnly ?: false
-    String partId         = opts.partId        ?: "${colorPrefix}fusuma_part"
 
     ['sl', 'sr'].each { s ->
         [false, true].each { flip ->
@@ -348,124 +328,77 @@ def buildSlidingBlockstateVariants(String modId, String partId) {
     return variants
 }
 
-/** Blockstate JSON ({colorPrefix}fusuma_part.json) を生成 — 288 バリアント */
-def generateFusumaBlockstate(File baseDir, String modId, String colorPrefix = '') {
-    def partId = "${colorPrefix}fusuma_part"
-    writeJson(baseDir, "assets/${modId}/blockstates/${partId}.json",
-            [variants: buildSlidingBlockstateVariants(modId, partId)])
-}
-
-/** 襖アイテムモデル (models/item/{colorPrefix}fusuma.json) を生成 */
-def generateFusumaItemModel(File baseDir, String modId, String colorPrefix = '', String texSuffix = '') {
-    writeJson(baseDir, "assets/${modId}/models/item/${colorPrefix}fusuma.json", [
+/** 襖アイテムモデル (models/item/{itemId}.json) を生成 */
+def generateFusumaItemModel(File baseDir, String modId, String itemId, String texSuffix = '') {
+    writeJson(baseDir, "assets/${modId}/models/item/${itemId}.json", [
             parent  : 'minecraft:item/generated',
             textures: [layer0: "${modId}:item/fusuma_item${texSuffix}"],
     ])
 }
 
-/** 襖アイテム定義 (items/{colorPrefix}fusuma.json) を生成 — 1.21+ のみ */
-def generateFusumaItemDefinition(File baseDir, String modId, String colorPrefix = '') {
-    writeJson(baseDir, "assets/${modId}/items/${colorPrefix}fusuma.json", [
-            model: [type: 'minecraft:model', model: "${modId}:item/${colorPrefix}fusuma"],
+/** 襖アイテム定義 (items/{itemId}.json) を生成 — 1.21+ のみ */
+def generateFusumaItemDefinition(File baseDir, String modId, String itemId) {
+    writeJson(baseDir, "assets/${modId}/items/${itemId}.json", [
+            model: [type: 'minecraft:model', model: "${modId}:item/${itemId}"],
     ])
 }
 
 // ── 派生スライドドア生成 ────────────────────────────────
 
-def slidingDoorVariants = [
-        [blockPartId: 'shoji_part', itemId: 'shoji', texBase: 'shoji', en: 'Shoji', ja: '障子'],
-        [blockPartId: 'frosted_glass_sliding_door_part', itemId: 'frosted_glass_sliding_door', texBase: 'frosted_glass_sliding_door', en: 'Frosted Glass Sliding Door', ja: 'すりガラスの引き戸', renderType: 'translucent'],
-        [blockPartId: 'sliding_window_part', itemId: 'sliding_window', texBase: 'sliding_window', en: 'Sliding Window', ja: '掃き出し窓', renderType: 'translucent', outerEdgeOnly: true],
-        [blockPartId: 'wooden_sliding_door_part', itemId: 'wooden_sliding_door', texBase: 'wooden_sliding_door', en: 'Wooden Sliding Door', ja: '木製の引き戸'],
-]
-
-
 /**
  * 派生スライドドアブロックの全アセットを生成する。
  * blockstate / closed models / overlap models / item model / item definition / loot table
- * renderType が指定されている場合、各ブロックモデルに "render_type" フィールドを追加する（NeoForge 用）。
  */
-def generateSlidingDoorVariant(File outDir, String modId, Map door, boolean isLegacy) {
-    def blockPartId   = door.blockPartId
-    def itemId        = door.itemId
-    def renderType    = door.renderType    ?: null
-    def outerEdgeOnly = door.outerEdgeOnly ?: false
-
-    writeJson(outDir, "assets/${modId}/blockstates/${blockPartId}.json",
-            [variants: buildSlidingBlockstateVariants(modId, blockPartId)])
+def generateSlidingDoorVariant(File outDir, String modId, cfg, boolean isLegacy) {
+    writeJson(outDir, "assets/${modId}/blockstates/${cfg.blockPartId}.json",
+              [variants: buildSlidingBlockstateVariants(modId, cfg.blockPartId)])
     generateSlidingPanelModels(outDir, modId, [
-            partId: blockPartId, texBase: door.texBase,
-            renderType: renderType, outerEdgeOnly: outerEdgeOnly,
+            partId       : cfg.blockPartId,
+            texBase      : cfg.texBase,
+            renderType   : cfg.renderType,
+            outerEdgeOnly: cfg.outerEdgeOnly,
     ])
-    writeJson(outDir, "assets/${modId}/models/item/${itemId}.json", [
+    writeJson(outDir, "assets/${modId}/models/item/${cfg.itemId}.json", [
             parent  : 'minecraft:item/generated',
-            textures: [layer0: "${modId}:item/${itemId}_item"],
+            textures: [layer0: "${modId}:item/${cfg.itemId}_item"],
     ])
     if (!isLegacy) {
-        writeJson(outDir, "assets/${modId}/items/${itemId}.json", [
-                model: [type: 'minecraft:model', model: "${modId}:item/${itemId}"],
+        writeJson(outDir, "assets/${modId}/items/${cfg.itemId}.json", [
+                model: [type: 'minecraft:model', model: "${modId}:item/${cfg.itemId}"],
         ])
     }
     def lootDir = isLegacy ? 'loot_tables' : 'loot_table'
-    writeJson(outDir, "data/${modId}/${lootDir}/blocks/${blockPartId}.json", [type: 'minecraft:block', pools: []])
+    writeJson(outDir, "data/${modId}/${lootDir}/blocks/${cfg.blockPartId}.json",
+              [type: 'minecraft:block', pools: []])
 }
 
 // ── Lang 生成 ─────────────────────────────────────────
 /**
  * 全色（デフォルト含む）の言語ファイルを生成する。
  */
-def generateLangFiles(File baseDir, String modId, List tatamiColorList, List fusumaColorList, List slidingDoorList) {
+def generateLangFiles(File baseDir, String modId, List tatamiSeries, List fusumaSeries, List slidingDoors) {
     def enMap = new LinkedHashMap()
     def jaMap = new LinkedHashMap()
 
-    // 襖 (デフォルト)
-    enMap["block.${modId}.fusuma_part"] = 'Fusuma'
-    enMap["item.${modId}.fusuma"] = 'Fusuma'
-
-    jaMap["block.${modId}.fusuma_part"] = '襖'
-    jaMap["item.${modId}.fusuma"] = '襖'
-
-    // 襖 カラーバリエーション
-    fusumaColorList.each { color ->
-        def prefix = "${color.id}_"
-        enMap["block.${modId}.${prefix}fusuma_part"] = "${color.en} Fusuma"
-        enMap["item.${modId}.${prefix}fusuma"] = "${color.en} Fusuma"
-        jaMap["block.${modId}.${prefix}fusuma_part"] = "${color.ja}襖"
-        jaMap["item.${modId}.${prefix}fusuma"] = "${color.ja}襖"
+    // 全スライドパネル（襖シリーズ + 派生スライドドア）
+    (fusumaSeries + slidingDoors).each { cfg ->
+        enMap["block.${modId}.${cfg.blockPartId}"] = cfg.enName
+        enMap["item.${modId}.${cfg.itemId}"]       = cfg.enName
+        jaMap["block.${modId}.${cfg.blockPartId}"] = cfg.jaName
+        jaMap["item.${modId}.${cfg.itemId}"]       = cfg.jaName
     }
 
-    // 派生スライドドア
-    slidingDoorList.each { door ->
-        enMap["block.${modId}.${door.blockPartId}"] = door.en
-        enMap["item.${modId}.${door.itemId}"] = door.en
-        jaMap["block.${modId}.${door.blockPartId}"] = door.ja
-        jaMap["item.${modId}.${door.itemId}"] = door.ja
-    }
+    // 畳シリーズ
+    tatamiSeries.each { cfg ->
+        enMap["block.${modId}.${cfg.prefix}tatami_part"]      = "${cfg.enPrefix}Tatami"
+        enMap["item.${modId}.${cfg.prefix}tatami"]            = "${cfg.enPrefix}Tatami"
+        enMap["block.${modId}.${cfg.prefix}tatami_half_part"] = "${cfg.enPrefix}Half Tatami"
+        enMap["item.${modId}.${cfg.prefix}tatami_half"]       = "${cfg.enPrefix}Half Tatami"
 
-    // デフォルト畳
-    enMap["block.${modId}.tatami_part"] = 'Tatami'
-    enMap["item.${modId}.tatami"] = 'Tatami'
-    enMap["block.${modId}.tatami_half_part"] = 'Half Tatami'
-    enMap["item.${modId}.tatami_half"] = 'Half Tatami'
-
-    jaMap["block.${modId}.tatami_part"] = '畳'
-    jaMap["item.${modId}.tatami"] = '畳'
-    jaMap["block.${modId}.tatami_half_part"] = '半畳'
-    jaMap["item.${modId}.tatami_half"] = '半畳'
-
-    // 畳 カラーバリエーション
-    tatamiColorList.each { color ->
-        def prefix = "${color.id}_"
-
-        enMap["block.${modId}.${prefix}tatami_part"] = "${color.en} Tatami"
-        enMap["item.${modId}.${prefix}tatami"] = "${color.en} Tatami"
-        enMap["block.${modId}.${prefix}tatami_half_part"] = "${color.en} Half Tatami"
-        enMap["item.${modId}.${prefix}tatami_half"] = "${color.en} Half Tatami"
-
-        jaMap["block.${modId}.${prefix}tatami_part"] = "${color.ja}畳"
-        jaMap["item.${modId}.${prefix}tatami"] = "${color.ja}畳"
-        jaMap["block.${modId}.${prefix}tatami_half_part"] = "${color.ja}半畳"
-        jaMap["item.${modId}.${prefix}tatami_half"] = "${color.ja}半畳"
+        jaMap["block.${modId}.${cfg.prefix}tatami_part"]      = "${cfg.jaPrefix}畳"
+        jaMap["item.${modId}.${cfg.prefix}tatami"]            = "${cfg.jaPrefix}畳"
+        jaMap["block.${modId}.${cfg.prefix}tatami_half_part"] = "${cfg.jaPrefix}半畳"
+        jaMap["item.${modId}.${cfg.prefix}tatami_half"]       = "${cfg.jaPrefix}半畳"
     }
 
     writeJson(baseDir, "assets/${modId}/lang/en_us.json", enMap)
@@ -486,44 +419,46 @@ tasks.register('generateTatamiAssets') {
         }
         outDir.mkdirs()
 
-        // ── 共通ヘルパー ──
-        def fusumaSet = { String prefix, String texSuffix ->
-            generateFusumaBlockstate(outDir, MOD_ID, prefix)
-            generateSlidingPanelModels(outDir, MOD_ID, [colorPrefix: prefix, texSuffix: texSuffix])
-            generateFusumaItemModel(outDir, MOD_ID, prefix, texSuffix)
-            if (!isLegacyFormat) generateFusumaItemDefinition(outDir, MOD_ID, prefix)
-            generateLootTable(outDir, MOD_ID, prefix, 'fusuma_part', isLegacyFormat)
-        }
+        def registry = BlockRegistry.INSTANCE
 
-        def tatamiSet = { String prefix, String texSuffix ->
-            ['tatami_part', 'tatami_half_part'].each { type ->
-                generateBlockstate(outDir, MOD_ID, prefix, type, type == 'tatami_part' ? 8 : 4)
-                generateBlockModel(outDir, MOD_ID, prefix, type, 'left', 270, texSuffix)
-                generateBlockModel(outDir, MOD_ID, prefix, type, 'right', 90, texSuffix)
-                generateLootTable(outDir, MOD_ID, prefix, type, isLegacyFormat)
-            }
-            ['tatami', 'tatami_half'].each { itemType ->
-                generateItemModel(outDir, MOD_ID, prefix, itemType, texSuffix)
-                if (!isLegacyFormat) generateItemDefinition(outDir, MOD_ID, prefix, itemType)
-            }
-        }
-
-        // ── 襖 ──
+        // ── 襖シリーズ ──
         generateFusumaInvisibleModel(outDir, MOD_ID)
-        fusumaSet('', '')
-        fusumaColors.each { color -> fusumaSet("${color.id}_", "_${color.id}") }
-
-        // ── 畳 ──
-        tatamiSet('', '')
-        tatamiColors.each { color -> tatamiSet("${color.id}_", "_${color.id}") }
+        registry.fusumaSeries.each { cfg ->
+            writeJson(outDir, "assets/${MOD_ID}/blockstates/${cfg.blockPartId}.json",
+                      [variants: buildSlidingBlockstateVariants(MOD_ID, cfg.blockPartId)])
+            generateSlidingPanelModels(outDir, MOD_ID, [
+                    partId       : cfg.blockPartId,
+                    texBase      : cfg.texBase,
+                    texSuffix    : cfg.texSuffix,
+                    renderType   : cfg.renderType,
+                    outerEdgeOnly: cfg.outerEdgeOnly,
+            ])
+            generateFusumaItemModel(outDir, MOD_ID, cfg.itemId, cfg.texSuffix)
+            if (!isLegacyFormat) generateFusumaItemDefinition(outDir, MOD_ID, cfg.itemId)
+            generateLootTable(outDir, MOD_ID, '', cfg.blockPartId, isLegacyFormat)
+        }
 
         // ── 派生スライドドア ──
-        slidingDoorVariants.each { door ->
-            generateSlidingDoorVariant(outDir, MOD_ID, door, isLegacyFormat)
+        registry.slidingDoors.each { cfg ->
+            generateSlidingDoorVariant(outDir, MOD_ID, cfg, isLegacyFormat)
+        }
+
+        // ── 畳シリーズ ──
+        registry.tatamiSeries.each { cfg ->
+            ['tatami_part', 'tatami_half_part'].each { type ->
+                generateBlockstate(outDir, MOD_ID, cfg.prefix, type, type == 'tatami_part' ? 8 : 4)
+                generateBlockModel(outDir, MOD_ID, cfg.prefix, type, 'left', 270, cfg.texSuffix)
+                generateBlockModel(outDir, MOD_ID, cfg.prefix, type, 'right', 90, cfg.texSuffix)
+                generateLootTable(outDir, MOD_ID, cfg.prefix, type, isLegacyFormat)
+            }
+            ['tatami', 'tatami_half'].each { itemType ->
+                generateItemModel(outDir, MOD_ID, cfg.prefix, itemType, cfg.texSuffix)
+                if (!isLegacyFormat) generateItemDefinition(outDir, MOD_ID, cfg.prefix, itemType)
+            }
         }
 
         // ── 言語ファイル ──
-        generateLangFiles(outDir, MOD_ID, tatamiColors, fusumaColors, slidingDoorVariants)
+        generateLangFiles(outDir, MOD_ID, registry.tatamiSeries, registry.fusumaSeries, registry.slidingDoors)
 
         // 生成数をログ出力
         def fileCount = 0
