@@ -12,4 +12,6 @@ object BlockRegistry {
     )
 
     val tatamiSeries: List<TatamiBlockConfig> = defaultTatamiSeries + coloredTatamiSeries
+
+    val allConfigs: List<BlockAssetConfig> = fusumaSeries + slidingDoors + tatamiSeries
 }

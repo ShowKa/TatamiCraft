@@ -13,6 +13,14 @@ object FusumaConfig : SlidingPanelConfig() {
     override val enName      = "Fusuma"
     override val jaName      = "襖"
     override val texBase     = "fusuma"
+    override val itemTexture get() = "fusuma_item$texSuffix"
+
+    // fusuma_part_invisible は全スライドパネルのブロックステートから参照される共有モデル。
+    // fusumaSeries の先頭に位置する FusumaConfig が代表して生成する。
+    override fun assetEntries(modId: String, isLegacy: Boolean): List<AssetEntry> =
+        listOf(AssetEntry("assets/$modId/models/block/fusuma_part_invisible.json",
+                          mapOf("elements" to emptyList<Any>()))) +
+        super.assetEntries(modId, isLegacy)
 
     val colorVariants: List<SlidingPanelConfig> = fusumaColorDefs.map { c ->
         object : SlidingPanelConfig() {
@@ -22,6 +30,7 @@ object FusumaConfig : SlidingPanelConfig() {
             override val jaName      = "${c.ja}襖"
             override val texBase     = "fusuma"
             override val texSuffix   = "_${c.id}"
+            override val itemTexture get() = "fusuma_item$texSuffix"
         }
     }
 }
