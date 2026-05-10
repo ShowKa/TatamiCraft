@@ -49,11 +49,65 @@ Two custom Groovy Gradle plugins in `buildSrc/src/main/groovy/`:
 
 This means the common module is compiled into the loader build directly (not as a dependency jar), so common code can reference loader APIs without circular dependency issues.
 
-### Asset Generation (`gradle/tatami-assets.gradle`)
+### Asset Generation
 
-The `generateTatamiAssets` task programmatically generates 200+ JSON files at build time:
-- Blockstates, block/item models, loot tables, language entries — one set per color variant
-- Detects MC version to emit correct path formats (e.g., `loot_table` vs `loot_tables` for 1.20.1)
+The `generateTatamiAssets` task generates 600+ JSON files at build time
+(blockstates, block/item models, item definitions, loot tables, lang files).
+It runs automatically as part of `processResources`.
+
+All generation logic lives in `buildSrc/src/main/kotlin/blocks/`.
+`gradle/tatami-assets.gradle` is a thin runner (~65 lines) that only handles
+file I/O (`writeJson`) and the Gradle task wiring.
+
+MC version detection (`isLegacy = mcMajor < 1.21`) switches the loot table
+directory between `loot_table/` (1.21+) and `loot_tables/` (1.20.1).
+
+#### Adding a completely new block type
+
+"New block type" means a geometry or behavior distinct from flat tatami or sliding panels
+(e.g. a door that opens upward, a multi-block structure, etc.).
+
+**Step 1 — Create a new abstract config class** in `buildSrc/src/main/kotlin/blocks/`
+implementing `BlockAssetConfig`. Define `assetEntries()` to return every JSON file
+the block needs.
+
+```kotlin
+// buildSrc/src/main/kotlin/blocks/MyNewBlockConfig.kt
+abstract class MyNewBlockConfig : BlockAssetConfig {
+    abstract override val blockPartId: String
+    abstract override val itemId: String
+    abstract override val enName: String
+    abstract override val jaName: String
+    // ...type-specific properties...
+
+    override fun assetEntries(modId: String, isLegacy: Boolean): List<AssetEntry> {
+        val lootDir = if (isLegacy) "loot_tables" else "loot_table"
+        return buildList {
+            add(AssetEntry("assets/$modId/blockstates/$blockPartId.json", blockstateData(modId)))
+            // ...add model, item model, item definition, loot table entries...
+            add(AssetEntry("data/$modId/$lootDir/blocks/$blockPartId.json",
+                           linkedMapOf("type" to "minecraft:block", "pools" to emptyList<Any>())))
+        }
+    }
+    private fun blockstateData(modId: String): Map<String, Any> { /* ... */ }
+}
+```
+
+**Step 2 — Create a concrete config object** for each variant:
+
+```kotlin
+object MyNewBlock : MyNewBlockConfig() {
+    override val blockPartId = "my_block_part"
+    override val itemId      = "my_block"
+    override val enName      = "My Block"
+    override val jaName      = "マイブロック"
+}
+```
+
+**Step 3 — Register in `BlockRegistry`** — add to `allConfigs` in `BlockRegistry.kt`.
+
+**Step 4 — Add game-side code** in `common-*/src/main/kotlin/com/showka/`:
+register the block and item (refer to existing blocks for the pattern).
 
 ### 1.20.1 Differences
 
